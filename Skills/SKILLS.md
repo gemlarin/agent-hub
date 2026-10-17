@@ -6,30 +6,30 @@ When a task matches a skill's description, load and follow its instructions.
 
 ### 1. `memory-management` (`./memory-management/`)
 
-- **When to use:** Updating `MEMORY.md`, capturing cross-session context, or enforcing secret/PII redaction rules.
-- **Instruction Summary:** Filters ephemeral noise, redacts sensitive credentials (SSNs, API keys, passwords), and structures long-term project knowledge.
+- **When to use:** Reading or updating Google Drive `MEMORY.md`, cross-session context, or secret/PII redaction.
+- **Who applies it:** **Memory Steward** for writes; main agent reads Google Drive `MEMORY.md` at session start (or steward `mode: read`). See [`Agents/memory.md`](../Agents/memory.md) for paths.
+- **Instruction Summary:** Filters noise, redacts credentials/PII, structures long-term knowledge. **No local Projects `MEMORY.md`.**
 
 ---
 
 ## Active Skill Routing: Memory Management
 
-You have access to a persistent memory skill located at `./memory-management/SKILL.md`. You must load and apply its protocols during specific lifecycle events.
+Load [`./memory-management/SKILL.md`](./memory-management/SKILL.md) and [`Agents/memory.md`](../Agents/memory.md).
 
 ### 1. When to Trigger the Memory Skill
 
-You must invoke the `memory-management` skill during these precise moments:
+| Event | Actor | Action |
+|-------|--------|--------|
+| Session start / new agent | Main agent | Read **Google Drive** `Documents/MEMORY.md` **or** Memory Steward `mode: read` |
+| User asks to remember something | Main agent → Memory Steward | `mode: write` + memory delta |
+| Milestone, bug fix, preference change | Main agent → Memory Steward | `mode: write` + delta |
+| Session wrap-up | Main agent → Memory Steward | `mode: read_then_write` if needed |
 
-- **Session Initialization (Read Phase):** At the very beginning of a session or when starting work on a new task, check for and read the root `MEMORY.md` file to load user preferences, active project goals, and known blockers.
-- **Milestone Completion (Write Phase):** When a major feature is completed, a complex bug is successfully resolved, or a hard-won configuration is finalized.
-- **Preference Shift:** When the user explicitly states a new coding preference, tooling choice, or workflow constraint.
-- **Session Wrap-Up / Exit:** Right before concluding a major working session or when the user prompts to save progress.
+### 2. Execution Directives
 
-### 2. Execution Directives for Memory Updates
-
-When executing a memory update using the skill:
-
-1. **Filter & Sanitize:** Apply the strict security boundaries from `SKILL.md` to ensure zero API keys, passwords, or PII are written.
-2. **Deduplicate:** Check existing contents in `MEMORY.md` and overwrite outdated facts rather than creating chronological clutter.
-3. **Persist:** Write clean, concise updates directly to the root `MEMORY.md` file so other devices and future sessions can inherit the state.
+1. **Google Drive only** for every read and write—never `Projects/MEMORY.md`.
+2. **Delegate writes** to Memory Steward during unrelated tasks.
+3. **Filter & sanitize** per `SKILL.md`.
+4. **Deduplicate** against existing Drive `MEMORY.md` in the steward write path.
 
 ---

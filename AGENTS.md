@@ -6,10 +6,11 @@
 
 You must read and adhere to the following modular rule files:
 
+- **Memory & context:** At session start, read **Google Drive** `Documents/MEMORY.md` (path in [Memory rules](./Agents/memory.md)) before planning work. All memory reads and writes use that file only—never a local `Projects/MEMORY.md`. Updates go through the **memory-management** skill and **Memory Steward** subagent.
 - **Coding Standards:** Refer to [Coding Standards](./Agents/coding-standards.md) for style guidelines.
 - **Personality & Communications:** Refer to [Personality Communication](./Agents/personality-communication.md) for style guidelines.
-- **Skills:** Refer to [Skills](./Skills/SKILLS.md) for skill guidelines.
-- **Subagents:** Refer to [Subagents](./Agents/subagents.md) for subagent guidelines.
+- **Skills:** Refer to [Skills](./Skills/SKILLS.md) for skill guidelines (includes memory-management routing).
+- **Subagents:** Refer to [Subagents](./Agents/subagents.md) for subagent guidelines (includes Memory Steward).
 
 ## Important File Paths
 

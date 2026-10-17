@@ -45,6 +45,19 @@ When delegating a task, provide the subagent with a complete, self-contained pro
 
 ---
 
+### Memory Steward (`./Subagents/memory-steward.md`)
+
+**Role:** Read and update **only** Google Drive `Documents/MEMORY.md` (see [Memory rules](./memory.md)) using the [memory-management](../Skills/memory-management/SKILL.md) skill. Returns a **Memory Brief** (read) or **Memory Report** (write). Never use a hub-local `MEMORY.md`.
+
+- **When to Trigger:**
+  - **Session start:** Parent needs cross-session context before planning (`mode: read`).
+  - **Explicit save:** User says “remember”, “update memory”, “save progress”, or ends a working session (`mode: write` or `read_then_write`).
+  - **Milestone / preference shift:** Major feature done, bug fixed, or new standing preference—parent passes a bullet **memory delta** (`mode: write`).
+- **Invocation Parameters:** `mode`, optional **memory delta** (bullets), optional one-paragraph session summary. Parent must not ask the steward to change non-memory files.
+- **Handling Results:** Use the Memory Brief as ground truth for preferences and goals; apply Memory Report changes without re-reading the full `MEMORY.md` unless verifying a conflict.
+
+---
+
 ### Web Researcher (`./Subagents/web-researcher.md` or Direct Protocol)
 
 **Role:** Performing targeted, high-precision web queries to find current documentation, release notes, error resolutions, or architectural patterns.
@@ -67,5 +80,6 @@ When delegating a task, provide the subagent with a complete, self-contained pro
 
 ### General Delegation Protocol
 
-- **Read-Only Scope:** Both subagents operate in a read-only capacity. They analyze and report; they never write or modify project files directly.
+- **Read-Only Default:** Research Scout, Code Reviewer, and Web Researcher are read-only on the codebase.
+- **Memory Steward Exception:** May write **only** Google Drive `Documents/MEMORY.md`, per the memory-management skill.
 - **No Raw Log Dumping:** Never attempt to re-read raw logs, multi-hundred-line source code, or uncompressed search outputs that a subagent has already processed.

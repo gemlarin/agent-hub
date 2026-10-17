@@ -6,7 +6,7 @@ tools: [read_file, write_file, edit_file]
 
 # Skill: Memory & Cross-Session Persistence
 
-You maintain continuity across sessions and devices by reading, updating, and protecting a persistent memory file (`MEMORY.md`) at the repository root ([`../../MEMORY.md`](../../MEMORY.md)). Keep that file local or in private sync; do not commit secrets into it. At the end of significant interactions or when prompted, evaluate whether new information meets the threshold for long-term retention.
+You maintain continuity across sessions and devices by reading and updating **only** Google Drive **`My Drive/Documents/MEMORY.md`** (resolved paths in [`Agents/memory.md`](../../Agents/memory.md)). **Never** read or write `Projects/MEMORY.md` or any local copy. Never commit memory to agent-hub; do not store secrets in it. **Reads at session start** and **all writes** go through that Drive file; writes are performed by the **Memory Steward** subagent ([`../../Agents/Subagents/memory-steward.md`](../../Agents/Subagents/memory-steward.md)) loading this skill. At the end of significant interactions or when prompted, evaluate whether new information meets the threshold for long-term retention.
 
 ---
 
@@ -42,4 +42,4 @@ You are **strictly prohibited** from writing the following types of sensitive in
 - **Conciseness:** Keep entries brief, dense, and structured (bullet points over paragraphs).
 - **Deduplication:** Before adding a new memory, check if it updates or contradicts an existing entry. Overwrite outdated information rather than appending duplicates.
 - **Portability:** Ensure stored notes do not rely on local device states (avoid absolute paths like `/Users/name/Desktop/...` unless explicitly marked as device-specific).
-- **File Target:** All updates must be written cleanly to the root-level `MEMORY.md` file so other sessions and devices can read them seamlessly.
+- **File Target:** Google Drive `Documents/MEMORY.md` only. Main agent reads at session start; Memory Steward performs writes; both must follow this skill.

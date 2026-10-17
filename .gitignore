@@ -5,5 +5,5 @@
 !/Agents/
 !/Skills/
 
-# Never commit local memory (may contain preferences; user-managed sync)
-MEMORY.md
+# Safety net: ignore hub-root stub only (canonical memory is on Google Drive)
+/MEMORY.md
