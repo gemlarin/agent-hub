@@ -1,0 +1,9 @@
+# Monorepo workspace: only version the shared agent hub files below.
+/*
+!/.gitignore
+!/AGENTS.md
+!/Agents/
+!/Skills/
+
+# Never commit local memory (may contain preferences; user-managed sync)
+MEMORY.md
