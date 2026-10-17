@@ -47,14 +47,13 @@ When delegating a task, provide the subagent with a complete, self-contained pro
 
 ### Memory Steward (`./Subagents/memory-steward.md`)
 
-**Role:** Read and update **only** Google Drive `Documents/MEMORY.md` (see [Memory rules](./memory.md)) using the [memory-management](../Skills/memory-management/SKILL.md) skill. Returns a **Memory Brief** (read) or **Memory Report** (write). Never use a hub-local `MEMORY.md`.
+**Role:** **Write only** to Google Drive `Documents/MEMORY.md` (see [Memory rules](./memory.md)) using the [memory-management](../Skills/memory-management/SKILL.md) skill. Returns a **Memory Report**. Session context comes from the **main agent’s** session-start read—do not use this subagent to load memory at session start.
 
 - **When to Trigger:**
-  - **Session start:** Parent needs cross-session context before planning (`mode: read`).
-  - **Explicit save:** User says “remember”, “update memory”, “save progress”, or ends a working session (`mode: write` or `read_then_write`).
+  - **Explicit save:** User says “remember”, “update memory”, “save progress”, or ends a working session (`mode: write`).
   - **Milestone / preference shift:** Major feature done, bug fixed, or new standing preference—parent passes a bullet **memory delta** (`mode: write`).
-- **Invocation Parameters:** `mode`, optional **memory delta** (bullets), optional one-paragraph session summary. Parent must not ask the steward to change non-memory files.
-- **Handling Results:** Use the Memory Brief as ground truth for preferences and goals; apply Memory Report changes without re-reading the full `MEMORY.md` unless verifying a conflict.
+- **Invocation Parameters:** `mode: write`, **memory delta** (bullets), optional one-paragraph session summary. Parent must not ask the steward to change non-memory files.
+- **Handling Results:** Trust the Memory Report; do not re-read `MEMORY.md` unless the user says Drive was edited on another device.
 
 ---
 

@@ -15,20 +15,29 @@ Resolve the synced file on disk (Google Drive for Desktop):
 
 If the path differs on a machine, locate `Documents/MEMORY.md` inside your synced **My Drive** folder and use that file only.
 
-## Skill (how to read / write)
+## Who reads vs writes
 
-Content rules (capture vs discard, redaction, deduplication):
+| Actor | Responsibility |
+|--------|----------------|
+| **Main agent** | **Read** Drive `MEMORY.md` once at **session start** (or when starting a new task in a fresh chat). Apply context; do not re-read unless the user says memory may have changed elsewhere. |
+| **Memory Steward** | **Write only.** Invoked for persistence updates; may read the file internally to merge edits—never for session bootstrap. |
+
+Do **not** invoke Memory Steward with `mode: read` to load session context (avoids double-read with the main agent).
+
+## Skill (content rules for writes)
+
+When **writing** memory, the steward loads:
 
 [`Skills/memory-management/SKILL.md`](../Skills/memory-management/SKILL.md)
 
-Load that skill whenever you touch `MEMORY.md`.
+Main agent should follow the same capture/discard boundaries when deciding *what* to ask the steward to save.
 
 ## Main agent responsibilities
 
-1. **Session start / new task:** Read **Google Drive** `MEMORY.md` (absolute path above) **or** invoke **Memory Steward** with `mode: read` before planning work.
-2. **During work:** Use memory as context; do not duplicate long memory contents into chat.
-3. **Memory reads and writes:** Never use a local Projects `MEMORY.md`. Delegate all writes to **Memory Steward**; do not edit memory inline during feature work.
-4. **User triggers:** “Remember this”, “update memory”, “save session”, or wrap-up → Memory Steward with `mode: write` and a memory delta.
+1. **Session start:** Read Google Drive `MEMORY.md` before planning work.
+2. **During work:** Use memory as context; do not paste the full file into chat.
+3. **Persistence:** Delegate **all writes** to Memory Steward (`mode: write`); never edit `MEMORY.md` during feature work.
+4. **User triggers:** “Remember this”, “update memory”, “save session”, or wrap-up → Memory Steward with `mode: write` and a **memory delta** (bullets).
 
 ## What belongs in `MEMORY.md`
 
