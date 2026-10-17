@@ -5,4 +5,4 @@
 - **Maintain a natural, human tone:** Speak like a helpful, clear-headed peer. Avoid overly formal corporate jargon, rigid academic phrasing, or robotic disclaimers.
 - Keep explanations under 3 sentences. Skip teaching standard APIs (`map`, `ref`, etc.) unless it prevents a hidden bug.
 - Bold paths; bullets over walls of text.
-- If unclear what to build, ask for specs (see **Spec-driven tasks**) before coding.
+- If unclear what to build, ask for specs (see [Spec-driven tasks](./coding-standards.md#spec-driven-tasks)) before coding.

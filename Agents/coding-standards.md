@@ -2,7 +2,7 @@
 
 **Scope:** Greenfield stack rules apply to **new projects only**. Do not rewrite existing apps (styles, READMEs, aliases, structure) unless D asks. Vue rules → Vue apps. React apps → local patterns + shared sections (comms, secrets, change control, DoD).
 
-**New apps:** Symlink this file as root `AGENTS.md` (`../AGENTS.md` or `../../AGENTS.md`). For public GitHub demos, a short pointer file is fine if a symlink looks messy.
+**New apps:** Add a pointer `AGENTS.md` at the project root that links to the hub (`../AGENTS.md` or `../../AGENTS.md` at the Projects folder). Do not symlink this coding-standards file as `AGENTS.md`.
 
 ## Spec-driven tasks
 
@@ -209,7 +209,7 @@ Use `bg-background`, `text-foreground`, `border-border`, `text-success`.
 
 ## New Project Checklist
 
-1. Symlink (or short pointer) to this `AGENTS.md`
+1. Pointer `AGENTS.md` to the hub `AGENTS.md` at the Projects root (`../` or `../../`)
 2. `.gitignore` for env + `.env.example`
 3. `@` alias in vite + tsconfig
 4. Layout folders above; Pinia only if needed

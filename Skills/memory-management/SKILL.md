@@ -6,7 +6,7 @@ tools: [read_file, write_file, edit_file]
 
 # Skill: Memory & Cross-Session Persistence
 
-You maintain continuity across sessions and devices by reading and updating **only** Google Drive **`My Drive/Documents/MEMORY.md`** (resolved paths in [`Agents/memory.md`](../../Agents/memory.md)). **Never** read or write `Projects/MEMORY.md` or any local copy. Never commit memory to agent-hub; do not store secrets in it. **Reads at session start** and **all writes** go through that Drive file; writes are performed by the **Memory Steward** subagent ([`../../Agents/Subagents/memory-steward.md`](../../Agents/Subagents/memory-steward.md)) loading this skill. At the end of significant interactions or when prompted, evaluate whether new information meets the threshold for long-term retention.
+Apply this skill when reading or writing Google Drive `Documents/MEMORY.md`. Paths and delegation rules: [`Agents/memory.md`](../../Agents/memory.md). Never use a local `Projects/MEMORY.md` or commit memory to agent-hub. Evaluate new facts against the sections below before persisting.
 
 ---
 

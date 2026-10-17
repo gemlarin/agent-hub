@@ -58,23 +58,13 @@ When delegating a task, provide the subagent with a complete, self-contained pro
 
 ---
 
-### Web Researcher (`./Subagents/web-researcher.md` or Direct Protocol)
+### Web Researcher (`./Subagents/web-researcher.md`)
 
-**Role:** Performing targeted, high-precision web queries to find current documentation, release notes, error resolutions, or architectural patterns.
+**Role:** Targeted web search for current docs, release notes, errors, and patterns. Follow the protocol in that file (source quality, date decay, compressed output).
 
-- **When to Trigger:**
-  - **Current & Real-Time Data:** Looking up recent API deprecations, framework updates released after your training cutoff, or live status pages/issues.
-  - **External Solution Discovery:** Searching for niche error codes, stack trace resolutions, or community-vetted best practices when local docs are insufficient.
-  - **Ecosystem Benchmarking:** Comparing competing libraries, package version matrices, or architectural patterns across different tech stacks.
-
-- **Source Quality & Credibility Rules:**
-  - **Prioritize Official Sources:** Always prefer official vendor documentation (e.g., `docs.python.org`, `react.dev`), GitHub repositories/releases, and primary maintainer blogs over secondary content farms.
-  - **Watch for Date Decay:** Filter out or cross-reference forum posts, Stack Overflow answers, or tutorials older than 2–3 years for fast-moving ecosystems (e.g., JavaScript/TypeScript tooling, cloud infrastructure).
-  - **Cross-Verification:** For critical architectural or security-related queries, verify findings across at least two independent authoritative sources.
-
-- **Output Compression (Anti-Noise):**
-  - Discard SEO filler, marketing fluff, and repetitive tutorial introductions.
-  - Extract only the core facts, code snippets, version requirements, or configuration options relevant to the user's specific context.
+- **When to Trigger:** Post-cutoff framework/API facts, niche errors, or comparing libraries when local docs are not enough.
+- **Invocation Parameters:** Precise query, stack/version constraints, desired output shape (answer + links + snippets).
+- **Handling Results:** Use returned findings directly; do not re-run the same searches in the parent context.
 
 ---
 
