@@ -13,7 +13,26 @@ You must read and adhere to the following modular rule files:
 
 ## Important File Paths
 
-When referencing this file, treat this repository as the source of truth for agent rules. Clone or sync it wherever you keep project work (e.g. a `Projects` folder on Mac or PC); individual app repos should use a pointer `AGENTS.md` that links to the hub `AGENTS.md` in this repo.
+This file is the **hub** for agent rules. Individual app repos use a pointer `AGENTS.md` (relative `../AGENTS.md` or `../../AGENTS.md`) that points here at the **Projects folder root**—not inside a nested clone folder.
+
+### Syncing the hub (Mac / PC)
+
+Remote: [github.com/gemlarin/agent-hub](https://github.com/gemlarin/agent-hub)
+
+- **Use your `Projects` directory as the Git root** for agent-hub so `AGENTS.md`, `Agents/`, and `Skills/` live next to your app folders.
+- **Do not** `git clone` into `Projects/agent-hub/` if apps use pointer stubs; that breaks `../` / `../../` links.
+- **First time on a machine** (folder already has app repos, no hub git yet):
+
+```bash
+cd /path/to/Projects
+git init
+git remote add origin https://github.com/gemlarin/agent-hub.git
+git fetch origin
+git checkout -b main origin/main
+```
+
+- **Updates:** from `Projects`, run `git pull` to refresh the hub files only (`.gitignore` keeps app repos out of this repo).
+- **App repos** keep their own `origin` and remotes; only the hub uses the agent-hub remote.
 
 ---
 
