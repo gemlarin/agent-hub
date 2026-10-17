@@ -88,9 +88,12 @@ Code sweep — check what to run:
 
 ## Secrets & Git
 
-- Never commit secrets. Gitignore `.env` / `.env.*` (allow `.env.example`).
-- Secrets only in local `.env` / `.env.local`.
-- New projects: ship `.env.example` with `VITE_*` placeholders.
+- **Never commit, push, or open a PR** that contains secrets or PII—no exceptions unless D explicitly asks to revert a leak and rotate credentials.
+- **Secrets:** API keys, bearer tokens, passwords, SSH/private keys, OAuth client secrets, webhook signing secrets, database URLs with credentials, `.env` / `.env.local` / `.env.production`, service account JSON, certificates with private keys.
+- **PII:** SSNs/tax IDs, bank or card numbers, government ID numbers, full home addresses, private phone numbers, medical or health records, or other sensitive personal data that does not belong in a public or shared repo.
+- Gitignore `.env` / `.env.*` (allow **`.env.example`** with fake placeholders only). Secrets live only in local env files or your secret manager—not in source, comments, tests, fixtures, screenshots, or sample data.
+- Before any commit: scan staged files for env-like values and PII; if found, remove, rotate if already exposed, and use env vars or redacted samples instead.
+- New projects: ship `.env.example` with `VITE_*` (or equivalent) placeholders.
 
 ---
 

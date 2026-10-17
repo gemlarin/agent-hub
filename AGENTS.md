@@ -7,6 +7,7 @@
 You must read and adhere to the following modular rule files:
 
 - **Memory & context:** **Main agent only** reads Google Drive `Documents/MEMORY.md` at session start (path in [Memory rules](./Agents/memory.md)). **Memory Steward only** writes that file (via **memory-management** skill). Never a local `Projects/MEMORY.md`; do not delegate session-start reads to the steward.
+- **Secrets & PII:** **Never** commit, push, or include in PRs any **secrets** (API keys, tokens, passwords, private keys, connection strings) or **PII** (government IDs, financial account numbers, full addresses, private phone numbers, health data). Use `.env` / local config for secrets (gitignored); use placeholders in `.env.example`. Details: [Secrets & Git](./Agents/coding-standards.md#secrets--git) in Coding Standards.
 - **Coding Standards:** Refer to [Coding Standards](./Agents/coding-standards.md) for style guidelines.
 - **Personality & Communications:** Refer to [Personality Communication](./Agents/personality-communication.md) for style guidelines.
 - **Skills:** Refer to [Skills](./Skills/SKILLS.md) for skill guidelines (includes memory-management routing).
