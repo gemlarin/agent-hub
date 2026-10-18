@@ -8,27 +8,62 @@ This file is the hub overview. Agents read [`Agents/AGENTS.md`](./Agents/AGENTS.
 
 ## Quick start
 
-**macOS / Linux / Git Bash**
+**Guided setup** (after this repo is on disk). One command detects macOS, Linux, WSL, or Windows, asks for the memory file, GitHub username, and which apps get a pointer, then finishes config:
 
 ```bash
-git clone https://github.com/gemlarin/agent-hub.git ~/Projects
-cd ~/Projects
-./Agents/Setup/scripts/bootstrap.sh
+./Agents/Setup/scripts/setup.sh
 ```
 
-**Windows (cmd or PowerShell)** — Git for Windows required:
+Windows (Git for Windows): `Agents\Setup\scripts\setup.cmd`
+
+In Cursor, say **set up the hub**. The Hub Installer agent asks those questions in chat and runs the same command. It does not commit.
+
+Pick a **work folder** first if you still need to clone: the directory that holds (or will hold) your app repos. The name does not matter (`~/Projects`, `~/code`, `~/dev`, `D:\work`, …). In the usual layout that folder **is** the hub git root, so `Agents/` sits next to the apps.
+
+**macOS / Linux / Git Bash** — new or empty work folder:
+
+```bash
+WORK=~/code   # your work folder
+git clone https://github.com/gemlarin/agent-hub.git "$WORK"
+cd "$WORK"
+./Agents/Setup/scripts/setup.sh
+```
+
+**Windows (cmd)** — Git for Windows required. New or empty work folder:
 
 ```bat
-git clone https://github.com/gemlarin/agent-hub.git %USERPROFILE%\Projects
-cd %USERPROFILE%\Projects
-Agents\Setup\scripts\bootstrap.cmd
+set WORK=%USERPROFILE%\code
+git clone https://github.com/gemlarin/agent-hub.git %WORK%
+cd /d %WORK%
+Agents\Setup\scripts\setup.cmd
 ```
 
-This clone treats the **Projects folder** as the hub git root (`Agents/` next to app folders). If `Projects` already exists, `cd` there and `git clone <url> .`. Do **not** nest a second `agent-hub/` folder when apps already use `../Agents/AGENTS.md`.
+PowerShell: `$WORK = "$env:USERPROFILE\code"`, then `git clone https://github.com/gemlarin/agent-hub.git $WORK`.
 
-Clone **anywhere else** if you prefer; each app’s pointer must still be a relative path to **this clone’s** `Agents/AGENTS.md`.
+**Work folder already has apps.** `git clone` refuses a non-empty directory. From that folder:
 
-**Still manual:** set the [`MEMORY.md` path](#persistent-memory); pointer `AGENTS.md` in each app (below). **Cursor:** paste [`Agents/Setup/cursor-user-rules.md`](./Agents/Setup/cursor-user-rules.md) only if default git User Rules tell the parent to run `git`.
+```bash
+cd "$WORK"
+git init
+git remote add origin https://github.com/gemlarin/agent-hub.git
+git fetch origin
+git checkout -t origin/main
+./Agents/Setup/scripts/setup.sh
+```
+
+The hub `.gitignore` ignores everything except hub files, so sibling app folders stay untracked. If `README.md` or `.gitignore` already exists in that folder, resolve the checkout conflict before setup.
+
+**Hub as its own folder** (work folder stays a normal directory, not this git repo):
+
+```bash
+git clone https://github.com/gemlarin/agent-hub.git "$WORK/agent-hub"
+cd "$WORK/agent-hub"
+./Agents/Setup/scripts/setup.sh
+```
+
+Use that layout’s pointer (`../agent-hub/Agents/AGENTS.md`). Do **not** use `../Agents/AGENTS.md` unless `Agents/` is a direct child of the work folder. Forks: clone your fork URL instead of `gemlarin/agent-hub`.
+
+`setup.sh` asks for the [memory path](#persistent-memory). Bootstrap then asks whether to link current project directories. Saying yes writes or replaces `AGENTS.md` in each selected project so it points at this hub's `Agents/AGENTS.md`. **Cursor:** paste [`Agents/Setup/cursor-user-rules.md`](./Agents/Setup/cursor-user-rules.md) only if default git User Rules tell the parent to run `git`. The installer cannot change Cursor settings for you.
 
 Full steps: **[Agents/Setup/hub-setup.md](./Agents/Setup/hub-setup.md)**
 
@@ -52,24 +87,24 @@ Agent rules for this repo are defined at the **agent hub**, not in this file.
 That hub is the source of truth for agent rules. Apply it (and everything it references) before any task in this repo.
 ```
 
-**App is a sibling of `Agents/`** (this repo cloned as `~/Projects`, app at `Projects/Portfolio/`):
+**App is a sibling of `Agents/`** (work folder is the hub root, app at `work/Portfolio/`):
 
 ```markdown
 # AGENTS.md (pointer)
 
-Agent rules for this repo are defined at the **Projects workspace hub**, not in this file.
+Agent rules for this repo are defined at the **agent hub**, not in this file.
 
 **Read and follow:** [`../Agents/AGENTS.md`](../Agents/AGENTS.md).
 
 That hub is the source of truth for agent rules. Apply it (and everything it references) before any task in this repo.
 ```
 
-**App is one extra level down** (`Projects/Vue/Cairn/`):
+**App is one extra level down** (`work/Vue/Cairn/`):
 
 ```markdown
 # AGENTS.md (pointer)
 
-Agent rules for this repo are defined at the **Projects workspace hub**, not in this file.
+Agent rules for this repo are defined at the **agent hub**, not in this file.
 
 **Read and follow:** [`../../Agents/AGENTS.md`](../../Agents/AGENTS.md).
 
@@ -123,7 +158,7 @@ Never commit `MEMORY.md`. Prefer a path **outside** this clone. Keep the file **
 | [`Agents/`](./Agents/) | Subagents, coding standards, memory, **[Setup/](./Agents/Setup/)**, **[Skills/](./Agents/Skills/)** — [how to contribute](./Agents/README.md) |
 | [`.cursor/`](./.cursor/) | Cursor agents, rules, hooks — **hub workspace root only** — [how to contribute](./.cursor/README.md) |
 | [`.githooks/`](./.githooks/) | Hub-repo git hooks (post-merge regen); not inherited by apps — [how to contribute](./.githooks/README.md) |
-| App folders | Separate git repos (siblings of `Agents/` in the Projects layout) |
+| App folders | Separate git repos. Siblings of `Agents/` when the work folder is the hub root; otherwise next to the `agent-hub/` clone |
 
 **Memory:** path in gitignored `Agents/Setup/hub-setup.local.md` — [`Agents/memory.md`](./Agents/memory.md).
 
@@ -142,7 +177,7 @@ After editing `Agents/Subagents/`:
 ./Agents/Setup/scripts/install-cursor-integration.sh --force
 ```
 
-Windows: `Agents\Setup\scripts\bootstrap.cmd` already ran sync on first install; regen with Git Bash (`./Agents/Setup/scripts/install-cursor-integration.sh --force`) or `py -3 Agents/Setup/scripts/sync_cursor_agents.py`.
+Windows: `Agents\Setup\scripts\setup.cmd` already ran sync on first install; regen with Git Bash (`./Agents/Setup/scripts/install-cursor-integration.sh --force`) or `py -3 Agents/Setup/scripts/sync_cursor_agents.py`.
 
 ---
 
@@ -165,8 +200,8 @@ This repo is **policy + Cursor glue**, not an application. Each folder has a REA
 
 ## Forking
 
-1. Fork on GitHub; `git clone` your fork (into the Projects folder, or next to your apps).
-2. Run `bootstrap.sh` or `bootstrap.cmd` (seeds gitignored `hub-setup.local.md`).
+1. Fork on GitHub; `git clone` your fork into your work folder (that folder becomes the hub root), or as `agent-hub/` next to your apps.
+2. Run `setup.sh` or `setup.cmd` (detects the OS, asks the remaining questions, then runs bootstrap).
 3. Pointer `AGENTS.md` in each app repo (see above).
 
 ---

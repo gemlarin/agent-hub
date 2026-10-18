@@ -17,6 +17,7 @@ You talk to the **main agent** in chat. It should spawn a specialist only when t
 | **Code Sweeper** | `code-sweeper` | “Code sweep”, “sweep a11y/types” | Git-diff review (use Code Reviewer); writing the feature |
 | **Web Researcher** | `web-researcher` | “Look up the current API for …” | Job boards (use Job Finder) |
 | **Job Finder** | `job-finder` | “Help me find jobs”, “search Indeed”, “use Job Finder” | Coding, git, docs, or a random web lookup |
+| **Hub Installer** | `hub-installer` | “Set up the hub”, “run setup” | Everyday coding, commits, job search |
 
 **Job Finder only** runs if you ask for a job search or name it. The main agent must not start a job hunt on its own.
 
@@ -30,7 +31,7 @@ You talk to the **main agent** in chat. It should spawn a specialist only when t
 
 A **foreground** specialist holds this chat until it finishes. A **background** one starts and keeps working so you can send another request here. When it finishes, the main agent posts the report. Docs: [subagents (foreground vs background)](https://cursor.com/docs/subagents). Parallel extra requests: `/multitask` ([multi-agent](https://cursor.com/help/ai-features/multi-agent.md)). That is **not** Cursor Cloud “background agents.”
 
-Say **“run that in the background”** if you want this chat free. Job Finder, Research Scout, Code Sweeper, and Web Researcher should already start that way. Git commits and durable-memory writes stay in the **foreground** so you can pick `[continue]` / `[custom]` or see `Durable memory saved to MEMORY file`.
+Say **“run that in the background”** if you want this chat free. Job Finder, Research Scout, Code Sweeper, and Web Researcher should already start that way. Git commits, hub setup questions, and durable-memory writes stay in the **foreground** so you can pick `[continue]` / `[custom]`, answer the installer, or see `Durable memory saved to MEMORY file`.
 
 Stop or a new interrupting message can abort a running specialist — that is not the same as a failed search.
 
@@ -74,8 +75,9 @@ Each file is a subagent spec: YAML frontmatter (`name`, `description`, `tools`) 
 | [`deep-document-research.md`](./deep-document-research.md) | `research-scout` |
 | [`code-sweeper.md`](./code-sweeper.md) | `code-sweeper` |
 | [`job-finder.md`](./job-finder.md) | `job-finder` |
+| [`hub-installer.md`](./hub-installer.md) | `hub-installer` |
 
-Writable (`readonly: false`): Git Coordinator, Memory Steward, Job Finder (Desktop files only). The others are read-only (including Code Sweeper).
+Writable (`readonly: false`): Git Coordinator, Memory Steward, Job Finder (Desktop files only), Hub Installer (setup files and app pointers you named). The others are read-only (including Code Sweeper).
 
 Reports default to **≤80 lines**. Parent agents relay user choices and **trust the report** — they must not re-run the specialist’s `git`/`gh` or re-read memory after a Memory Report.
 

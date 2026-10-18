@@ -10,16 +10,16 @@ The hub is **not Cursor-only**. Any agent that can read `Agents/AGENTS.md` can f
 
 | Piece | Location | Git |
 |--------|-----------|-----|
-| **Agent hub** (rules, subagents, skills) | `Agents/` — `AGENTS.md`, `Skills/`, `Setup/` | This clone (Projects-as-root layout, or a standalone `agent-hub` folder) |
+| **Agent hub** (rules, subagents, skills) | `Agents/` — `AGENTS.md`, `Skills/`, `Setup/` | This clone (work folder is the hub root, or a standalone `agent-hub` folder) |
 | **App repos** | Separate folders; each has a pointer to `Agents/AGENTS.md` | Each has its own remote |
 | **Memory** | Path in `hub-setup.local.md` (Drive-synced or local `MEMORY.md`) | Never commit `MEMORY.md` |
 | **Your remotes/paths** | `Agents/Setup/hub-setup.local.md` | Gitignored; seeded by bootstrap |
 | **Cursor integration** (optional) | **Hub git root** `.cursor/` (not under `Agents/`) | `.cursor/` committed; User Rules are account-local |
 | **Hub git hooks** | **Hub git root** `.githooks/` (`core.hooksPath`) | Hub repo only |
 
-**This clone’s default layout:** the **Projects directory** is the hub git root; `Agents/` sits next to app folders. `git clone agent-hub` into `Projects/agent-hub/` breaks pointers that use `../Agents/AGENTS.md`.
+**Usual layout:** your **work folder** (any path or name) is the hub git root; `Agents/` sits next to app folders. Cloning into `<work>/agent-hub/` breaks pointers that use `../Agents/AGENTS.md`.
 
-**Generic layout:** clone this repo anywhere. Each app’s pointer is the relative path to **this clone’s** `Agents/AGENTS.md` (see [README — Point app repos](../../README.md#point-app-repos-at-the-hub)).
+**Other layout:** clone this repo as its own folder anywhere. Each app’s pointer is the relative path to **this clone’s** `Agents/AGENTS.md` (see [README — Point app repos](../../README.md#point-app-repos-at-the-hub)).
 
 **Do not nest `.cursor/` or `.githooks/` under `Agents/`.** Cursor only loads `.cursor/` from the opened workspace root. Git hooks only run where `core.hooksPath` is set. Details: [README — What the pointer loads](../../README.md#what-the-pointer-loads).
 
@@ -27,23 +27,35 @@ The hub is **not Cursor-only**. Any agent that can read `Agents/AGENTS.md` can f
 
 ## First run
 
-You need: Git, access to the **agent-hub** remote, and a folder that will be hub root (e.g. `~/Projects` — may already contain app repos).
+You need: Git, access to this repo (or your fork), and a **work folder** that will be the hub root. The folder name is yours (`~/code`, `~/dev`, `D:\work`, …). It may already contain app repos.
+
+**Recommended:** after the clone is on disk, run the guided installer. It detects the OS and asks for the memory file, GitHub username, and app folders:
 
 ```bash
-# macOS / Linux / Git Bash — empty folder, or cd into existing Projects then clone into .
-git clone https://github.com/gemlarin/agent-hub.git ~/Projects
-cd ~/Projects
-./Agents/Setup/scripts/bootstrap.sh
+./Agents/Setup/scripts/setup.sh
+```
+
+Windows: `Agents\Setup\scripts\setup.cmd`. In Cursor, say **set up the hub** (Hub Installer). `bootstrap.sh` is what that command calls. In a terminal it also asks whether to link current project directories, then writes or replaces each selected `AGENTS.md` with a pointer to `Agents/AGENTS.md`. Use `--no-link` to skip that, or `--link-all` / `--link PATH` when there is no prompt.
+
+```bash
+# macOS / Linux / Git Bash — new or empty work folder
+WORK=~/code
+git clone https://github.com/gemlarin/agent-hub.git "$WORK"
+cd "$WORK"
+./Agents/Setup/scripts/setup.sh
 ```
 
 ```bat
-REM Windows cmd / PowerShell (Git for Windows)
-git clone https://github.com/gemlarin/agent-hub.git %USERPROFILE%\Projects
-cd %USERPROFILE%\Projects
-Agents\Setup\scripts\bootstrap.cmd
+REM Windows cmd (Git for Windows) — new or empty work folder
+set WORK=%USERPROFILE%\code
+git clone https://github.com/gemlarin/agent-hub.git %WORK%
+cd /d %WORK%
+Agents\Setup\scripts\setup.cmd
 ```
 
-Already a clone: `cd` to the hub root, `git pull`, then `bootstrap.sh` / `bootstrap.cmd` **once per machine**.
+Work folder already has apps (`git clone` refuses a non-empty directory): `cd` there, `git init`, `git remote add origin <url>`, `git fetch origin`, `git checkout -t origin/main`, then `setup.sh`. Full variants, including a nested `agent-hub/` folder: [README — Quick start](../../README.md#quick-start).
+
+Already a clone: `cd` to the hub root, `git pull`, then `setup.sh` / `setup.cmd` **once per machine**.
 
 `bootstrap` seeds `hub-setup.local.md` if missing (origin, hub path, and `MEMORY.md path` when it finds Drive `Documents/MEMORY.md`; Windows Git Bash paths are stored as `C:/...`), runs [install-cursor-integration.sh](./scripts/install-cursor-integration.sh) when Cursor is detected, and sets local `core.hooksPath=.githooks` if unset. Missing Python does **not** abort hub core — you get a warning and `.cursor/agents/` from git.
 
@@ -103,8 +115,8 @@ Expect `"permission":"deny"` with no marker, `"allow"` after a git-coordinator s
 
 | Task | Command |
 |------|---------|
-| First run / new machine | `./Agents/Setup/scripts/bootstrap.sh` (Windows: `bootstrap.cmd`) |
-| Pull hub updates | `cd /path/to/Projects && git pull` |
+| First run / new machine | `./Agents/Setup/scripts/setup.sh` (Windows: `setup.cmd`) |
+| Pull hub updates | `cd /path/to/your-work-folder && git pull` |
 | Detect Cursor | `./Agents/Setup/scripts/detect-cursor-env.sh` |
 | Cursor regen | `./Agents/Setup/scripts/install-cursor-integration.sh --force` |
 | Hub remote / paths | `Agents/Setup/hub-setup.local.md` |
@@ -115,10 +127,10 @@ Expect `"permission":"deny"` with no marker, `"allow"` after a git-coordinator s
 
 | Problem | Check |
 |---------|--------|
-| `git pull` wants to add app folders | Hub root = `Projects` with sparse `.gitignore`. |
+| `git pull` wants to add app folders | Work folder is the hub root; sparse `.gitignore` should ignore sibling apps. |
 | App can’t find `AGENTS.md` | Pointer must be the relative path from the **app root** to this clone’s `Agents/AGENTS.md`. |
 | Memory path unset / placeholder | Edit **MEMORY.md path** in `Agents/Setup/hub-setup.local.md`. Cloud-synced or local file; never commit it. |
-| Cloned into `Projects/agent-hub/` | For the Projects-as-root layout: move/reclone so **Projects** is the hub root. Or keep a standalone clone and fix app pointers. |
+| Cloned into `<work>/agent-hub/` | For the work-folder-as-root layout: move or reclone so the **work folder** is the hub root. Or keep the standalone clone and fix app pointers. |
 | Non-Cursor IDE | Skip Cursor User Rules; hub still works via the `AGENTS.md` pointer. |
 | Cursor missing `git-coordinator` in the **hub** | `install-cursor-integration.sh --force`; reload IDE. |
 | Cursor missing `git-coordinator` in an **app** | Expected: the pointer does not load hub `.cursor/`. Open the hub, sync agents into the app, or use `~/.cursor/agents/`. |

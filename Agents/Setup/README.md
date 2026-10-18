@@ -10,7 +10,7 @@ Install, sync, and optional **Cursor** integration. Hub overview: [../../README.
 | [cursor-user-rules.md](./cursor-user-rules.md) | Paste into Cursor **User Rules** only if default git User Rules tell the parent to run git |
 | [cursor-agents.json](./cursor-agents.json) | Manifest for generating `.cursor/agents/` from `Agents/Subagents/` |
 
-**Quick command (hub root):** `./Agents/Setup/scripts/bootstrap.sh` (Windows: `Agents\Setup\scripts\bootstrap.cmd`)
+**Quick command (hub root):** `./Agents/Setup/scripts/setup.sh` (Windows: `Agents\Setup\scripts\setup.cmd`). That detects the OS, asks the remaining questions, and runs bootstrap. In Cursor: say **set up the hub**.
 
 ## Design
 

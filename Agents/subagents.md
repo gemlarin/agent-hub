@@ -24,6 +24,7 @@ When delegating a task, provide the subagent with a complete, self-contained pro
 | **Git Coordinator** | **Foreground** | Relays `[continue]` / `[more]` / `[custom]` / `[agent]` / merge ids in this turn. |
 | **Memory Steward** | **Background** | Cloud `MEMORY.md` can stall. Do not block this chat. Print `Durable memory saved to MEMORY file` when the report arrives. |
 | **Code Reviewer** | **Foreground** when it gates a commit/PR; **background** if they asked for a review while doing other work | |
+| **Hub Installer** | **Foreground** | Asks memory path, GitHub username, and app folders before it writes config. |
 
 If they say **“in the background”**, **“don’t wait”**, or **`/multitask`**, use background even for a foreground-default specialist **unless** that would skip a required relay (commit/merge choices). Memory save line is printed when the steward report arrives — do not wait in the foreground for it.
 
@@ -115,6 +116,17 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 
 ---
 
+### Hub Installer (`./Subagents/hub-installer.md`)
+
+**Role:** Finish first-run hub setup. Detects the OS and runs [`Setup/scripts/setup.sh`](./Setup/scripts/setup.sh). Returns a **Setup Report**.
+
+- **When to Trigger:** The user asks to install, set up, or configure the agent hub, or names Hub Installer / `setup.sh`.
+- **Do not trigger** for everyday coding, commits, job search, or a machine that is already configured unless they asked to re-run setup.
+- **Invocation Parameters:** Any answers they already gave (memory path, GitHub username, app paths), plus optional `related_memory`. Do not tell Hub Installer to read `MEMORY.md`. It must not run `git`/`gh` itself — only `setup.sh`.
+- **Handling Results:** If the report is **NEED_INPUT**, ask the user and re-invoke with the answers. Trust **SUCCESS**. Relay the memory path and anything still manual (Cursor User Rules paste).
+
+---
+
 ### Web Researcher (`./Subagents/web-researcher.md`)
 
 **Role:** Targeted web search for current docs, release notes, errors, and patterns. Follow the protocol in that file (source quality, date decay, compressed output).
@@ -130,6 +142,6 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 - **Trigger matrix:** When a section above matches, delegate—do not do that work in the parent.
 - **Durable memory:** Specialists other than Memory Steward **do not** read `MEMORY.md`. Parent passes a task-relevant `related_memory` slice only ([memory.md](./memory.md#passing-memory-to-subagents)).
 - **Read-Only default:** Research Scout, Code Reviewer, Code Sweeper, and Web Researcher do not edit the codebase. Reviewer uses coordinator diff text or `read_file`—not `git`. Sweeper greps named paths only.
-- **Write exceptions:** Memory Steward → configured `MEMORY.md` only. Git Coordinator → `git`/`gh`; file edits only per [git-merge](./Skills/git-merge/SKILL.md) after user approves a merge plan. Job Finder → Desktop result files only (never the hub repo).
+- **Write exceptions:** Memory Steward → configured `MEMORY.md` only. Git Coordinator → `git`/`gh`; file edits only per [git-merge](./Skills/git-merge/SKILL.md) after user approves a merge plan. Job Finder → Desktop result files only (never the hub repo). Hub Installer → `hub-setup.local.md`, a `MEMORY.md` outside the clone, and pointer `AGENTS.md` files in app folders the user named. It runs `setup.sh` only (no direct `git`/`gh`).
 - **No Raw Log Dumping:** Never attempt to re-read raw logs, multi-hundred-line source code, or uncompressed search outputs that a subagent has already processed.
 - **Report cap:** Same **≤80 lines** default for every specialist (see Execution & Synthesis).

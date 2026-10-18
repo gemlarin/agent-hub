@@ -9,7 +9,7 @@
 
 Not under **⌘,** (editor settings) and not **General → Rules for AI** (old UI). **New Cursor Rule** in the palette creates **project** rules (`.cursor/rules/`), not User Rules.
 
-First-run: `./Agents/Setup/scripts/bootstrap.sh`. This paste is the leftover Cursor step bootstrap cannot do.
+First-run: `./Agents/Setup/scripts/setup.sh` (or `bootstrap.sh` when nothing is left to ask). This paste is the leftover Cursor step the installer cannot do.
 
 Replace or merge the blocks below so they match **AGENTS.md** and **git-coordinator**. Project rules: `.cursor/rules/git-delegation.mdc` in the hub.
 

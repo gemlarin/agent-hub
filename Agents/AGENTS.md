@@ -7,14 +7,14 @@ App repos: keep a pointer `AGENTS.md` at the app root whose relative path target
 | Module | Path | Read when |
 |--------|------|-----------|
 | Memory | [memory.md](./memory.md) | **Session start:** main agent reads `MEMORY.md` at the path in `Setup/hub-setup.local.md`. **Writes:** Memory Steward only. **Subagents:** do not read the file; parent passes a task-relevant slice. |
-| Subagents | [subagents.md](./subagents.md) | Any `git`/`gh`, deep research, code review, **code sweep**, memory write, web lookup, **job search** |
+| Subagents | [subagents.md](./subagents.md) | Any `git`/`gh`, deep research, code review, **code sweep**, memory write, web lookup, **job search**, **hub install** |
 | Git Coordinator | [Subagents/git-coordinator.md](./Subagents/git-coordinator.md) | After subagents matrix says delegate git/gh |
 | Skills index | [Skills/SKILLS.md](./Skills/SKILLS.md) | Before memory-management, git-merge, job-search, research, or code-sweep work |
 | Coding (core) | [coding-standards.md](./coding-standards.md) | Implementing or reviewing code (any stack) |
 | Vue greenfield | [coding-standards-vue.md](./coding-standards-vue.md) | New Vue 3 + Vite apps or hub greenfield Vue work |
 | Secrets & Git | [coding-standards § Secrets](./coding-standards.md#secrets--git) | Stage, commit, push, or open a PR |
 | Comms | [personality-communication.md](./personality-communication.md) | Tone; **the user** = person directing the agent this session |
-| Hub setup | [README.md](../README.md), [this folder](./README.md), [Setup/](./Setup/) ([hub-setup.md](./Setup/hub-setup.md), [bootstrap.sh](./Setup/scripts/bootstrap.sh)) | New machine, clone, `git pull` — run bootstrap once per machine |
+| Hub setup | [README.md](../README.md), [this folder](./README.md), [Setup/](./Setup/) ([hub-setup.md](./Setup/hub-setup.md), [setup.sh](./Setup/scripts/setup.sh)) | New machine or clone — guided setup asks the remaining questions; say **set up the hub** to use Hub Installer |
 | Context discipline | [context-discipline.md](./context-discipline.md) | Orchestrating git, memory, subagents, or large reads |
 | Cursor integration | [Setup/scripts/install-cursor-integration.sh](./Setup/scripts/install-cursor-integration.sh) | **Cursor only** — bootstrap on first run; `--force` after editing `Subagents/` |
 | Cursor User Rules | [Setup/cursor-user-rules.md](./Setup/cursor-user-rules.md) | **Cursor only** — paste if default git User Rules tell the parent to run git |

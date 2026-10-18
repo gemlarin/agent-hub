@@ -38,4 +38,4 @@ On-demand rules for **token-efficient orchestration**. Subagent caps: [subagents
 
 ## Hub setup
 
-- Humans: [README.md](../README.md). First run: [Setup/scripts/bootstrap.sh](./Setup/scripts/bootstrap.sh) (Windows: `bootstrap.cmd`). Layout/troubleshooting: [Setup/hub-setup.md](./Setup/hub-setup.md). Read **gitignored** [Setup/hub-setup.local.md](./Setup/hub-setup.local.md) for remotes/accounts (do not commit local file).
+- Humans: [README.md](../README.md). First run: [Setup/scripts/setup.sh](./Setup/scripts/setup.sh) (Windows: `setup.cmd`), or say **set up the hub**. Layout/troubleshooting: [Setup/hub-setup.md](./Setup/hub-setup.md). Read **gitignored** [Setup/hub-setup.local.md](./Setup/hub-setup.local.md) for remotes/accounts (do not commit local file).
