@@ -65,10 +65,11 @@ def expect(label: str, payload: dict, permission: str) -> None:
         raise SystemExit(f"FAIL: expected permission={permission}, got {out}")
 
 
-def shell(command: str) -> dict:
+def shell(command: str, cwd: str | None = None) -> dict:
     return {
         "hook_event_name": "beforeShellExecution",
         "command": command,
+        "cwd": cwd or str(ROOT),
         "workspace_roots": [str(ROOT)],
     }
 
@@ -87,6 +88,9 @@ def assert_git_detection() -> None:
     assert detect("gh pr create")
     assert not detect("python3 .cursor/hooks/git-delegation-hook.py")
     assert not detect("echo hello")
+    hub = mod.hook_hub_root()
+    assert mod.targets_hub_repo("git status", str(ROOT), hub)
+    assert not mod.targets_hub_repo('git -C "/tmp/some-other-app" status', str(ROOT), hub)
 
 
 def main() -> int:
@@ -174,6 +178,23 @@ def main() -> int:
     expect(
         "hook path is not a git command",
         shell("python3 .cursor/hooks/git-delegation-hook.py"),
+        "allow",
+    )
+    other = Path(tempfile.mkdtemp(prefix="not-agent-hub-"))
+    (other / ".git").mkdir()
+    expect(
+        "allow git -C other repo",
+        shell(f'git -C "{other}" status'),
+        "allow",
+    )
+    expect(
+        "allow git with cwd other repo",
+        shell("git status", cwd=str(other)),
+        "allow",
+    )
+    expect(
+        "allow gh with cwd other repo",
+        shell("gh pr list", cwd=str(other)),
         "allow",
     )
     print("OK")

@@ -120,7 +120,11 @@ Reload **Cursor**. Align **User Rules** from [cursor-user-rules.md](./cursor-use
 
 ### Git delegation hook
 
-Hooks apply **only in Cursor** when `.cursor/hooks.json` loads. They block `git`/`gh` unless **git-coordinator** is active (marker file under `.cursor/hooks/state/`, set on `preToolUse` / `subagentStart` for a Task with `subagent_type: git-coordinator`). After editing hooks, Cursor reloads `hooks.json` automatically. See **Settings → Hooks** if commands are blocked unexpectedly.
+Hooks apply **only in Cursor** when this hub’s `.cursor/hooks.json` is loaded (the hub folder is the workspace, or a multi-root workspace includes it). They block `git`/`gh` **only for the agent-hub git root**, unless **git-coordinator** is active (marker under `.cursor/hooks/state/`, set on `preToolUse` / `subagentStart` for `subagent_type: git-coordinator`). `git -C <other-repo>` and a shell `cwd` in another git root are **allowed**. After editing hooks, Cursor reloads `hooks.json` automatically. See **Settings → Hooks** if commands are blocked unexpectedly.
+
+**Other repos after install — nothing extra.** Setup scripts do **not** install User-level hooks. A Cursor window opened on an app (or any clone without this `.cursor/hooks.json`) has **no** shell blocker. If the hub window is still open, the parent can git in sibling/other repos; use git-coordinator only when working **in the hub**, or when you pass `repo_path` on purpose.
+
+If User Rules still say “never run git,” update them from [cursor-user-rules.md](./cursor-user-rules.md) so delegation applies to the hub only.
 
 The hook is **Python** (`.cursor/hooks/git-delegation-hook.py`). Cursor starts it through `.cursor/hooks/git-delegation-hook.cmd`, a polyglot so **Windows `cmd`** and **POSIX `sh`** both work. The launcher looks up `PYTHON`, then `python3`, `python`, or `py -3`. Do not feed Python via a bash heredoc — that replaces stdin and denies every `git` command. Markers live under `.cursor/hooks/state/` when writable, otherwise the process temp dir (`/tmp` or `%TEMP%`).
 

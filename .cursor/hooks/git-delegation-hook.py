@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Git delegation hooks for agent-hub.
 
-beforeShellExecution: block git/gh unless git-coordinator is active.
+beforeShellExecution: block git/gh in the agent-hub repo unless git-coordinator is active.
+Other git roots (sibling apps, unrelated clones) are not blocked.
 subagentStart / preToolUse: write coordinator-*.active under .cursor/hooks/state/.
 
 Limitation: while a coordinator marker exists, the parent could still run git
@@ -79,6 +80,60 @@ def git_or_gh_command(command: str) -> bool:
             flags=re.IGNORECASE,
         )
     )
+
+
+def hook_hub_root() -> Path:
+    """Directory that contains this hook (agent-hub git root)."""
+    return Path(__file__).resolve().parent.parent.parent
+
+
+def parse_git_c_path(command: str) -> str | None:
+    """Last `git -C <path>` (git uses the last -C)."""
+    matches = re.findall(
+        r"(?:^|[\s])-C\s+(?:\"([^\"]+)\"|'([^']+)'|(\S+))",
+        command,
+    )
+    if not matches:
+        return None
+    for group in matches[-1]:
+        if group:
+            return group
+    return None
+
+
+def find_git_root(start: Path) -> Path | None:
+    try:
+        path = start.resolve()
+    except OSError:
+        return None
+    if path.is_file():
+        path = path.parent
+    for directory in [path, *path.parents]:
+        if (directory / ".git").exists():
+            return directory
+    return None
+
+
+def targets_hub_repo(command: str, cwd: str, hub: Path) -> bool:
+    """Enforce the shell block only for the agent-hub git root, not sibling/other repos."""
+    hub = hub.resolve()
+    try:
+        workdir = Path(cwd).resolve() if cwd else Path.cwd()
+    except OSError:
+        workdir = Path.cwd()
+    raw = parse_git_c_path(command)
+    start = workdir
+    if raw:
+        candidate = Path(raw)
+        start = candidate if candidate.is_absolute() else (workdir / candidate)
+        try:
+            start = start.resolve()
+        except OSError:
+            return False
+    root = find_git_root(start)
+    if root is not None:
+        return root == hub
+    return start == hub
 
 
 def coordinator_marker_id(data: dict) -> str:
@@ -179,7 +234,15 @@ def deactivate_coordinator(state_dirs: list, marker_id: str | None = None) -> No
 def main() -> int:
     data = load_payload()
     event = data.get("hook_event_name") or ""
-    hub = resolve_hub(data.get("workspace_roots") or [])
+    hub = hook_hub_root()
+    if data.get("workspace_roots"):
+        # Prefer the workspace folder that actually contains this hook.
+        resolved = resolve_hub(data.get("workspace_roots") or [])
+        try:
+            if (resolved / ".cursor" / "hooks" / "git-delegation-hook.py").is_file():
+                hub = resolved.resolve()
+        except OSError:
+            pass
     state_dirs = marker_dirs(hub)
 
     if event == "sessionStart":
@@ -217,6 +280,10 @@ def main() -> int:
         if not git_or_gh_command(cmd):
             allow_shell()
             return 0
+        cwd = data.get("cwd") or ""
+        if not targets_hub_repo(cmd, cwd, hub):
+            allow_shell()
+            return 0
         if coordinator_active(state_dirs):
             allow_shell()
         else:
@@ -229,6 +296,10 @@ def main() -> int:
     # Empty or unknown payload: fail closed only for git/gh command text.
     cmd = data.get("command") or ""
     if git_or_gh_command(cmd):
+        cwd = data.get("cwd") or ""
+        if not targets_hub_repo(cmd, cwd, hub):
+            allow_shell()
+            return 0
         if coordinator_active(state_dirs):
             allow_shell()
         else:

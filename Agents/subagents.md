@@ -23,7 +23,8 @@ When delegating a task, provide the subagent with a complete, self-contained pro
 ### Git Coordinator (`./Subagents/git-coordinator.md`)
 
 - **Cursor:** Registered as `git-coordinator` in `.cursor/agents/` (run [`Setup/scripts/sync-cursor-agents.sh`](./Setup/scripts/sync-cursor-agents.sh) after spec changes).
-- **When:** Any **`git`** or **`gh`** (read-only or mutating). Parent **never** runs those CLIs.
+- **When (hub repo):** Any **`git`** or **`gh`** on the agent-hub git root. Parent **never** runs those CLIs **in this hub**.
+- **Other repos:** Parent may run `git`/`gh` (shell hook does not block non-hub git roots). Use git-coordinator only if the user wants the hub flow; still pass **`repo_path`**.
 - **Parent only:** Confirm **`repo_path`** with the user if unclear; relay choices and (if `[agent]`) a drafted commit message; surface the **Git Report**—do not re-run git or duplicate its output.
 - **Coordinator spec** (params, commit/merge flows, safety, report statuses): load the subagent file when delegating—not duplicated here.
 

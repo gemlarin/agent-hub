@@ -5,6 +5,8 @@ alwaysApply: true
 
 # Git delegation
 
-- Do **not** run `git` or `gh` in the parent agent shell.
-- Delegate to the **git-coordinator** subagent (`.cursor/agents/git-coordinator.md`); relay user choices and trust the **Git Report**.
-- Ask which **repo_path** when unclear. Orchestration: `Agents/subagents.md`.
+Applies to **this hub git repo** (the folder that contains `AGENTS.md` and `.cursor/hooks/`).
+
+- In **this hub repo**, do **not** run `git` or `gh` in the parent agent shell. Delegate to **git-coordinator**; relay user choices; trust the **Git Report**.
+- In **any other git repo** (sibling app, unrelated clone), the parent **may** run `git`/`gh`. The shell hook does not block those roots. Optional: still use git-coordinator with `repo_path` if the user wants hub-style flow.
+- Ask which **repo_path** when the user wants coordinator on a specific repo. Orchestration: `Agents/subagents.md`.

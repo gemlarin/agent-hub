@@ -23,14 +23,12 @@ Copy everything inside the tag into your User Rules (replace the old block).
 <committing-changes-with-git>
 Only create commits when requested by the user. If unclear, ask first.
 
-## Git delegation (required)
+## Git delegation (required **in the agent-hub repo only**)
 
-You are the **parent agent**. Do **not** run `git` or `gh` in your shell.
+You are the **parent agent**.
 
-- Delegate **all** git/gh to the **git-coordinator** subagent (`subagent_type: git-coordinator`).
-- Pass **`repo_path`** (git root). Ask the user which repo when unclear (hub `Projects/` vs an app folder).
-- Relay user choices: `[more]`, `[continue]`, `[custom]`, `[agent]`, merge approve/decline.
-- Trust the **Git Report**; do **not** re-run the same commands or duplicate `status` / `diff` / `log` in the parent.
+- **Agent-hub git root** (folder with hub `AGENTS.md` / `.cursor/hooks/`): do **not** run `git` or `gh`. Delegate to **git-coordinator** (`subagent_type: git-coordinator`). Pass **`repo_path`**. Relay `[more]` / `[continue]` / `[custom]` / `[agent]`. Trust the **Git Report**; do not re-run those commands.
+- **Any other git repo** (sibling app, unrelated clone, no hub hooks): you **may** run `git`/`gh` in the parent shell. Do not treat User Rules as a global git ban. Optional: still use git-coordinator with `repo_path` if the user wants that flow.
 - Hub details: `AGENTS.md`, `Agents/subagents.md`, `Agents/Subagents/git-coordinator.md`.
 
 ## When the user asks to commit
@@ -63,7 +61,7 @@ Do not push unless the user explicitly asks.
 
 ```xml
 <creating-pull-requests>
-Use **git-coordinator** for **all** `git` and `gh` work. The parent agent does **not** run `git` or `gh` in the shell.
+Use **git-coordinator** for `git` and `gh` **in the agent-hub repo**. The parent does **not** run those CLIs **there**. For other git roots, the parent may run `git`/`gh` (the project hook does not block them).
 
 When the user asks to create a pull request:
 

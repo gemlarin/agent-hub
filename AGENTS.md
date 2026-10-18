@@ -21,5 +21,5 @@
 
 1. **Memory:** No local `Projects/MEMORY.md`. Main agent does not delegate session-start memory load to Memory Steward.
 2. **Secrets / PII:** Never commit, push, or put in PRs — use `.env` (gitignored) and `.env.example` placeholders. Details in Secrets & Git (link above).
-3. **Git / GitHub:** Parent agent **does not** run `git` or `gh`. Git Coordinator only; relay user choices; trust **Git Report** — do not re-run the same commands. Ask **which repo** if `repo_path` is unclear.
+3. **Git / GitHub (this hub repo):** Parent agent **does not** run `git` or `gh` here. Git Coordinator only; relay user choices; trust **Git Report**. Other git roots are not blocked by the Cursor hook — parent may run `git`/`gh` there, or pass `repo_path` to the coordinator. Ask **which repo** if unclear.
 4. **Context:** One Drive memory read per session; trust subagent reports; details in [context discipline](./Agents/context-discipline.md).
