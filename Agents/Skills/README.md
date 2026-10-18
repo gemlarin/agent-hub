@@ -33,7 +33,8 @@ Skills/
 ├── SKILLS.md                 # Index: when to load which skill
 └── <skill-name>/
     ├── SKILL.md              # Frontmatter + instructions
-    └── options.md            # User-facing ids the parent offers
+    ├── options.md            # User-facing ids the parent offers
+    └── user-config.example.md  # Copy to user-config.md (gitignored)
 ```
 
 Optional later: `reference.md`, `examples.md`, `scripts/` beside `SKILL.md`.
@@ -46,12 +47,21 @@ Optional later: `reference.md`, `examples.md`, `scripts/` beside `SKILL.md`.
 | [`research/`](./research/) | Research Scout | Brief + follow-ups + output formats ([option list](./research/options.md)) |
 | [`code-sweep/`](./code-sweep/) | Code Sweeper | Topic-limited a11y/quality sweep ([option list](./code-sweep/options.md)) |
 
-[`SKILLS.md`](./SKILLS.md) is the index. Orchestration paths live in [`../memory.md`](../memory.md) and [`../subagents.md`](../subagents.md), not duplicated as a second trigger matrix here.
+[`SKILLS.md`](./SKILLS.md) is the index. Orchestration paths live in [`../Memory/memory.md`](../Memory/memory.md) and [`../Subagents/subagents.md`](../Subagents/subagents.md), not duplicated as a second trigger matrix here.
+
+## Local settings
+
+Each skill folder has `user-config.example.md`. Copy it to `user-config.md` in that same folder. The hub `.gitignore` ignores every `Agents/Skills/**/user-config.md`.
+
+When `user-config.md` exists, read it **after** `SKILL.md`. **Additions** extend the skill. **Overrides** replace the matching part on this machine only. A hub update does not touch `user-config.md`.
+
+Job search board on/off stays in gitignored `boards.local.md`, not in `user-config.md`.
 
 ## Contribute
 
-1. New skill: folder + `SKILL.md` with YAML `name` and a **description that states when to use it**.
+1. New skill: folder + `SKILL.md` with YAML `name` and a **description that states when to use it**, plus `user-config.example.md`.
 2. List it in [`SKILLS.md`](./SKILLS.md).
-3. Point the owner (subagent or parent) at the skill from [`../subagents.md`](../subagents.md) or [`../memory.md`](../memory.md).
-4. Keep capture/security rules in the skill; keep **file path** config in `hub-setup.local.md` / `memory.md`. User-facing ids live in that skill’s `options.md`.
+3. Point the owner at the skill. For a specialist, follow [Attach a skill to a specialist](../Subagents/README.md#attach-a-skill-to-a-specialist). Path and read/write rules stay in [`../Memory/memory.md`](../Memory/memory.md).
+4. Keep capture/security rules in the skill; keep **file path** config in `hub-setup.local.md` / `memory.md`. User-facing ids live in that skill’s `options.md`. Personal steps go in `user-config.md`.
 5. Do not instruct the parent to run `git`/`gh` in this hub — that stays Git Coordinator (+ git-merge when needed).
+6. Do not commit `user-config.md`. Gitignore is already `Agents/Skills/**/user-config.md`.

@@ -29,7 +29,7 @@ You are the **parent agent**.
 
 - **Agent-hub git root** (folder with hub `Agents/AGENTS.md` / `.cursor/hooks/`): do **not** run `git` or `gh`. Delegate to **git-coordinator** (`subagent_type: git-coordinator`). Pass **`repo_path`**. Relay `[more]` / `[continue]` / `[custom]` / `[agent]`. **Resume** the same coordinator agent id for those relays (do not spawn a new Task unless the last run aborted). Trust the **Git Report**; do not re-run those commands.
 - **Any other git repo** (sibling app, unrelated clone, no hub hooks): you **may** run `git`/`gh` in the parent shell. Do not treat User Rules as a global git ban. Optional: still use git-coordinator with `repo_path` if the user wants that flow.
-- Hub details: `Agents/AGENTS.md`, `Agents/subagents.md`, `Agents/Subagents/git-coordinator.md`.
+- Hub details: `Agents/AGENTS.md`, `Agents/Subagents/subagents.md`, `Agents/Subagents/git-coordinator/git-coordinator.md`.
 
 ## When the user asks to commit
 

@@ -34,20 +34,20 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 - Verify the subagent's summary against project goals before taking direct action.
 - **Report size:** Subagents return **≤80 lines** by default (summaries, capped lists, truncated diffs/snippets). Expand only when the user or parent asks for detail.
 - **Parent relay:** Prefer the report summary in chat; pass full reports only when the user needs them.
-- **Runtime:** Follow [context discipline](./Rules/context-discipline/context-discipline.md) (no duplicate git/memory reads, narrow file scope).
+- **Runtime:** Follow [context discipline](../Rules/context-discipline/context-discipline.md) (no duplicate git/memory reads, narrow file scope).
 
-### Git Coordinator (`./Subagents/git-coordinator.md`)
+### Git Coordinator (`./git-coordinator/git-coordinator.md`)
 
-- **Cursor:** Registered as `git-coordinator` in `.cursor/agents/` (run [`Setup/scripts/sync-cursor-agents.sh`](./Setup/scripts/sync-cursor-agents.sh) after spec changes).
+- **Cursor:** Registered as `git-coordinator` in `.cursor/agents/` (run [`Setup/scripts/sync-cursor-agents.sh`](../Setup/scripts/sync-cursor-agents.sh) after spec changes).
 - **When (hub repo):** Any **`git`** or **`gh`** on the agent-hub git root. Parent **never** runs those CLIs **in this hub**.
 - **Resume:** After the first Git Coordinator Task in this chat, **resume that same agent id** for `[continue]` / `[more]` / `[custom]` / `[agent]` / merge ids / `commit_message`. Spawn a new coordinator only if the previous run **aborted**, **FAILED** with no id, or this is the first git ask in the chat. Cold-starting every relay is what makes GIT feel stuck.
 - **Other repos:** Parent may run `git`/`gh` (shell hook does not block non-hub git roots). Use git-coordinator only if the user wants the hub flow; still pass **`repo_path`**.
-- **Parent only:** Confirm **`repo_path`** with the user if unclear; relay choices and (if `[agent]`) a drafted commit message; surface the **Git Report**—do not re-run git or duplicate its output. On **`AWAIT_MERGE_APPROVAL`**, offer [git-merge option ids](./Skills/git-merge/options.md) unless already chosen. When the user already said **commit and push** in one breath, pass **`user_choice: continue`** plus a **`commit_message`** so the coordinator can one-shot (no extra `[continue]` / `[custom]` round-trips).
+- **Parent only:** Confirm **`repo_path`** with the user if unclear; relay choices and (if `[agent]`) a drafted commit message; surface the **Git Report**—do not re-run git or duplicate its output. On **`AWAIT_MERGE_APPROVAL`**, offer [git-merge option ids](../Skills/git-merge/options.md) unless already chosen. When the user already said **commit and push** in one breath, pass **`user_choice: continue`** plus a **`commit_message`** so the coordinator can one-shot (no extra `[continue]` / `[custom]` round-trips).
 - **Coordinator spec** (params, commit/merge flows, safety, report statuses): load the subagent file when delegating—not duplicated here.
 
 ---
 
-### Research Scout (`./Subagents/deep-document-research.md`)
+### Research Scout (`./research-scout/research-scout.md`)
 
 **Role:** Deep documentation research, codebase exploration, API investigations, and multi-source verification.
 
@@ -55,12 +55,12 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
   - **External Libraries & APIs:** Investigating third-party packages, new frameworks, or APIs spanning more than 3 files or requiring external web search.
   - **Version Compatibility:** Verifying breaking changes, version dependencies, or upgrade guides (e.g., checking `package.json` or `pyproject.toml` compatibility).
   - **Deep Discovery:** Searching through long historical design docs, architectural specs, or large log files.
-- **Invocation Parameters:** Research objective, target dirs/URLs, version constraints, optional `task` from [research options](./Skills/research/options.md) (`brief` if omitted), optional `related_memory` (task-relevant bullets only). Scout loads the [research skill](./Skills/research/SKILL.md). Do not tell Scout to read `MEMORY.md`.
-- **Handling Results:** Trust the brief. Then **offer follow-up tasks and output formats** ([`Skills/research/options.md`](./Skills/research/options.md)) unless the user already picked. Re-invoke with `task` / `output` + prior brief. Parent writes Desktop files for `out-md` / `out-xml` / `out-raw`. Do not re-read sources except for `deepen` / `verify` / `versions` / `timeline`.
+- **Invocation Parameters:** Research objective, target dirs/URLs, version constraints, optional `task` from [research options](../Skills/research/options.md) (`brief` if omitted), optional `related_memory` (task-relevant bullets only). Scout loads the [research skill](../Skills/research/SKILL.md). Do not tell Scout to read `MEMORY.md`.
+- **Handling Results:** Trust the brief. Then **offer follow-up tasks and output formats** ([`Skills/research/options.md`](../Skills/research/options.md)) unless the user already picked. Re-invoke with `task` / `output` + prior brief. Parent writes Desktop files for `out-md` / `out-xml` / `out-raw`. Do not re-read sources except for `deepen` / `verify` / `versions` / `timeline`.
 
 ---
 
-### Code Reviewer (`./Subagents/code-reviewer.md`)
+### Code Reviewer (`./code-reviewer/code-reviewer.md`)
 
 **Role:** Adversarial security auditing, edge-case analysis, and code quality verification for diffs and staged changes.
 
@@ -76,36 +76,36 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 
 ---
 
-### Code Sweeper (`./Subagents/code-sweeper.md`)
+### Code Sweeper (`./code-sweeper/code-sweeper.md`)
 
-**Role:** Topic-limited accessibility and quality sweep using the [code-sweep](./Skills/code-sweep/SKILL.md) skill. Returns a **Sweep Report**. Read-only; does not apply fixes.
+**Role:** Topic-limited accessibility and quality sweep using the [code-sweep](../Skills/code-sweep/SKILL.md) skill. Returns a **Sweep Report**. Read-only; does not apply fixes.
 
 - **When to Trigger:**
   - The user asks for a code sweep or names Code Sweeper.
   - A `tasks.md` **Code sweep** item is due.
-  - The one-time wrap-up reminder in [coding-standards.md](./Rules/coding-standards/coding-standards.md#code-sweep) (offer the topic menu first).
+  - The one-time wrap-up reminder in [coding-standards.md](../Rules/coding-standards/coding-standards.md#code-sweep) (offer the topic menu first).
 - **Do not trigger** for git-diff / security review (Code Reviewer), job search, or implementing the feature.
-- **Invocation Parameters:** `scope` (app root / paths), `topics` from [code-sweep options](./Skills/code-sweep/options.md), optional `related_memory`. If topics are missing, **show the option ids** and wait — do not sweep all topics. Do not run the skill in the parent. Do not tell Code Sweeper to read `MEMORY.md`.
+- **Invocation Parameters:** `scope` (app root / paths), `topics` from [code-sweep options](../Skills/code-sweep/options.md), optional `related_memory`. If topics are missing, **show the option ids** and wait — do not sweep all topics. Do not run the skill in the parent. Do not tell Code Sweeper to read `MEMORY.md`.
 - **Handling Results:** Trust the Sweep Report. Relay findings by topic. **Ask before** applying suggested fixes (Change Control). Do not re-read the swept files unless verifying one finding.
 
 ---
 
-### Memory Steward (`./Subagents/memory-steward.md`)
+### Memory Steward (`./memory-steward/memory-steward.md`)
 
-**Role:** **Write only** to the `MEMORY.md` path in gitignored `Setup/hub-setup.local.md` (see [Memory rules](./memory.md)) using the [memory-management](./Skills/memory-management/SKILL.md) skill. Returns a **Memory Report**. Keeps the file **lean** (target ≤80 lines). Session context comes from the **main agent’s** session-start read—do not use this subagent to load memory at session start.
+**Role:** **Write only** to the `MEMORY.md` path in gitignored `Setup/hub-setup.local.md` (see [Memory rules](../Memory/memory.md)) using the [memory-management](../Skills/memory-management/SKILL.md) skill. Returns a **Memory Report**. Keeps the file **lean** (target ≤80 lines). Session context comes from the **main agent’s** session-start read—do not use this subagent to load memory at session start.
 
 - **When to Trigger:**
   - **Viable fact (auto):** Parent judged a standing preference, durable decision, workaround, blocker, or lasting goal is worth storing. Invoke immediately with `option: mem-save` — **do not** show the option menu.
-  - **Session ending / explicit save:** User input means they are done, or they said “remember” / “update memory” / “save session”. **Show** [memory option ids](./Skills/memory-management/options.md) first; invoke only after they pick (not on `mem-skip`).
+  - **Session ending / explicit save:** User input means they are done, or they said “remember” / “update memory” / “save session”. **Show** [memory option ids](../Skills/memory-management/options.md) first; invoke only after they pick (not on `mem-skip`).
 - **Do not trigger** to bootstrap the session or to let another specialist read memory.
 - **Invocation Parameters:** `mode: write`, **option** id (`mem-save` on autosave), **memory_path** (absolute, from this session’s hub-setup resolve), **memory delta** (bullets; empty on `mem-prune`), optional one-paragraph session summary (not stored as-is). Parent must not ask the steward to change non-memory files. Launch **in the background**. Do not poll.
 - **Handling Results:** Trust the Memory Report; do not re-read `MEMORY.md` unless the user says the file changed on another device or you need the new bullets for later `related_memory`. After SUCCESS with a real change, print exactly: `Durable memory saved to MEMORY file`
 
 ---
 
-### Job Finder (`./Subagents/job-finder.md`)
+### Job Finder (`./job-finder/job-finder.md`)
 
-**Role:** Resume-matched job search using the [job-search](./Skills/job-search/SKILL.md) skill. Returns a **Job Report**. Writes result files to the Desktop only when the user asks.
+**Role:** Resume-matched job search using the [job-search](../Skills/job-search/SKILL.md) skill. Returns a **Job Report**. Writes result files to the Desktop only when the user asks.
 
 - **When to Trigger (only):**
   - The user asks for help finding jobs, openings, or a job search.
@@ -116,9 +116,9 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 
 ---
 
-### Hub Installer (`./Subagents/hub-installer.md`)
+### Hub Installer (`./hub-installer/hub-installer.md`)
 
-**Role:** Finish first-run hub setup. Detects the OS and runs [`Setup/scripts/setup.sh`](./Setup/scripts/setup.sh). Returns a **Setup Report**.
+**Role:** Finish first-run hub setup. Detects the OS and runs [`Setup/scripts/setup.sh`](../Setup/scripts/setup.sh). Returns a **Setup Report**.
 
 - **When to Trigger:** The user asks to install, set up, or configure the agent hub, or names Hub Installer / `setup.sh`.
 - **Do not trigger** for everyday coding, commits, job search, or a machine that is already configured unless they asked to re-run setup.
@@ -127,7 +127,7 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 
 ---
 
-### Web Researcher (`./Subagents/web-researcher.md`)
+### Web Researcher (`./web-researcher/web-researcher.md`)
 
 **Role:** Targeted web search for current docs, release notes, errors, and patterns. Follow the protocol in that file (source quality, date decay, compressed output).
 
@@ -140,8 +140,8 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 ### General Delegation Protocol
 
 - **Trigger matrix:** When a section above matches, delegate—do not do that work in the parent.
-- **Durable memory:** Specialists other than Memory Steward **do not** read `MEMORY.md`. Parent passes a task-relevant `related_memory` slice only ([memory.md](./memory.md#passing-memory-to-subagents)).
+- **Durable memory:** Specialists other than Memory Steward **do not** read `MEMORY.md`. Parent passes a task-relevant `related_memory` slice only ([memory.md](../Memory/memory.md#passing-memory-to-subagents)).
 - **Read-Only default:** Research Scout, Code Reviewer, Code Sweeper, and Web Researcher do not edit the codebase. Reviewer uses coordinator diff text or `read_file`—not `git`. Sweeper greps named paths only.
-- **Write exceptions:** Memory Steward → configured `MEMORY.md` only. Git Coordinator → `git`/`gh`; file edits only per [git-merge](./Skills/git-merge/SKILL.md) after user approves a merge plan. Job Finder → Desktop result files only (never the hub repo). Hub Installer → `hub-setup.local.md`, a `MEMORY.md` outside the clone, and pointer `AGENTS.md` files in app folders the user named. It runs `setup.sh` only (no direct `git`/`gh`).
+- **Write exceptions:** Memory Steward → configured `MEMORY.md` only. Git Coordinator → `git`/`gh`; file edits only per [git-merge](../Skills/git-merge/SKILL.md) after user approves a merge plan. Job Finder → Desktop result files only (never the hub repo). Hub Installer → `hub-setup.local.md`, a `MEMORY.md` outside the clone, and pointer `AGENTS.md` files in app folders the user named. It runs `setup.sh` only (no direct `git`/`gh`).
 - **No Raw Log Dumping:** Never attempt to re-read raw logs, multi-hundred-line source code, or uncompressed search outputs that a subagent has already processed.
 - **Report cap:** Same **≤80 lines** default for every specialist (see Execution & Synthesis).

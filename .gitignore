@@ -27,3 +27,9 @@
 
 # Per-machine rule overrides (template: user-config.example.md in each Rules folder)
 /Agents/Rules/**/user-config.md
+
+# Per-machine skill overrides (template: user-config.example.md in each skill folder)
+/Agents/Skills/**/user-config.md
+
+# Per-machine subagent overrides (template: user-config.example.md in each specialist folder)
+/Agents/Subagents/**/user-config.md

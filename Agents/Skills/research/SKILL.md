@@ -5,6 +5,8 @@ description: Follow-up tasks on Research Scout findings (compare, cite, verify, 
 
 # Skill: Research follow-ups
 
+**This machine:** After this file, read `user-config.md` in this folder when it exists. Additions extend the skill. Overrides replace the matching part on this machine only. Never commit that file. Copy [user-config.example.md](./user-config.example.md) to create it.
+
 **Research Scout** loads this skill. Catalog: [`options.md`](./options.md). File shapes: [`output.md`](./output.md).
 
 Do not invent APIs or quotes. Stay **read-only** in the repo. Default **≤80 lines** unless `task` is `expand` or the parent asked for detail.

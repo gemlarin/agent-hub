@@ -5,7 +5,7 @@ Shared rule: [`context-discipline.md`](./context-discipline.md). Loaded when orc
 ## Contribute
 
 1. Edit [`context-discipline.md`](./context-discipline.md) for orchestration limits every hub user should get.
-2. Delegation triggers stay in [`../../subagents.md`](../../subagents.md). Do not copy that matrix here.
+2. Delegation triggers stay in [`../../Subagents/subagents.md`](../../Subagents/subagents.md). Do not copy that matrix here.
 3. Do not commit `user-config.md`.
 
 ## Local settings

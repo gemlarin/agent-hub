@@ -5,6 +5,8 @@ description: Searches public job boards for openings that match a resume and fil
 
 # Skill: Job search
 
+**This machine:** After this file, read `user-config.md` in this folder when it exists. Additions extend the skill. Overrides replace the matching part on this machine only. Never commit that file. Copy [user-config.example.md](./user-config.example.md) to create it. Board on/off stays in `boards.local.md`, not in `user-config.md`.
+
 **Job Finder** loads this skill. The parent agent must not run a job search itself. Collect **all** inputs below, then search. Do not invent openings.
 
 **Never** commit a resume or result file to git. **Never** write resume contents (or SSN, address, phone) into `MEMORY.md`.

@@ -6,6 +6,8 @@ tools: [shell, read_file, write_file, edit_file]
 
 # Skill: Git merge & conflict resolution
 
+**This machine:** After this file, read `user-config.md` in this folder when it exists. Additions extend the skill. Overrides replace the matching part on this machine only. Never commit that file. Copy [user-config.example.md](./user-config.example.md) to create it.
+
 Use this skill when the Git Coordinator handles **`git merge`**, **`git pull`** (merge or rebase), **`git rebase`**, or **`git cherry-pick`**, or when the repo is already in a conflicted state from those operations.
 
 User-facing ids: [`options.md`](./options.md). The **main agent** relays those ids. The **coordinator** runs all git commands and reads conflicted files.

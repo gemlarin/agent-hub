@@ -2,7 +2,7 @@
 
 **Canonical specs** for hub specialists. Cursor Task types in [`.cursor/agents/`](../../.cursor/agents/) are **generated** from these files — do not treat the generated copies as source.
 
-Orchestration (when the **parent agent** must delegate): [`../subagents.md`](../subagents.md).
+Orchestration (when the **parent agent** must delegate): [`./subagents.md`](./subagents.md).
 
 ## Using the agents (users)
 
@@ -64,30 +64,69 @@ Example: `cite` + `out-md`. The main agent re-invokes Research Scout for the tas
 
 ## Design
 
-Each file is a subagent spec: YAML frontmatter (`name`, `description`, `tools`) plus the body the specialist follows.
+Each specialist is its own folder: the spec, a contribute README, and a gitignored `user-config.md`. The spec has YAML frontmatter (`name`, `description`, `tools`) plus the body the specialist follows. [`subagents.md`](./subagents.md) is the trigger matrix. It stays in this folder.
 
 | Spec | Cursor `name` in [`../Setup/cursor-agents.json`](../Setup/cursor-agents.json) |
 |------|----------------|
-| [`git-coordinator.md`](./git-coordinator.md) | `git-coordinator` |
-| [`memory-steward.md`](./memory-steward.md) | `memory-steward` |
-| [`code-reviewer.md`](./code-reviewer.md) | `code-reviewer` |
-| [`web-researcher.md`](./web-researcher.md) | `web-researcher` |
-| [`deep-document-research.md`](./deep-document-research.md) | `research-scout` |
-| [`code-sweeper.md`](./code-sweeper.md) | `code-sweeper` |
-| [`job-finder.md`](./job-finder.md) | `job-finder` |
-| [`hub-installer.md`](./hub-installer.md) | `hub-installer` |
+| [`git-coordinator.md`](./git-coordinator/git-coordinator.md) | `git-coordinator` |
+| [`memory-steward.md`](./memory-steward/memory-steward.md) | `memory-steward` |
+| [`code-reviewer.md`](./code-reviewer/code-reviewer.md) | `code-reviewer` |
+| [`web-researcher.md`](./web-researcher/web-researcher.md) | `web-researcher` |
+| [`research-scout.md`](./research-scout/research-scout.md) | `research-scout` |
+| [`code-sweeper.md`](./code-sweeper/code-sweeper.md) | `code-sweeper` |
+| [`job-finder.md`](./job-finder/job-finder.md) | `job-finder` |
+| [`hub-installer.md`](./hub-installer/hub-installer.md) | `hub-installer` |
 
 Writable (`readonly: false`): Git Coordinator, Memory Steward, Job Finder (Desktop files only), Hub Installer (setup files and app pointers you named). The others are read-only (including Code Sweeper).
 
 Reports default to **≤80 lines**. Parent agents relay user choices and **trust the report** — they must not re-run the specialist’s `git`/`gh` or re-read memory after a Memory Report.
 
+## Local settings
+
+Each specialist folder has `user-config.example.md`. Copy it to `user-config.md` in that same folder. The hub `.gitignore` ignores every `Agents/Subagents/**/user-config.md`.
+
+When `user-config.md` exists, read it **after** the spec. **Additions** extend the specialist. **Overrides** replace the matching part on this machine only. A hub update does not touch `user-config.md`.
+
+## Attach a skill to a specialist
+
+A skill is the procedure. The specialist is who runs it. The parent does not run that procedure itself.
+
+| Specialist | Skill |
+|------------|--------|
+| Git Coordinator | [`git-merge`](../Skills/git-merge/SKILL.md) for merge, rebase, and cherry-pick only |
+| Memory Steward | [`memory-management`](../Skills/memory-management/SKILL.md) |
+| Research Scout | [`research`](../Skills/research/SKILL.md) |
+| Code Sweeper | [`code-sweep`](../Skills/code-sweep/SKILL.md) |
+| Job Finder | [`job-search`](../Skills/job-search/SKILL.md) |
+
+Code Reviewer, Web Researcher, and Hub Installer have no skill. Their steps stay in the spec.
+
+To attach a skill:
+
+1. Put the procedure in `Agents/Skills/<skill>/SKILL.md`. List it in [`../Skills/SKILLS.md`](../Skills/SKILLS.md) with this specialist as the one who must load it.
+2. In `Subagents/<name>/<name>.md`, add a **Required skill** section. Tell the specialist to load that `SKILL.md` before the work, then read `user-config.md` in the skill folder when it exists. Link `options.md` when the parent must offer ids. Do not paste the skill body into the spec.
+
+   From a spec file, link the skill with a path relative to that file. Job Finder does it in [`job-finder.md`](./job-finder/job-finder.md):
+
+   ```markdown
+   ## Required skill
+
+   Load and follow Agents/Skills/job-search/SKILL.md before searching.
+   Then read Agents/Skills/job-search/user-config.md when that file exists.
+   ```
+
+3. In [`subagents.md`](./subagents.md), name that skill on the specialist's role line, and say the parent must not run it.
+4. Regen `.cursor/agents/` so the generated specialist gets the same load instruction ([Contribute](#contribute)).
+
+Two local files stay separate. `Subagents/<name>/user-config.md` extends the specialist. `Skills/<skill>/user-config.md` extends the procedure.
+
 ## Contribute
 
-1. **Edit the spec in this folder**, not `.cursor/agents/*.md`.
+1. **Edit the spec in that specialist's folder**, not `.cursor/agents/*.md`.
 2. Add or rename a specialist:
-   - New `*.md` here with frontmatter `name` + `description`.
-   - Register it in [`../Setup/cursor-agents.json`](../Setup/cursor-agents.json) (`name`, `source` filename, `readonly`).
-   - Add a trigger section in [`../subagents.md`](../subagents.md).
+   - New folder `Subagents/<name>/<name>.md` with frontmatter `name` + `description`, plus `README.md` and `user-config.example.md`.
+   - Register it in [`../Setup/cursor-agents.json`](../Setup/cursor-agents.json) (`name`, `source` path, `readonly`).
+   - Add a trigger section in [`./subagents.md`](./subagents.md).
 3. Regen Cursor copies from the hub root:
 
    ```bash
@@ -97,3 +136,4 @@ Reports default to **≤80 lines**. Parent agents relay user choices and **trust
    (`sync-cursor-agents.sh` / `sync_cursor_agents.py` is enough if you only need `.cursor/agents/`.)
 4. Commit **spec + generated** `.cursor/agents/` together.
 5. Do not put hub policy that belongs in `AGENTS.md` or a skill into a subagent body unless that specialist must follow it.
+6. Do not commit `user-config.md`. Gitignore is already `Agents/Subagents/**/user-config.md`.

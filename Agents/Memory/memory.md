@@ -6,7 +6,7 @@ Put it in **cloud storage** (Google Drive, iCloud, Dropbox, …) so machines sha
 
 ## Configure the path
 
-The Memory Steward and the main agent read the absolute path from gitignored [`Setup/hub-setup.local.md`](./Setup/hub-setup.local.md):
+The Memory Steward and the main agent read the absolute path from gitignored [`Setup/hub-setup.local.md`](../Setup/hub-setup.local.md):
 
 ```markdown
 ## Persistent memory
@@ -14,7 +14,7 @@ The Memory Steward and the main agent read the absolute path from gitignored [`S
 - **MEMORY.md path:** `/absolute/path/to/MEMORY.md`
 ```
 
-Bootstrap seeds that file from [`Setup/hub-setup.local.example.md`](./Setup/hub-setup.local.example.md). Edit the path on each machine. If the field is missing or still the placeholder, stop and ask the user to set it.
+Bootstrap seeds that file from [`Setup/hub-setup.local.example.md`](../Setup/hub-setup.local.example.md). Edit the path on each machine. If the field is missing or still the placeholder, stop and ask the user to set it.
 
 Typical locations:
 
@@ -58,7 +58,7 @@ When the Memory Report arrives with a real change, print exactly:
 
 ### Option menu (only these times)
 
-Show the proposed bullets and the ids in [`Skills/memory-management/options.md`](./Skills/memory-management/options.md) **only** when:
+Show the proposed bullets and the ids in [`Skills/memory-management/options.md`](../Skills/memory-management/options.md) **only** when:
 
 1. **Explicit save:** the user asked to remember / save / update memory.
 2. **Session ending:** user input means they are done (e.g. “that’s all”, “we’re done”, “wrap up”, “thanks, I’m out”, “later”, “good night”, “stop for now”).
@@ -71,9 +71,9 @@ Never dump the full `MEMORY.md` into chat.
 
 When **writing** memory, the steward loads:
 
-[`Skills/memory-management/SKILL.md`](./Skills/memory-management/SKILL.md)
+[`Skills/memory-management/SKILL.md`](../Skills/memory-management/SKILL.md)
 
-Write ids the parent offers: [`Skills/memory-management/options.md`](./Skills/memory-management/options.md).
+Write ids the parent offers: [`Skills/memory-management/options.md`](../Skills/memory-management/options.md).
 
 Main agent should follow the same capture/discard boundaries when deciding *what* to propose.
 

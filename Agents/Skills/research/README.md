@@ -15,3 +15,8 @@ Scout stays read-only in the repo. This is not Web Researcher (one-shot lookup) 
 - Add or rename a follow-up or output id in [`options.md`](./options.md) **and** the matching format in [`SKILL.md`](./SKILL.md) / [`output.md`](./output.md).
 - Keep the skill listed in [`../SKILLS.md`](../SKILLS.md).
 - Do not teach the parent to re-read all sources when `cite` / `explain` is enough.
+- Do not commit `user-config.md`.
+
+## Local settings
+
+Copy [`user-config.example.md`](./user-config.example.md) to `user-config.md`. That file stays on your machine. Additions extend this skill. Overrides replace the matching part for you only.

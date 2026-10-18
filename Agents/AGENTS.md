@@ -1,15 +1,15 @@
 # Agent hub (canonical)
 
-**Load policy on demand.** Use the table below; open linked files only when a row applies. Full subagent bodies live under `Subagents/` — read when [Subagents](./subagents.md) says to delegate.
+**Load policy on demand.** Use the table below; open linked files only when a row applies. Full subagent bodies live in `Subagents/<name>/` — read when [Subagents](./Subagents/subagents.md) says to delegate. After a spec, read `user-config.md` in that folder when it exists.
 
 App repos: keep a pointer `AGENTS.md` at the app root whose relative path targets **this file**. That pointer loads this policy; it does **not** load hub `.cursor/` or `.githooks/`. See [README.md](../README.md#point-app-repos-at-the-hub).
 
 | Module | Path | Read when |
 |--------|------|-----------|
-| Memory | [memory.md](./memory.md) | **Session start:** main agent reads `MEMORY.md` at the path in `Setup/hub-setup.local.md`. **Writes:** Memory Steward only. **Subagents:** do not read the file; parent passes a task-relevant slice. |
-| Subagents | [subagents.md](./subagents.md) | Any `git`/`gh`, deep research, code review, **code sweep**, memory write, web lookup, **job search**, **hub install** |
-| Git Coordinator | [Subagents/git-coordinator.md](./Subagents/git-coordinator.md) | After subagents matrix says delegate git/gh |
-| Skills index | [Skills/SKILLS.md](./Skills/SKILLS.md) | Before memory-management, git-merge, job-search, research, or code-sweep work |
+| Memory | [memory.md](./Memory/memory.md) | **Session start:** main agent reads `MEMORY.md` at the path in `Setup/hub-setup.local.md`. **Writes:** Memory Steward only. **Subagents:** do not read the file; parent passes a task-relevant slice. |
+| Subagents | [Subagents/subagents.md](./Subagents/subagents.md) | Any `git`/`gh`, deep research, code review, **code sweep**, memory write, web lookup, **job search**, **hub install**. Then that specialist's `user-config.md` if it exists. |
+| Git Coordinator | [Subagents/git-coordinator/git-coordinator.md](./Subagents/git-coordinator/git-coordinator.md) | After subagents matrix says delegate git/gh. Then that folder's `user-config.md` if it exists. |
+| Skills index | [Skills/SKILLS.md](./Skills/SKILLS.md) | Before memory-management, git-merge, job-search, research, or code-sweep work. Then that skill's `user-config.md` if it exists. |
 | Coding (core) | [Rules/coding-standards](./Rules/coding-standards/coding-standards.md) | Implementing or reviewing code (any stack). Then `user-config.md` in that folder if it exists. |
 | Vue greenfield | [Rules/coding-standards-vue](./Rules/coding-standards-vue/coding-standards-vue.md) | New Vue 3 + Vite apps or hub greenfield Vue work. Then that folder's `user-config.md` if it exists. |
 | Secrets & Git | [coding-standards § Secrets](./Rules/coding-standards/coding-standards.md#secrets--git) | Stage, commit, push, or open a PR |
@@ -25,4 +25,4 @@ App repos: keep a pointer `AGENTS.md` at the app root whose relative path target
 2. **Secrets / PII:** Never commit, push, or put in PRs — use `.env` (gitignored) and `.env.example` placeholders. Details in Secrets & Git (link above).
 3. **Git / GitHub (this hub repo):** Parent agent **does not** run `git` or `gh` here. Git Coordinator only; relay user choices; trust **Git Report**. Other git roots are not blocked by the Cursor hook — parent may run `git`/`gh` there, or pass `repo_path` to the coordinator. Ask **which repo** if unclear.
 4. **Context:** One memory-file read per session (main agent only); trust subagent reports; details in [context discipline](./Rules/context-discipline/context-discipline.md).
-5. **Local rules:** A `Rules/<name>/user-config.md` file extends that rule. Read it after the shared file. Additions add. Overrides replace the matching part on this machine. Never commit `user-config.md`.
+5. **Local overrides:** `Rules/<name>/user-config.md` extends that rule. `Skills/<name>/user-config.md` extends that skill. `Subagents/<name>/user-config.md` extends that specialist. Read it after the shared file. Additions add. Overrides replace the matching part on this machine. Never commit `user-config.md`. `Memory/` has no `user-config.md`.

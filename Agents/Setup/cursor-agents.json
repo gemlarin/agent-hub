@@ -2,42 +2,42 @@
   "agents": [
     {
       "name": "git-coordinator",
-      "source": "git-coordinator.md",
+      "source": "git-coordinator/git-coordinator.md",
       "readonly": false
     },
     {
       "name": "memory-steward",
-      "source": "memory-steward.md",
+      "source": "memory-steward/memory-steward.md",
       "readonly": false
     },
     {
       "name": "code-reviewer",
-      "source": "code-reviewer.md",
+      "source": "code-reviewer/code-reviewer.md",
       "readonly": true
     },
     {
       "name": "code-sweeper",
-      "source": "code-sweeper.md",
+      "source": "code-sweeper/code-sweeper.md",
       "readonly": true
     },
     {
       "name": "web-researcher",
-      "source": "web-researcher.md",
+      "source": "web-researcher/web-researcher.md",
       "readonly": true
     },
     {
       "name": "research-scout",
-      "source": "deep-document-research.md",
+      "source": "research-scout/research-scout.md",
       "readonly": true
     },
     {
       "name": "job-finder",
-      "source": "job-finder.md",
+      "source": "job-finder/job-finder.md",
       "readonly": false
     },
     {
       "name": "hub-installer",
-      "source": "hub-installer.md",
+      "source": "hub-installer/hub-installer.md",
       "readonly": false
     }
   ]

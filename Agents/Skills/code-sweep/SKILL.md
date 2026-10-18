@@ -5,6 +5,8 @@ description: Topic-limited accessibility and quality sweep of named paths. Use w
 
 # Skill: Code sweep
 
+**This machine:** After this file, read `user-config.md` in this folder when it exists. Additions extend the skill. Overrides replace the matching part on this machine only. Never commit that file. Copy [user-config.example.md](./user-config.example.md) to create it.
+
 **Code Sweeper** loads this skill. Topic ids: [`options.md`](./options.md). The parent **must not** run a multi-topic sweep in the main chat.
 
 Stay **read-only**. Do not edit files, run `git`/`gh`, or write `MEMORY.md`. Default report **≤80 lines**.

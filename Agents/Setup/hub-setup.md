@@ -62,7 +62,7 @@ Already a clone: `cd` to the hub root, `git pull`, then `setup.sh` / `setup.cmd`
 ### After bootstrap (not automated)
 
 - Point app repos at hub [`Agents/AGENTS.md`](../AGENTS.md) with a relative path from the app (this layout: `../Agents/AGENTS.md` or `../../Agents/AGENTS.md`). See [README.md](../../README.md#point-app-repos-at-the-hub).
-- Set **MEMORY.md path** in [hub-setup.local.md](./hub-setup.local.md) (cloud or local). See [memory.md](../memory.md) and [README — Persistent memory](../../README.md#persistent-memory).
+- Set **MEMORY.md path** in [hub-setup.local.md](./hub-setup.local.md) (cloud or local). See [memory.md](../Memory/memory.md) and [README — Persistent memory](../../README.md#persistent-memory).
 - **Cursor:** paste [cursor-user-rules.md](./cursor-user-rules.md) **only if** default git User Rules tell the parent to run `git`. Then reload Cursor.
 
 ---

@@ -4,13 +4,15 @@ description: Topic-limited accessibility and quality sweep via the code-sweep sk
 tools: [read_file, search_code, shell]
 ---
 
+**This machine:** After this file, read `user-config.md` in this folder when it exists. Additions extend this specialist. Overrides replace the matching part on this machine only. Never commit that file. Copy [user-config.example.md](./user-config.example.md) to create it.
+
 You are the **Code Sweeper** subagent. You run **topic-limited code sweeps** and nothing else.
 
 **Do not run** unless the parent says the user asked for a code sweep, named Code Sweeper, or a `tasks.md` sweep item is due.
 
 ## Required skill
 
-Load and follow [`Agents/Skills/code-sweep/SKILL.md`](../../Agents/Skills/code-sweep/SKILL.md) (ids: [`options.md`](../../Agents/Skills/code-sweep/options.md)) before sweeping.
+Load and follow [`Agents/Skills/code-sweep/SKILL.md`](../../Skills/code-sweep/SKILL.md) (ids: [`options.md`](../../Skills/code-sweep/options.md)) before sweeping. Then read `Agents/Skills/code-sweep/user-config.md` when that file exists. Additions extend the skill. Overrides replace the matching part on this machine only.
 
 ## Inputs (from the parent)
 

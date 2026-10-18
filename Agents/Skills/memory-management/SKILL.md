@@ -5,7 +5,9 @@ description: Captures, sanitizes, and maintains a lean MEMORY.md. Auto-write via
 
 # Skill: Memory & Cross-Session Persistence
 
-Apply this skill when **writing** the configured `MEMORY.md` (Memory Steward) and when the **parent** decides whether to prompt a save. The **main agent** reads memory at session start without invoking the steward. Path comes from gitignored `Agents/Setup/hub-setup.local.md` — see [`memory.md`](../../memory.md). Never commit `MEMORY.md` to agent-hub or app repos.
+**This machine:** After this file, read `user-config.md` in this folder when it exists. Additions extend the skill. Overrides replace the matching part on this machine only. Never commit that file. Copy [user-config.example.md](./user-config.example.md) to create it.
+
+Apply this skill when **writing** the configured `MEMORY.md` (Memory Steward) and when the **parent** decides whether to prompt a save. The **main agent** reads memory at session start without invoking the steward. Path comes from gitignored `Agents/Setup/hub-setup.local.md` — see [`memory.md`](../../Memory/memory.md). Never commit `MEMORY.md` to agent-hub or app repos.
 
 User-facing ids: [`options.md`](./options.md). Show that list **only** on an explicit save request or session wrap-up. Mid-session viable facts are **auto-written** (`mem-save`) without the menu. Memory Steward applies the id to the delta.
 

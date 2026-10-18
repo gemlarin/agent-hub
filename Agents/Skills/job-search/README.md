@@ -16,3 +16,8 @@ The parent must not run this skill unless Job Finder is unavailable. Do not comm
 - Edit [`boards.md`](./boards.md) to change the shared default boards. For a personal list, copy [`boards.local.example.md`](./boards.local.example.md) to `boards.local.md` (gitignored). Set **On** to `yes` or `no`, or add and delete rows. Do not hardcode board names in `SKILL.md`.
 - Edit [`options.md`](./options.md) / [`output.md`](./output.md) for export ids and Desktop schemas. Keep ids aligned with [`../research/options.md`](../research/options.md).
 - Keep the skill listed in [`../SKILLS.md`](../SKILLS.md).
+- Do not commit `user-config.md`. Personal search steps go there. Personal boards stay in `boards.local.md`.
+
+## Local settings
+
+Copy [`user-config.example.md`](./user-config.example.md) to `user-config.md`. That file stays on your machine and extends this skill. Copy [`boards.local.example.md`](./boards.local.example.md) to `boards.local.md` when you want your own board table. Both files are gitignored.

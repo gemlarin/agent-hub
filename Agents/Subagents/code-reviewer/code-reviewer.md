@@ -4,6 +4,8 @@ description: Evaluates code for security risks, performance bottlenecks, and sty
 tools: [read_file, search_code] # Read-only; no git CLI — diff comes from parent (Git Coordinator Git Report)
 ---
 
+**This machine:** After this file, read `user-config.md` in this folder when it exists. Additions extend this specialist. Overrides replace the matching part on this machine only. Never commit that file. Copy [user-config.example.md](./user-config.example.md) to create it.
+
 You are a Senior Code Auditor. Your sole task is to review proposed changes.
 
 ### Instructions:

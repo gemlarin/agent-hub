@@ -19,7 +19,7 @@ done
 
 if ! $FORCE && ! "$SCRIPTS/detect-cursor-env.sh" --quiet; then
   echo "Skipping Cursor integration (not detected)."
-  echo "Hub works without Cursor: Agents/AGENTS.md, Agents/subagents.md, Agents/Skills/."
+  echo "Hub works without Cursor: Agents/AGENTS.md, Agents/Subagents/subagents.md, Agents/Skills/."
   echo "To install anyway: $0 --force"
   echo "Details: Agents/Setup/hub-setup.md#cursor-integration-optional"
   exit 0

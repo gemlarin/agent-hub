@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -39,6 +40,25 @@ def yaml_quote(s: str) -> str:
         escaped = s.replace("\\", "\\\\").replace('"', '\\"')
         return f'"{escaped}"'
     return s
+
+
+def rebase_markdown_links(text: str, src_dir: Path, out_dir: Path) -> str:
+    """Rewrite relative links so they resolve from the generated Cursor agent file."""
+
+    def repl(match: re.Match[str]) -> str:
+        url, extra = match.group(1), match.group(2)
+        if url.startswith(("http://", "https://", "mailto:", "#")):
+            return match.group(0)
+        path_part, sep, frag = url.partition("#")
+        if not path_part:
+            return match.group(0)
+        target = (src_dir / path_part).resolve()
+        rel = Path(os.path.relpath(target, out_dir)).as_posix()
+        if sep:
+            rel = f"{rel}#{frag}"
+        return f"]({rel}{extra})"
+
+    return re.sub(r"\]\(([^)\s]+)([^)]*)\)", repl, text)
 
 
 def build_cursor_file(
@@ -97,6 +117,7 @@ def main() -> int:
             return 1
 
         source_rel = f"Agents/Subagents/{source}"
+        body = rebase_markdown_links(body, src_path.parent, OUT_DIR)
         out_text = build_cursor_file(name, description, readonly, source_rel, body)
         out_path = OUT_DIR / f"{name}.md"
         out_path.write_text(out_text, encoding="utf-8")

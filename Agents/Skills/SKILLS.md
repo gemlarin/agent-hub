@@ -1,6 +1,6 @@
 # Skills
 
-When a task matches a skill's description, load and follow its instructions.
+When a task matches a skill's description, load and follow its instructions. After `SKILL.md`, read `user-config.md` in that skill folder when it exists. Additions extend the skill. Overrides replace the matching part on this machine only. Never commit `user-config.md`.
 
 ## Available Workspace Skills
 
@@ -8,14 +8,14 @@ When a task matches a skill's description, load and follow its instructions.
 
 - **Skill file:** [`./memory-management/SKILL.md`](./memory-management/SKILL.md)
 - **User options:** [`options.md`](./memory-management/options.md) (`mem-save`, `mem-skip`, `mem-prefs`, `mem-projects`, `mem-solutions`, `mem-blockers`, `mem-forget`, `mem-prune`)
-- **Orchestration (paths, triggers, steward):** [`memory.md`](../memory.md)
-- **When to use:** Memory Steward **writes** (sanitize, dedupe, prune). Main agent **reads** once at session start, **auto-writes** viable facts mid-session, **offers option ids** only on explicit save or wrap-up, and passes a **slice** to other subagents—see `Agents/memory.md`.
+- **Orchestration (paths, triggers, steward):** [`memory.md`](../Memory/memory.md)
+- **When to use:** Memory Steward **writes** (sanitize, dedupe, prune). Main agent **reads** once at session start, **auto-writes** viable facts mid-session, **offers option ids** only on explicit save or wrap-up, and passes a **slice** to other subagents—see `Agents/Memory/memory.md`.
 
 ### 2. `git-merge` (`./git-merge/`)
 
 - **Skill file:** [`./git-merge/SKILL.md`](./git-merge/SKILL.md)
 - **User options:** [`options.md`](./git-merge/options.md) (`approve`, `decline`, `ours`, `theirs`, `detail`, `revise`)
-- **Orchestration:** [Git Coordinator](../Subagents/git-coordinator.md) in [`subagents.md`](../subagents.md)
+- **Orchestration:** [Git Coordinator](../Subagents/git-coordinator/git-coordinator.md) in [`subagents.md`](../Subagents/subagents.md)
 - **When to use:** Merge, pull-with-merge, rebase, or cherry-pick conflicts. Coordinator must load this skill before resolving or aborting.
 
 ### 3. `job-search` (`./job-search/`)
@@ -34,7 +34,7 @@ When a task matches a skill's description, load and follow its instructions.
 
 - **Skill file:** [`./code-sweep/SKILL.md`](./code-sweep/SKILL.md)
 - **User options:** [`options.md`](./code-sweep/options.md) (`aria`, `live`, `a11y`, `bugs`, `typos`, `smell`, `types`, `async`, `secrets`, `ci`, `dod`)
-- **Orchestration:** [Code Sweeper](../Subagents/code-sweeper.md) in [`subagents.md`](../subagents.md)
+- **Orchestration:** [Code Sweeper](../Subagents/code-sweeper/code-sweeper.md) in [`subagents.md`](../Subagents/subagents.md)
 - **When to use:** Loaded by **Code Sweeper** when the user asks for a code sweep (or names that subagent) or a `tasks.md` sweep item is due. Parent must not run a multi-topic sweep itself. Not Code Reviewer (git diffs).
 
 ---

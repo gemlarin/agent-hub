@@ -45,7 +45,7 @@ When the user asks for a **code sweep** (or a `tasks.md` sweep item is due): **d
 
 1. Offer topic **ids** from [`Skills/code-sweep/options.md`](../../Skills/code-sweep/options.md). Confirm **scope** (which app/paths) if unclear.
 2. Wait for the user to name ids.
-3. Delegate to **Code Sweeper** ([`subagents.md`](../../subagents.md)) with those `topics` + `scope`. Trust the **Sweep Report**. Ask before applying suggested fixes (Change Control).
+3. Delegate to **Code Sweeper** ([`subagents.md`](../../Subagents/subagents.md)) with those `topics` + `scope`. Trust the **Sweep Report**. Ask before applying suggested fixes (Change Control).
 
 **Reminders:** If the user is deep in a build and hasn’t swept in a while (e.g. feature roughly done, about to call a task complete, or several sessions without a sweep), **once** gently remind: offer the topic ids. Don’t nag every turn.
 
