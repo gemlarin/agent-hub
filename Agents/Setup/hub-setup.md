@@ -91,11 +91,11 @@ Only when [detect-cursor-env.sh](./scripts/detect-cursor-env.sh) succeeds, or wh
 
 ```bash
 cd /path/to/Projects
-chmod +x Agents/Setup/scripts/*.sh .githooks/post-merge .cursor/hooks/git-delegation-hook.sh 2>/dev/null || true
+chmod +x Agents/Setup/scripts/*.sh .githooks/post-merge .cursor/hooks/git-delegation-hook.sh .cursor/hooks/git-delegation-hook.cmd 2>/dev/null || true
 ./Agents/Setup/scripts/install-cursor-integration.sh
 ```
 
-If Cursor hooks are enabled, run `chmod` in **Terminal.app** if hook scripts report “permission denied”.
+**Windows:** run the same from **Git Bash**, or skip chmod and run `python Agents/Setup/scripts/sync_cursor_agents.py` after Python 3 is on `PATH` (`python3`, `python`, or `py -3`). If hook scripts report “permission denied” on macOS, `chmod` from Terminal.app (not the agent shell).
 
 - **Without Cursor detected:** exits 0 and skips (use `--force` to sync `.cursor/agents/` anyway).
 - **With Cursor:** runs [sync-cursor-agents.sh](./scripts/sync-cursor-agents.sh), chmods hooks.
@@ -122,12 +122,15 @@ Reload **Cursor**. Align **User Rules** from [cursor-user-rules.md](./cursor-use
 
 Hooks apply **only in Cursor** when `.cursor/hooks.json` loads. They block `git`/`gh` unless **git-coordinator** is active (marker file under `.cursor/hooks/state/`, set on `preToolUse` / `subagentStart` for a Task with `subagent_type: git-coordinator`). After editing hooks, Cursor reloads `hooks.json` automatically. See **Settings → Hooks** if commands are blocked unexpectedly.
 
-The hook must be a **Python file** (`.cursor/hooks/git-delegation-hook.py`). Do not feed Python via a bash heredoc — that replaces stdin, so Cursor’s JSON never arrives and every `git` command is denied. Markers live under `.cursor/hooks/state/` when writable, otherwise `/tmp/cursor-agent-hub-git-delegation/`.
+The hook is **Python** (`.cursor/hooks/git-delegation-hook.py`). Cursor starts it through `.cursor/hooks/git-delegation-hook.cmd`, a polyglot so **Windows `cmd`** and **POSIX `sh`** both work. The launcher looks up `PYTHON`, then `python3`, `python`, or `py -3`. Do not feed Python via a bash heredoc — that replaces stdin and denies every `git` command. Markers live under `.cursor/hooks/state/` when writable, otherwise the process temp dir (`/tmp` or `%TEMP%`).
+
+Requires **Python 3.8+** that actually runs (`python3`, `python`, `py -3`, or `/usr/bin/python3`). The launcher skips broken PATH stubs.
 
 **Smoke test (full deny → allow → clear flow):**
 
 ```bash
-./Agents/Setup/scripts/test-git-delegation-hook.sh
+python3 Agents/Setup/scripts/test-git-delegation-hook.py
+# or: ./Agents/Setup/scripts/test-git-delegation-hook.sh
 ```
 
 Expect `"permission":"deny"` with no marker, `"allow"` after a git-coordinator spawn, then deny again after stop. If a test **allows** `git status` with no marker, run `rm -f .cursor/hooks/state/coordinator-*.active`.
@@ -156,8 +159,8 @@ Expect `"permission":"deny"` with no marker, `"allow"` after a git-coordinator s
 | App can’t find `AGENTS.md` | Pointer `../` vs `../../` from app root. |
 | Non-Cursor IDE | **Hub core** only; skip `.cursor/` and [cursor-user-rules.md](./cursor-user-rules.md). |
 | Cursor missing `git-coordinator` | `install-cursor-integration.sh`; reload IDE. |
-| Sync fails | `/usr/bin/python3 Agents/Setup/scripts/sync_cursor_agents.py` |
+| Sync fails | `python3 Agents/Setup/scripts/sync_cursor_agents.py` (or `py -3` on Windows) |
 | post-merge didn’t regen | `git config core.hooksPath .githooks`; use `--force` sync. |
 | Hook test **allow** for `git status` | `rm -f .cursor/hooks/state/coordinator-*.active` |
-| Hook “permission denied” | `chmod +x .cursor/hooks/git-delegation-hook.sh` (Cursor should invoke the `.py` via `/usr/bin/python3`) |
+| Hook “permission denied” | `chmod +x .cursor/hooks/git-delegation-hook.cmd` (Unix). On Windows, install Python 3 and confirm `py -3` or `python`. |
 | Every `git` denied, even coordinator | Hook must read JSON on stdin. Re-run `./Agents/Setup/scripts/test-git-delegation-hook.sh`. |

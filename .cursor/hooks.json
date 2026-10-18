@@ -3,41 +3,41 @@
   "hooks": {
     "sessionStart": [
       {
-        "command": "/usr/bin/python3 .cursor/hooks/git-delegation-hook.py"
+        "command": ".cursor/hooks/git-delegation-hook.cmd"
       }
     ],
     "preToolUse": [
       {
-        "command": "/usr/bin/python3 .cursor/hooks/git-delegation-hook.py",
+        "command": ".cursor/hooks/git-delegation-hook.cmd",
         "matcher": "Task|CallDynamicTool"
       }
     ],
     "postToolUse": [
       {
-        "command": "/usr/bin/python3 .cursor/hooks/git-delegation-hook.py",
+        "command": ".cursor/hooks/git-delegation-hook.cmd",
         "matcher": "Task|CallDynamicTool"
       }
     ],
     "postToolUseFailure": [
       {
-        "command": "/usr/bin/python3 .cursor/hooks/git-delegation-hook.py",
+        "command": ".cursor/hooks/git-delegation-hook.cmd",
         "matcher": "Task|CallDynamicTool"
       }
     ],
     "subagentStart": [
       {
-        "command": "/usr/bin/python3 .cursor/hooks/git-delegation-hook.py"
+        "command": ".cursor/hooks/git-delegation-hook.cmd"
       }
     ],
     "subagentStop": [
       {
-        "command": "/usr/bin/python3 .cursor/hooks/git-delegation-hook.py"
+        "command": ".cursor/hooks/git-delegation-hook.cmd"
       }
     ],
     "beforeShellExecution": [
       {
-        "command": "/usr/bin/python3 .cursor/hooks/git-delegation-hook.py",
-        "matcher": "(^|[\\s;&|])(git|gh)(\\s|$)",
+        "command": ".cursor/hooks/git-delegation-hook.cmd",
+        "matcher": "(^|[\\s;&|/\\\\])(git|gh)(\\.exe)?(\\s|$)",
         "failClosed": true
       }
     ]

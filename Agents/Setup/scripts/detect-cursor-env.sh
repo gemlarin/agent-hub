@@ -33,6 +33,12 @@ case "$(uname -s 2>/dev/null || echo unknown)" in
       reasons+=("Cursor config (Linux)")
     fi
     ;;
+  MINGW*|MSYS*|CYGWIN*|Windows_NT*)
+    if [[ -d "${APPDATA:-}/Cursor" ]] || [[ -d "${LOCALAPPDATA:-}/Programs/Cursor" ]]; then
+      found=true
+      reasons+=("Cursor application data (Windows)")
+    fi
+    ;;
 esac
 
 if [[ -n "${CURSOR_TRACE_ID:-}" ]] || [[ -n "${CURSOR_AGENT:-}" ]]; then
@@ -46,12 +52,17 @@ if [[ "${TERM_PROGRAM:-}" == *Cursor* ]]; then
 fi
 
 if $JSON; then
-  PY="${PYTHON:-/usr/bin/python3}"
-  command -v "$PY" >/dev/null 2>&1 || PY="$(command -v python3)"
+  # shellcheck disable=SC1091
+  . "$(cd "$(dirname "$0")" && pwd)/find-python.sh"
+  find_python || exit 1
   REASONS_STR=$(printf '%s\n' "${reasons[@]}")
   CURSOR_JSON=$([ "$found" = true ] && echo true || echo false)
   export REASONS_STR
-  "$PY" -c 'import json, os; r=[x for x in os.environ.get("REASONS_STR","").splitlines() if x.strip()]; print(json.dumps({"cursor": '"$CURSOR_JSON"', "reasons": r}))'
+  if [ "${PY:-}" = py ]; then
+    py -3 -c 'import json, os; r=[x for x in os.environ.get("REASONS_STR","").splitlines() if x.strip()]; print(json.dumps({"cursor": '"$CURSOR_JSON"', "reasons": r}))'
+  else
+    "$PY" -c 'import json, os; r=[x for x in os.environ.get("REASONS_STR","").splitlines() if x.strip()]; print(json.dumps({"cursor": '"$CURSOR_JSON"', "reasons": r}))'
+  fi
 fi
 
 if $found; then

@@ -34,15 +34,17 @@ chmod +x "$SCRIPTS/sync-cursor-agents.sh" "$SCRIPTS/detect-cursor-env.sh" 2>/dev
 if [[ -f "$ROOT/.githooks/post-merge" ]]; then
   chmod +x "$ROOT/.githooks/post-merge"
 fi
-if [[ -f "$ROOT/.cursor/hooks/git-delegation-hook.sh" ]]; then
-  chmod +x "$ROOT/.cursor/hooks/git-delegation-hook.sh"
-fi
-if [[ -f "$ROOT/.cursor/hooks/git-delegation-hook.py" ]]; then
-  chmod +x "$ROOT/.cursor/hooks/git-delegation-hook.py"
-fi
-if [[ -f "$ROOT/Agents/Setup/scripts/test-git-delegation-hook.sh" ]]; then
-  chmod +x "$ROOT/Agents/Setup/scripts/test-git-delegation-hook.sh"
-fi
+for f in \
+  "$ROOT/.cursor/hooks/git-delegation-hook.sh" \
+  "$ROOT/.cursor/hooks/git-delegation-hook.cmd" \
+  "$ROOT/.cursor/hooks/git-delegation-hook.py" \
+  "$ROOT/Agents/Setup/scripts/test-git-delegation-hook.sh" \
+  "$ROOT/Agents/Setup/scripts/test-git-delegation-hook.py" \
+  "$ROOT/Agents/Setup/scripts/find-python.sh"; do
+  if [[ -f "$f" ]]; then
+    chmod +x "$f" 2>/dev/null || true
+  fi
+done
 
 if [[ ! -f "$ROOT/.cursor/hooks.json" ]]; then
   echo "Note: .cursor/hooks.json missing in this clone — pull latest hub or see Agents/Setup/hub-setup.md"

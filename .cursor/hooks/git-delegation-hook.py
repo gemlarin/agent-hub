@@ -71,7 +71,14 @@ def parse_object(value) -> dict:
 
 
 def git_or_gh_command(command: str) -> bool:
-    return bool(re.search(r"(^|[;&|]\s*)(git|gh)(\s|$)", command))
+    """True for git/gh invocations on POSIX and Windows (git.exe, quoted paths)."""
+    return bool(
+        re.search(
+            r"(^|[\s;&|'\"\\/])(git|gh)(\.exe)?(\s|$)",
+            command,
+            flags=re.IGNORECASE,
+        )
+    )
 
 
 def coordinator_marker_id(data: dict) -> str:
