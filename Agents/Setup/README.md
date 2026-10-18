@@ -1,6 +1,6 @@
 # Agent hub — setup
 
-Install, sync, and optional **Cursor** integration. Hub overview: [../README.md](../README.md). Policy and subagents live elsewhere under `Agents/`.
+Install, sync, and optional **Cursor** integration. Hub overview: [../../README.md](../../README.md). Policy and subagents live elsewhere under `Agents/`.
 
 | File / folder | Purpose |
 |---------------|---------|

@@ -2,7 +2,7 @@
 
 **Load policy on demand.** Use the table below; open linked files only when a row applies. Full subagent bodies live under `Subagents/` — read when [Subagents](./subagents.md) says to delegate.
 
-App repos: keep a pointer `AGENTS.md` at the app root that points here (`../Agents/AGENTS.md` or `../../Agents/AGENTS.md`). See [README.md](./README.md#point-app-repos-at-the-hub).
+App repos: keep a pointer `AGENTS.md` at the app root that points here (`../Agents/AGENTS.md` or `../../Agents/AGENTS.md`). See [README.md](../README.md#point-app-repos-at-the-hub).
 
 | Module | Path | Read when |
 |--------|------|-----------|
@@ -14,7 +14,7 @@ App repos: keep a pointer `AGENTS.md` at the app root that points here (`../Agen
 | Vue greenfield | [coding-standards-vue.md](./coding-standards-vue.md) | New Vue 3 + Vite apps or hub greenfield Vue work |
 | Secrets & Git | [coding-standards § Secrets](./coding-standards.md#secrets--git) | Stage, commit, push, or open a PR |
 | Comms | [personality-communication.md](./personality-communication.md) | Tone; **the user** = person directing the agent this session |
-| Hub setup | [README.md](./README.md), [Setup/](./Setup/) ([hub-setup.md](./Setup/hub-setup.md), [bootstrap.sh](./Setup/scripts/bootstrap.sh)) | New machine, clone, `git pull` — run bootstrap once per machine |
+| Hub setup | [README.md](../README.md), [Setup/](./Setup/) ([hub-setup.md](./Setup/hub-setup.md), [bootstrap.sh](./Setup/scripts/bootstrap.sh)) | New machine, clone, `git pull` — run bootstrap once per machine |
 | Context discipline | [context-discipline.md](./context-discipline.md) | Orchestrating git, memory, subagents, or large reads |
 | Cursor integration | [Setup/scripts/install-cursor-integration.sh](./Setup/scripts/install-cursor-integration.sh) | **Cursor only** — bootstrap on first run; `--force` after editing `Subagents/` |
 | Cursor User Rules | [Setup/cursor-user-rules.md](./Setup/cursor-user-rules.md) | **Cursor only** — paste if default git User Rules tell the parent to run git |

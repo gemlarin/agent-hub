@@ -1,8 +1,8 @@
 # agent-hub
 
-Shared **agent hub** for a `Projects/`-style workspace: rules, subagents, and skills. Works with **any** agent that reads [`AGENTS.md`](./AGENTS.md); **Cursor** integration is **optional** under [`Setup/`](./Setup/). App repos live as **siblings** of this folder and point here via a stub `AGENTS.md`.
+Shared **agent hub** for a `Projects/`-style workspace: rules, subagents, and skills. Works with **any** agent that reads [`Agents/AGENTS.md`](./Agents/AGENTS.md); **Cursor** integration is **optional** under [`Agents/Setup/`](./Agents/Setup/). App repos live as **siblings** of `Agents/` and point here via a stub `AGENTS.md`.
 
-The **Projects root `README.md` is yours** — this file is the hub’s. Agents read [`AGENTS.md`](./AGENTS.md) in this directory. Humans read this file and [`Setup/hub-setup.md`](./Setup/hub-setup.md) when installing or moving machines.
+This file is the hub overview. Agents read [`Agents/AGENTS.md`](./Agents/AGENTS.md). Humans read this file and [`Agents/Setup/hub-setup.md`](./Agents/Setup/hub-setup.md) when installing or moving machines.
 
 ---
 
@@ -26,15 +26,15 @@ Agents\Setup\scripts\bootstrap.cmd
 
 Clone **into** `~/Projects` (or `%USERPROFILE%\Projects`), not `Projects/agent-hub/`. If `Projects` already exists, `cd` there and `git clone <url> .`.
 
-**Still manual:** Drive [`MEMORY.md`](./memory.md); pointer `AGENTS.md` in each app (below). **Cursor:** paste [`Setup/cursor-user-rules.md`](./Setup/cursor-user-rules.md) only if default git User Rules tell the parent to run `git`.
+**Still manual:** Drive [`MEMORY.md`](./Agents/memory.md); pointer `AGENTS.md` in each app (below). **Cursor:** paste [`Agents/Setup/cursor-user-rules.md`](./Agents/Setup/cursor-user-rules.md) only if default git User Rules tell the parent to run `git`.
 
-Full steps: **[Setup/hub-setup.md](./Setup/hub-setup.md)**
+Full steps: **[Agents/Setup/hub-setup.md](./Agents/Setup/hub-setup.md)**
 
 ---
 
 ## Point app repos at the hub
 
-Canonical policy is **[`Agents/AGENTS.md`](./AGENTS.md)** (this folder). Do **not** put hub policy in each app, and do **not** symlink this file.
+Canonical policy is **[`Agents/AGENTS.md`](./Agents/AGENTS.md)**. Do **not** put hub policy in each app, and do **not** symlink this file.
 
 At each **app repo root**, add `AGENTS.md` that points here. Depth is from the app to the `Projects` folder:
 
@@ -70,19 +70,19 @@ When Cursor’s workspace is the **app**, that pointer is how the agent loads hu
 
 | Path | Purpose |
 |------|---------|
-| [`AGENTS.md`](./AGENTS.md) | Entry point for agents (on-demand module table) |
-| [`./`](./) | Subagents, coding standards, memory, **[Setup/](./Setup/)**, **[Skills/](./Skills/)** |
-| [`../.cursor/agents/`](../.cursor/agents/) | Cursor subagents (generated; optional) |
+| [`Agents/AGENTS.md`](./Agents/AGENTS.md) | Entry point for agents (on-demand module table) |
+| [`Agents/`](./Agents/) | Subagents, coding standards, memory, **[Setup/](./Agents/Setup/)**, **[Skills/](./Agents/Skills/)** |
+| [`.cursor/agents/`](./.cursor/agents/) | Cursor subagents (generated; optional) |
 | App folders | Separate git repos under the Projects root |
 
-**Memory:** Google Drive `Documents/MEMORY.md` only — [`memory.md`](./memory.md).
+**Memory:** Google Drive `Documents/MEMORY.md` only — [`Agents/memory.md`](./Agents/memory.md).
 
 ---
 
 ## Highlights
 
-- **Git Coordinator** — [`Subagents/git-coordinator.md`](./Subagents/git-coordinator.md)
-- **Subagents** — [`subagents.md`](./subagents.md)
+- **Git Coordinator** — [`Agents/Subagents/git-coordinator.md`](./Agents/Subagents/git-coordinator.md)
+- **Subagents** — [`Agents/subagents.md`](./Agents/subagents.md)
 - **Coding standards** — core + optional Vue split
 
 After editing `Agents/Subagents/`:

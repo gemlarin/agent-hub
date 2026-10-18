@@ -1,6 +1,6 @@
 # Agent hub — setup & sync
 
-Use this when you **first wire up** the hub on a machine or need a **refresher** after cloning. Overview: [Agents/README.md](../README.md). This folder: [Setup/README.md](./README.md).
+Use this when you **first wire up** the hub on a machine or need a **refresher** after cloning. Overview: [README.md](../../README.md). This folder: [Setup/README.md](./README.md).
 
 The hub is **not Cursor-only**. Any agent that can read `Agents/AGENTS.md` can follow the same policy. **Cursor-specific** steps are optional.
 
@@ -44,7 +44,7 @@ Already a clone: `cd` to the hub root, `git pull`, then `bootstrap.sh` / `bootst
 
 ### After bootstrap (not automated)
 
-- Point app repos at hub [`Agents/AGENTS.md`](../AGENTS.md) (`../Agents/AGENTS.md` or `../../Agents/AGENTS.md`). See [README.md](../README.md#point-app-repos-at-the-hub).
+- Point app repos at hub [`Agents/AGENTS.md`](../AGENTS.md) (`../Agents/AGENTS.md` or `../../Agents/AGENTS.md`). See [README.md](../../README.md#point-app-repos-at-the-hub).
 - Use [memory.md](../memory.md) for Drive `MEMORY.md`.
 - **Cursor:** paste [cursor-user-rules.md](./cursor-user-rules.md) **only if** default git User Rules tell the parent to run `git`. Then reload Cursor.
 
