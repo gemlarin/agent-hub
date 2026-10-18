@@ -1,46 +1,43 @@
 # agent-hub
 
-Shared **agent hub**: rules, subagents, and skills. Clone this repo, then in each app add a stub `AGENTS.md` that points at [`Agents/AGENTS.md`](./Agents/AGENTS.md). Works with **any** agent that follows that file. **Cursor** integration is **optional** under [`Agents/Setup/`](./Agents/Setup/).
+Shared **agent hub**: rules, subagents, and skills for the apps on your machine. Any AI app that can read [`Agents/AGENTS.md`](./Agents/AGENTS.md) can use it. **Cursor is optional.**
 
-This file is the hub overview. Agents read [`Agents/AGENTS.md`](./Agents/AGENTS.md). Humans read this file and [`Agents/Setup/hub-setup.md`](./Agents/Setup/hub-setup.md) when installing or moving machines.
+This file is for people. Agents read [`Agents/AGENTS.md`](./Agents/AGENTS.md). Extra setup detail: [`Agents/Setup/hub-setup.md`](./Agents/Setup/hub-setup.md).
 
 ---
 
-## Quick start
+## 1. Download
 
-**Guided setup** (after this repo is on disk). One command detects macOS, Linux, WSL, or Windows, asks for the memory file, GitHub username, and which apps get a pointer, then finishes config:
+Start from the folder where your project files live, or where you want them to live. In the commands below, `code` is only an example. Use the name your root work directory already has (`Projects`, `dev`, `src`, or whatever it is called).
 
-```bash
-./Agents/Setup/scripts/setup.sh
-```
+Forks: use your fork URL instead of `https://github.com/gemlarin/agent-hub.git`.
 
-Windows (Git for Windows): `Agents\Setup\scripts\setup.cmd`
+### Apps will sit next to the hub
 
-In Cursor, say **set up the hub**. The Hub Installer agent asks those questions in chat and runs the same command. It does not commit.
+This is the usual layout. The work folder becomes the hub git root, and `Agents/` sits beside your apps. Pointers in those apps use `../Agents/AGENTS.md` (or `../../Agents/AGENTS.md` if the app is one folder deeper).
 
-Pick a **work folder** first if you still need to clone: the directory that holds (or will hold) your app repos. The name does not matter (`~/Projects`, `~/code`, `~/dev`, `D:\work`, …). In the usual layout that folder **is** the hub git root, so `Agents/` sits next to the apps.
+**The folder is new or empty**
 
-**macOS / Linux / Git Bash** — new or empty work folder:
+macOS, Linux, or Git Bash:
 
 ```bash
-WORK=~/code   # your work folder
+WORK=~/code   # change "code" to your work folder's real name
 git clone https://github.com/gemlarin/agent-hub.git "$WORK"
-cd "$WORK"
-./Agents/Setup/scripts/setup.sh
 ```
 
-**Windows (cmd)** — Git for Windows required. New or empty work folder:
+Windows cmd (Git for Windows):
 
 ```bat
+REM Change "code" to your work folder's real name
 set WORK=%USERPROFILE%\code
 git clone https://github.com/gemlarin/agent-hub.git %WORK%
-cd /d %WORK%
-Agents\Setup\scripts\setup.cmd
 ```
 
-PowerShell: `$WORK = "$env:USERPROFILE\code"`, then `git clone https://github.com/gemlarin/agent-hub.git $WORK`.
+PowerShell: `$WORK = "$env:USERPROFILE\code"  # change "code" to your work folder's real name`, then `git clone https://github.com/gemlarin/agent-hub.git $WORK`.
 
-**Work folder already has apps.** `git clone` refuses a non-empty directory. From that folder:
+**The folder already has apps**
+
+`git clone` will not write into a folder that already has files. From that folder:
 
 ```bash
 cd "$WORK"
@@ -48,28 +45,61 @@ git init
 git remote add origin https://github.com/gemlarin/agent-hub.git
 git fetch origin
 git checkout -t origin/main
-./Agents/Setup/scripts/setup.sh
 ```
 
-The hub `.gitignore` ignores everything except hub files, so sibling app folders stay untracked. If `README.md` or `.gitignore` already exists in that folder, resolve the checkout conflict before setup.
+The hub `.gitignore` leaves those app folders untracked. If `README.md` or `.gitignore` is already in that folder, fix the checkout conflict before you install.
 
-**Hub as its own folder** (work folder stays a normal directory, not this git repo):
+### The hub is its own folder next to your apps
+
+The work folder stays a normal directory. The clone lives inside it as `agent-hub/`. Pointers in sibling apps use `../agent-hub/Agents/AGENTS.md`.
 
 ```bash
 git clone https://github.com/gemlarin/agent-hub.git "$WORK/agent-hub"
-cd "$WORK/agent-hub"
+```
+
+---
+
+## 2. Install
+
+Open the downloaded folder in the AI app you already use. You do not need Cursor. The app follows `Agents/AGENTS.md`. Cursor-only files (`.cursor/`, `.githooks/`) stay in this clone and are not required.
+
+### Automatic
+
+In that AI app, say **set up the hub**.
+
+The installer detects your OS and asks:
+
+- where to keep `MEMORY.md` (cloud storage or a file on this computer)
+- your GitHub username
+- which current project folders to link
+
+Saying yes to a project writes or replaces that project's `AGENTS.md` so it points at this hub's `Agents/AGENTS.md`. You do not need [Point app repos at the hub](#point-app-repos-at-the-hub) for those folders. That section is only for project folders you add later. The installer does not commit.
+
+### Manual
+
+From the hub root (the folder that contains `Agents/`):
+
+```bash
 ./Agents/Setup/scripts/setup.sh
 ```
 
-Use that layout’s pointer (`../agent-hub/Agents/AGENTS.md`). Do **not** use `../Agents/AGENTS.md` unless `Agents/` is a direct child of the work folder. Forks: clone your fork URL instead of `gemlarin/agent-hub`.
+Windows (Git for Windows): `Agents\Setup\scripts\setup.cmd`
 
-`setup.sh` asks for the [memory path](#persistent-memory). Bootstrap then asks whether to link current project directories. Saying yes writes or replaces `AGENTS.md` in each selected project so it points at this hub's `Agents/AGENTS.md`. **Cursor:** paste [`Agents/Setup/cursor-user-rules.md`](./Agents/Setup/cursor-user-rules.md) only if default git User Rules tell the parent to run `git`. The installer cannot change Cursor settings for you.
+The script asks the same questions and links the projects you pick. Folders you link here already point at the hub. Use [Point app repos at the hub](#point-app-repos-at-the-hub) only for project folders you add later.
 
-Full steps: **[Agents/Setup/hub-setup.md](./Agents/Setup/hub-setup.md)**
+To skip the script and do it yourself:
+
+1. Copy [`Agents/Setup/hub-setup.local.example.md`](./Agents/Setup/hub-setup.local.example.md) to `Agents/Setup/hub-setup.local.md`. Set the hub path and the [memory path](#persistent-memory).
+2. Add a pointer `AGENTS.md` in each app. Use the examples in [Point app repos at the hub](#point-app-repos-at-the-hub).
+3. **Cursor only:** if that app's User Rules tell the agent to run git, paste [`Agents/Setup/cursor-user-rules.md`](./Agents/Setup/cursor-user-rules.md), then reload. Skip this step in every other AI app.
+
+More detail: **[Agents/Setup/hub-setup.md](./Agents/Setup/hub-setup.md)**
 
 ---
 
 ## Point app repos at the hub
+
+Skip this section if setup already linked your projects. Use it when you add another project folder later.
 
 Canonical policy is **[`Agents/AGENTS.md`](./Agents/AGENTS.md)**. Do **not** copy hub policy into each app, and do **not** symlink this file.
 
@@ -111,7 +141,7 @@ Agent rules for this repo are defined at the **agent hub**, not in this file.
 That hub is the source of truth for agent rules. Apply it (and everything it references) before any task in this repo.
 ```
 
-When Cursor’s workspace is the **app**, that pointer is how the agent loads hub **policy**. When the workspace is this hub clone, read `Agents/AGENTS.md` directly (there is no hub `AGENTS.md` at the clone root).
+When your AI app has an **app** open, that pointer is how it loads hub **policy**. When it has this hub clone open, it should read `Agents/AGENTS.md` directly (there is no hub `AGENTS.md` at the clone root). Cursor is one app that can do this. Any other AI app that reads `AGENTS.md` can do the same.
 
 ### What the pointer loads
 
@@ -200,9 +230,9 @@ This repo is **policy + Cursor glue**, not an application. Each folder has a REA
 
 ## Forking
 
-1. Fork on GitHub; `git clone` your fork into your work folder (that folder becomes the hub root), or as `agent-hub/` next to your apps.
-2. Run `setup.sh` or `setup.cmd` (detects the OS, asks the remaining questions, then runs bootstrap).
-3. Pointer `AGENTS.md` in each app repo (see above).
+1. Fork on GitHub, then [download](#1-download) your fork into your work folder or as `agent-hub/` next to your apps.
+2. [Install](#2-install) automatically (say **set up the hub**) or manually (`setup.sh` / `setup.cmd`, or the by-hand steps).
+3. Add a pointer `AGENTS.md` only for project folders setup did not link. See [Point app repos at the hub](#point-app-repos-at-the-hub).
 
 ---
 
