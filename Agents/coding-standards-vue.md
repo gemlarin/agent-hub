@@ -6,7 +6,7 @@
 
 **Scope:** Rules below apply to **new Vue projects only**. Do not rewrite existing apps unless the user asks. React and other stacks → local patterns + core standards only.
 
-**New apps:** Pointer `AGENTS.md` at project root → hub `../Agents/AGENTS.md` or `../../Agents/AGENTS.md`. Do not symlink this file as `AGENTS.md`. See [README.md](../README.md#point-app-repos-at-the-hub).
+**New apps:** Pointer `AGENTS.md` at project root → relative path to this clone’s `Agents/AGENTS.md`. Do not symlink this file as `AGENTS.md`. See [README.md](../README.md#point-app-repos-at-the-hub).
 
 ---
 

@@ -1,6 +1,6 @@
 # Agent hub — setup
 
-Install, sync, and optional **Cursor** integration. Hub overview: [../../README.md](../../README.md). Policy and subagents live elsewhere under `Agents/`.
+Install, sync, and optional **Cursor** integration. Hub overview: [../../README.md](../../README.md). Policy lives under `Agents/`; `.cursor/` and `.githooks/` stay at the **hub git root** (they do not follow an app’s `AGENTS.md` pointer).
 
 | File / folder | Purpose |
 |---------------|---------|

@@ -2,7 +2,7 @@
 
 **Load policy on demand.** Use the table below; open linked files only when a row applies. Full subagent bodies live under `Subagents/` — read when [Subagents](./subagents.md) says to delegate.
 
-App repos: keep a pointer `AGENTS.md` at the app root that points here (`../Agents/AGENTS.md` or `../../Agents/AGENTS.md`). See [README.md](../README.md#point-app-repos-at-the-hub).
+App repos: keep a pointer `AGENTS.md` at the app root whose relative path targets **this file**. That pointer loads this policy; it does **not** load hub `.cursor/` or `.githooks/`. See [README.md](../README.md#point-app-repos-at-the-hub).
 
 | Module | Path | Read when |
 |--------|------|-----------|

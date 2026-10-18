@@ -4,7 +4,7 @@ Shared rules for any stack. **Vue greenfield** (layout, Tailwind, Vue 3, new-app
 
 **Scope:** Do not rewrite existing apps (styles, READMEs, aliases, structure) unless the user asks.
 
-**New apps:** Pointer `AGENTS.md` at the project root → hub `../Agents/AGENTS.md` or `../../Agents/AGENTS.md`. Do not symlink this file as `AGENTS.md`. See [README.md](../README.md#point-app-repos-at-the-hub).
+**New apps:** Pointer `AGENTS.md` at the project root → relative path to this clone’s `Agents/AGENTS.md`. Do not symlink this file as `AGENTS.md`. See [README.md](../README.md#point-app-repos-at-the-hub).
 
 ## Spec-driven tasks
 
