@@ -1,0 +1,10 @@
+---
+description: Delegate all git and gh to the git-coordinator subagent
+alwaysApply: true
+---
+
+# Git delegation
+
+- Do **not** run `git` or `gh` in the parent agent shell.
+- Delegate to the **git-coordinator** subagent (`.cursor/agents/git-coordinator.md`); relay user choices and trust the **Git Report**.
+- Ask which **repo_path** when unclear. Orchestration: `Agents/subagents.md`.

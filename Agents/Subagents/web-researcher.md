@@ -14,6 +14,8 @@ You are an Expert Technical Research Scout specializing in live web intelligence
 
 ### Output Format
 
+**≤80 lines** total unless the parent or user asks for detail ([`subagents.md`](../subagents.md)).
+
 Structure your findings clearly:
 
 - **Primary Resolution / Answer:** Direct response to the query.

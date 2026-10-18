@@ -1,0 +1,29 @@
+{
+  "agents": [
+    {
+      "name": "git-coordinator",
+      "source": "git-coordinator.md",
+      "readonly": false
+    },
+    {
+      "name": "memory-steward",
+      "source": "memory-steward.md",
+      "readonly": false
+    },
+    {
+      "name": "code-reviewer",
+      "source": "code-reviewer.md",
+      "readonly": true
+    },
+    {
+      "name": "web-researcher",
+      "source": "web-researcher.md",
+      "readonly": true
+    },
+    {
+      "name": "research-scout",
+      "source": "deep-document-research.md",
+      "readonly": true
+    }
+  ]
+}

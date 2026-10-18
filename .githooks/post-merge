@@ -1,0 +1,8 @@
+#!/bin/sh
+# Regenerate Cursor subagents when hub subagent specs change.
+set -e
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+if [ -x "./Agents/scripts/sync-cursor-agents.sh" ]; then
+  ./Agents/scripts/sync-cursor-agents.sh
+fi

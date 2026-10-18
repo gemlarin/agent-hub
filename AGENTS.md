@@ -1,45 +1,24 @@
-# Projects AGENTS.md (canonical)
+# Agent hub (canonical)
 
-# Master Agent Instructions
+**Load policy on demand.** Use the table below; open linked files only when a row applies. Full subagent bodies live under `Agents/Subagents/` — read when [Subagents](./Agents/subagents.md) says to delegate.
 
-## Core Protocols
+| Module | Path | Read when |
+|--------|------|-----------|
+| Memory | [Agents/memory.md](./Agents/memory.md) | **Session start:** main agent reads Drive `MEMORY.md` only. **Writes:** Memory Steward only. |
+| Subagents | [Agents/subagents.md](./Agents/subagents.md) | Any `git`/`gh`, deep research, code review, memory write, web lookup |
+| Git Coordinator | [Agents/Subagents/git-coordinator.md](./Agents/Subagents/git-coordinator.md) | After subagents matrix says delegate git/gh |
+| Skills index | [Skills/SKILLS.md](./Skills/SKILLS.md) | Before memory-management or git-merge work |
+| Coding (core) | [Agents/coding-standards.md](./Agents/coding-standards.md) | Implementing or reviewing code (any stack) |
+| Vue greenfield | [Agents/coding-standards-vue.md](./Agents/coding-standards-vue.md) | New Vue 3 + Vite apps or hub greenfield Vue work |
+| Secrets & Git | [coding-standards § Secrets](./Agents/coding-standards.md#secrets--git) | Stage, commit, push, or open a PR |
+| Comms | [Agents/personality-communication.md](./Agents/personality-communication.md) | Tone; **the user** = person directing the agent this session |
+| Hub setup & sync | [Agents/hub-setup.md](./Agents/hub-setup.md) (local paths: [example](./Agents/hub-setup.local.example.md) → `hub-setup.local.md`) | New machine, clone, `git pull`, or Cursor agent sync |
+| Context discipline | [Agents/context-discipline.md](./Agents/context-discipline.md) | Orchestrating git, memory, subagents, or large reads |
+| Cursor agents | `.cursor/agents/` (sync via [sync-cursor-agents.sh](./Agents/scripts/sync-cursor-agents.sh)) | After hub install/pull or editing `Agents/Subagents/` |
 
-You must read and adhere to the following modular rule files:
+## Non‑negotiables (always)
 
-- **Memory & context:** **Main agent only** reads Google Drive `Documents/MEMORY.md` at session start (path in [Memory rules](./Agents/memory.md)). **Memory Steward only** writes that file (via **memory-management** skill). Never a local `Projects/MEMORY.md`; do not delegate session-start reads to the steward.
-- **Secrets & PII:** **Never** commit, push, or include in PRs any **secrets** (API keys, tokens, passwords, private keys, connection strings) or **PII** (government IDs, financial account numbers, full addresses, private phone numbers, health data). Use `.env` / local config for secrets (gitignored); use placeholders in `.env.example`. Details: [Secrets & Git](./Agents/coding-standards.md#secrets--git) in Coding Standards.
-- **Coding Standards:** Refer to [Coding Standards](./Agents/coding-standards.md) for style guidelines.
-- **Personality & Communications:** Refer to [Personality Communication](./Agents/personality-communication.md) for style guidelines.
-- **Skills:** Refer to [Skills](./Skills/SKILLS.md) for skill guidelines (includes memory-management routing).
-- **Subagents:** Refer to [Subagents](./Agents/subagents.md) for subagent guidelines (includes Memory Steward).
-
-## Important File Paths
-
-This file is the **hub** for agent rules. Individual app repos use a pointer `AGENTS.md` (relative `../AGENTS.md` or `../../AGENTS.md`) that points here at the **Projects folder root**—not inside a nested clone folder.
-
-### Syncing the hub (Mac / PC)
-
-Remote: [github.com/gemlarin/agent-hub](https://github.com/gemlarin/agent-hub)
-
-- **Use your `Projects` directory as the Git root** for agent-hub so `AGENTS.md`, `Agents/`, and `Skills/` live next to your app folders.
-- **Do not** `git clone` into `Projects/agent-hub/` if apps use pointer stubs; that breaks `../` / `../../` links.
-- **First time on a machine** (folder already has app repos, no hub git yet):
-
-```bash
-cd /path/to/Projects
-git init
-git remote add origin https://github.com/gemlarin/agent-hub.git
-git fetch origin
-git checkout -b main origin/main
-```
-
-- **Updates:** from `Projects`, run `git pull` to refresh the hub files only (`.gitignore` keeps app repos out of this repo).
-- **App repos** keep their own `origin` and remotes; only the hub uses the agent-hub remote.
-
----
-
-## Important Accounts
-
-- **GitHub** The repo for the primary GitHub account. All local repos use that account as origin: https://github.com/gemlarin/
-
----
+1. **Memory:** No local `Projects/MEMORY.md`. Main agent does not delegate session-start memory load to Memory Steward.
+2. **Secrets / PII:** Never commit, push, or put in PRs — use `.env` (gitignored) and `.env.example` placeholders. Details in Secrets & Git (link above).
+3. **Git / GitHub:** Parent agent **does not** run `git` or `gh`. Git Coordinator only; relay user choices; trust **Git Report** — do not re-run the same commands. Ask **which repo** if `repo_path` is unclear.
+4. **Context:** One Drive memory read per session; trust subagent reports; details in [context discipline](./Agents/context-discipline.md).

@@ -4,6 +4,13 @@
 !/AGENTS.md
 !/Agents/
 !/Skills/
+!/.cursor/
+!/.cursor/agents/
+!/.cursor/rules/
+!/.githooks/
 
 # Safety net: ignore hub-root stub only (canonical memory is on Google Drive)
 /MEMORY.md
+
+# Per-machine hub remotes & accounts (template: Agents/hub-setup.local.example.md)
+/Agents/hub-setup.local.md

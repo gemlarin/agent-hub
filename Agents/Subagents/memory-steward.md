@@ -10,7 +10,7 @@ The **main agent** already read `MEMORY.md` at session start. Do **not** return 
 
 ## Required skill
 
-Load and follow every rule in `Skills/memory-management/SKILL.md` (Projects hub root) before writing.
+Load and follow [`Skills/memory-management/SKILL.md`](../../Skills/memory-management/SKILL.md) before writing.
 
 ## Target file (Google Drive only)
 
@@ -54,6 +54,7 @@ Do not modify application source, `AGENTS.md`, skills, or other subagent definit
 
 ## Constraints
 
+- **Memory Report:** **≤80 lines** unless the parent or user asks for detail ([`subagents.md`](../subagents.md)).
 - Never store credentials, tokens, keys, or PII.
 - Never echo secrets into the report or file.
 - Keep entries portable; avoid machine-specific paths unless labeled device-local.
