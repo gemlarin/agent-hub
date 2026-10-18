@@ -6,7 +6,7 @@ App repos: keep a pointer `AGENTS.md` at the app root whose relative path target
 
 | Module | Path | Read when |
 |--------|------|-----------|
-| Memory | [memory.md](./memory.md) | **Session start:** main agent reads Drive `MEMORY.md` only. **Writes:** Memory Steward only. |
+| Memory | [memory.md](./memory.md) | **Session start:** main agent reads `MEMORY.md` at the path in `Setup/hub-setup.local.md`. **Writes:** Memory Steward only. |
 | Subagents | [subagents.md](./subagents.md) | Any `git`/`gh`, deep research, code review, memory write, web lookup |
 | Git Coordinator | [Subagents/git-coordinator.md](./Subagents/git-coordinator.md) | After subagents matrix says delegate git/gh |
 | Skills index | [Skills/SKILLS.md](./Skills/SKILLS.md) | Before memory-management or git-merge work |
@@ -21,7 +21,7 @@ App repos: keep a pointer `AGENTS.md` at the app root whose relative path target
 
 ## Non‑negotiables (always)
 
-1. **Memory:** No local `Projects/MEMORY.md`. Main agent does not delegate session-start memory load to Memory Steward.
+1. **Memory:** Path from gitignored `Setup/hub-setup.local.md`. Never commit `MEMORY.md`. Main agent does not delegate session-start memory load to Memory Steward.
 2. **Secrets / PII:** Never commit, push, or put in PRs — use `.env` (gitignored) and `.env.example` placeholders. Details in Secrets & Git (link above).
 3. **Git / GitHub (this hub repo):** Parent agent **does not** run `git` or `gh` here. Git Coordinator only; relay user choices; trust **Git Report**. Other git roots are not blocked by the Cursor hook — parent may run `git`/`gh` there, or pass `repo_path` to the coordinator. Ask **which repo** if unclear.
-4. **Context:** One Drive memory read per session; trust subagent reports; details in [context discipline](./context-discipline.md).
+4. **Context:** One memory-file read per session; trust subagent reports; details in [context discipline](./context-discipline.md).

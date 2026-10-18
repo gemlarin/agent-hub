@@ -28,7 +28,7 @@ This clone treats the **Projects folder** as the hub git root (`Agents/` next to
 
 Clone **anywhere else** if you prefer; each app’s pointer must still be a relative path to **this clone’s** `Agents/AGENTS.md`.
 
-**Still manual:** Drive [`MEMORY.md`](./Agents/memory.md); pointer `AGENTS.md` in each app (below). **Cursor:** paste [`Agents/Setup/cursor-user-rules.md`](./Agents/Setup/cursor-user-rules.md) only if default git User Rules tell the parent to run `git`.
+**Still manual:** set the [`MEMORY.md` path](#persistent-memory); pointer `AGENTS.md` in each app (below). **Cursor:** paste [`Agents/Setup/cursor-user-rules.md`](./Agents/Setup/cursor-user-rules.md) only if default git User Rules tell the parent to run `git`.
 
 Full steps: **[Agents/Setup/hub-setup.md](./Agents/Setup/hub-setup.md)**
 
@@ -91,6 +91,30 @@ Do **not** move `.cursor/` or `.githooks/` into `Agents/`. Cursor only reads `.c
 
 ---
 
+## Persistent memory
+
+Agents keep durable notes in **one** `MEMORY.md` file. Use **cloud storage** (Google Drive, iCloud, Dropbox, …) if you want the same file on every machine, or a **local file** if this computer is enough.
+
+Configure the absolute path in gitignored [`Agents/Setup/hub-setup.local.md`](./Agents/Setup/hub-setup.local.md) (bootstrap copies the [example](./Agents/Setup/hub-setup.local.example.md)):
+
+```markdown
+## Persistent memory
+
+- **MEMORY.md path:** `/absolute/path/to/MEMORY.md`
+```
+
+Examples:
+
+| Kind | Path |
+|------|------|
+| Google Drive for Desktop (Mac) | `~/Library/CloudStorage/GoogleDrive-<account>/My Drive/Documents/MEMORY.md` |
+| Google Drive for Desktop (Windows) | `~/Google Drive/My Drive/Documents/MEMORY.md` |
+| Local only | `~/Documents/MEMORY.md` |
+
+Never commit `MEMORY.md`. Prefer a path **outside** this clone. Policy for agents: [`Agents/memory.md`](./Agents/memory.md). The Memory Steward reads that path and writes only that file.
+
+---
+
 ## Layout
 
 | Path | Purpose |
@@ -101,7 +125,7 @@ Do **not** move `.cursor/` or `.githooks/` into `Agents/`. Cursor only reads `.c
 | [`.githooks/`](./.githooks/) | Hub-repo git hooks (post-merge regen); not inherited by apps |
 | App folders | Separate git repos (siblings of `Agents/` in the Projects layout) |
 
-**Memory:** Google Drive `Documents/MEMORY.md` only — [`Agents/memory.md`](./Agents/memory.md).
+**Memory:** path in gitignored `Agents/Setup/hub-setup.local.md` — [`Agents/memory.md`](./Agents/memory.md).
 
 ---
 

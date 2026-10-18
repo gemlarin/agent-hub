@@ -10,7 +10,7 @@ On-demand rules for **token-efficient orchestration**. Subagent caps: [subagents
 
 ## Memory
 
-- Read Google Drive `MEMORY.md` **once** at session start ([memory.md](./memory.md)).
+- Resolve the path from `Setup/hub-setup.local.md`, then read that `MEMORY.md` **once** at session start ([memory.md](./memory.md)).
 - **Do not** re-read unless the user says memory changed on another device or after Memory Steward writes.
 - **Do not** paste the full file into chat; use short paraphrases.
 

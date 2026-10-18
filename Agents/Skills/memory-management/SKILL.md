@@ -6,7 +6,7 @@ tools: [read_file, write_file, edit_file]
 
 # Skill: Memory & Cross-Session Persistence
 
-Apply this skill when **writing** Google Drive `Documents/MEMORY.md` (Memory Steward). The **main agent** reads memory at session start without invoking the steward. Paths: [`memory.md`](../../memory.md). Never use a local `Projects/MEMORY.md` or commit memory to agent-hub. Evaluate new facts against the sections below before persisting.
+Apply this skill when **writing** the configured `MEMORY.md` (Memory Steward). The **main agent** reads memory at session start without invoking the steward. Path comes from gitignored `Agents/Setup/hub-setup.local.md` — see [`memory.md`](../../memory.md). Never commit `MEMORY.md` to agent-hub or app repos. Evaluate new facts against the sections below before persisting.
 
 ---
 
@@ -42,4 +42,4 @@ You are **strictly prohibited** from writing the following types of sensitive in
 - **Conciseness:** Keep entries brief, dense, and structured (bullet points over paragraphs).
 - **Deduplication:** Before adding a new memory, check if it updates or contradicts an existing entry. Overwrite outdated information rather than appending duplicates.
 - **Portability:** Ensure stored notes do not rely on local device states (avoid absolute paths like `/Users/name/Desktop/...` unless explicitly marked as device-specific).
-- **File Target:** Google Drive `Documents/MEMORY.md` only. Main agent reads at session start; Memory Steward performs writes; both must follow this skill.
+- **File Target:** The absolute path in `Agents/Setup/hub-setup.local.md` (`MEMORY.md path`). Cloud-synced or local-only is fine. Main agent reads at session start; Memory Steward performs writes; both must follow this skill. Never commit the file.

@@ -6,7 +6,7 @@ Install, sync, and optional **Cursor** integration. Hub overview: [../../README.
 |---------------|---------|
 | [hub-setup.md](./hub-setup.md) | Layout, bootstrap, Cursor regen, troubleshooting |
 | [scripts/bootstrap.sh](./scripts/bootstrap.sh) / [bootstrap.cmd](./scripts/bootstrap.cmd) | First run / new machine (`.cmd` for Windows) |
-| [hub-setup.local.example.md](./hub-setup.local.example.md) | Template → `hub-setup.local.md` (gitignored; bootstrap seeds this) |
+| [hub-setup.local.example.md](./hub-setup.local.example.md) | Template → `hub-setup.local.md` (gitignored; remotes, paths, **MEMORY.md path**) |
 | [cursor-user-rules.md](./cursor-user-rules.md) | Paste into Cursor **User Rules** only if default git User Rules tell the parent to run git |
 | [cursor-agents.json](./cursor-agents.json) | Manifest for generating `.cursor/agents/` |
 | [scripts/](./scripts/) | `detect-cursor-env.sh`, `install-cursor-integration.sh`, `sync-cursor-agents.sh`, `test-git-delegation-hook.py` |

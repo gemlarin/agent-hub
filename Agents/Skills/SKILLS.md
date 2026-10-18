@@ -8,7 +8,7 @@ When a task matches a skill's description, load and follow its instructions.
 
 - **Skill file:** [`./memory-management/SKILL.md`](./memory-management/SKILL.md)
 - **Orchestration (paths, triggers, steward):** [`memory.md`](../memory.md)
-- **When to use:** Memory Steward **writes** (sanitization, dedupe). Main agent **reads** Drive `MEMORY.md` at session start—see `Agents/memory.md`.
+- **When to use:** Memory Steward **writes** (sanitization, dedupe). Main agent **reads** the configured `MEMORY.md` at session start—see `Agents/memory.md`.
 
 ### 2. `git-merge` (`./git-merge/`)
 

@@ -75,6 +75,21 @@ sed_escape() {
   printf '%s' "$1" | sed -e 's/[\\|&]/\\&/g'
 }
 
+detect_memory_path() {
+  local f
+  for f in "$HOME/Library/CloudStorage"/GoogleDrive-*/My\ Drive/Documents/MEMORY.md; do
+    if [[ -f "$f" ]]; then
+      printf '%s\n' "$f"
+      return 0
+    fi
+  done
+  if [[ -f "$HOME/Google Drive/My Drive/Documents/MEMORY.md" ]]; then
+    printf '%s\n' "$HOME/Google Drive/My Drive/Documents/MEMORY.md"
+    return 0
+  fi
+  return 1
+}
+
 origin=""
 github_user=""
 if git -C "$ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
@@ -101,9 +116,14 @@ if [[ ! -f "$LOCAL" ]]; then
   if [[ -n "$github_user" ]]; then
     sed_script+="s|<your-github-user>|$(sed_escape "$github_user")|g;"
   fi
-  sed_script+="s|/path/to/Projects|$(sed_escape "$HOST_ROOT")|g"
+  sed_script+="s|/path/to/Projects|$(sed_escape "$HOST_ROOT")|g;"
+  memory_path="$(detect_memory_path || true)"
+  if [[ -n "$memory_path" ]]; then
+    memory_path="$(host_path "$memory_path")"
+    sed_script+="s|/absolute/path/to/MEMORY.md|$(sed_escape "$memory_path")|g;"
+  fi
   sed -e "$sed_script" "$LOCAL" >"$tmp" && mv "$tmp" "$LOCAL"
-  echo "Wrote $LOCAL (gitignored). Edit if origin or paths look wrong."
+  echo "Wrote $LOCAL (gitignored). Edit if origin, hub path, or MEMORY.md path look wrong."
 else
   echo "Keeping existing $LOCAL"
 fi
@@ -138,7 +158,7 @@ fi
 
 echo ""
 echo "Next (not automated):"
-echo "  - Google Drive: Documents/MEMORY.md — Agents/memory.md"
+echo "  - Persistent memory: set MEMORY.md path in Agents/Setup/hub-setup.local.md (cloud or local) — Agents/memory.md"
 echo "  - App repos: pointer AGENTS.md at the app root → ../Agents/AGENTS.md or ../../Agents/AGENTS.md"
 if $cursor_detected; then
   echo "  - Cursor User Rules: paste Agents/Setup/cursor-user-rules.md only if default git User Rules tell the parent to run git"

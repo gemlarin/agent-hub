@@ -15,7 +15,7 @@
 !.cursor/hooks/state/.gitkeep
 !/.githooks/
 
-# Safety net: ignore hub-root stub only (canonical memory is on Google Drive)
+# Safety net: never commit a hub-root MEMORY.md (path is in hub-setup.local.md)
 /MEMORY.md
 
 # Per-machine hub remotes & accounts (template: Agents/Setup/hub-setup.local.example.md)

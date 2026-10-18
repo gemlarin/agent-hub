@@ -60,13 +60,13 @@ When delegating a task, provide the subagent with a complete, self-contained pro
 
 ### Memory Steward (`./Subagents/memory-steward.md`)
 
-**Role:** **Write only** to Google Drive `Documents/MEMORY.md` (see [Memory rules](./memory.md)) using the [memory-management](./Skills/memory-management/SKILL.md) skill. Returns a **Memory Report**. Session context comes from the **main agent’s** session-start read—do not use this subagent to load memory at session start.
+**Role:** **Write only** to the `MEMORY.md` path in gitignored `Setup/hub-setup.local.md` (see [Memory rules](./memory.md)) using the [memory-management](./Skills/memory-management/SKILL.md) skill. Returns a **Memory Report**. Session context comes from the **main agent’s** session-start read—do not use this subagent to load memory at session start.
 
 - **When to Trigger:**
   - **Explicit save:** User says “remember”, “update memory”, “save progress”, or ends a working session (`mode: write`).
   - **Milestone / preference shift:** Major feature done, bug fixed, or new standing preference—parent passes a bullet **memory delta** (`mode: write`).
 - **Invocation Parameters:** `mode: write`, **memory delta** (bullets), optional one-paragraph session summary. Parent must not ask the steward to change non-memory files.
-- **Handling Results:** Trust the Memory Report; do not re-read `MEMORY.md` unless the user says Drive was edited on another device.
+- **Handling Results:** Trust the Memory Report; do not re-read `MEMORY.md` unless the user says the file changed on another device.
 
 ---
 
@@ -84,6 +84,6 @@ When delegating a task, provide the subagent with a complete, self-contained pro
 
 - **Trigger matrix:** When a section above matches, delegate—do not do that work in the parent.
 - **Read-Only default:** Research Scout, Code Reviewer, and Web Researcher do not edit the codebase. Reviewer uses coordinator diff text or `read_file`—not `git`.
-- **Write exceptions:** Memory Steward → Drive `MEMORY.md` only. Git Coordinator → `git`/`gh`; file edits only per [git-merge](./Skills/git-merge/SKILL.md) after user approves a merge plan.
+- **Write exceptions:** Memory Steward → configured `MEMORY.md` only. Git Coordinator → `git`/`gh`; file edits only per [git-merge](./Skills/git-merge/SKILL.md) after user approves a merge plan.
 - **No Raw Log Dumping:** Never attempt to re-read raw logs, multi-hundred-line source code, or uncompressed search outputs that a subagent has already processed.
 - **Report cap:** Same **≤80 lines** default for every specialist (see Execution & Synthesis).

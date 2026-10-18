@@ -1,26 +1,37 @@
 # Memory & Persistent Context
 
-Cross-session continuity uses **one** file: **`MEMORY.md`** in **Google Drive** (`My Drive/Documents/MEMORY.md`). It is private—never commit it to agent-hub or app repos.
+Cross-session continuity uses **one** `MEMORY.md` file. It is private—never commit it to agent-hub or app repos.
 
-## Canonical path (read and write **only** here)
+Put it in **cloud storage** (Google Drive, iCloud, Dropbox, …) so machines share it, or keep a **local-only** file on this computer.
 
-**Do not** read or write `MEMORY.md` under the Projects folder, app repos, or any other local path. **No symlinks, copies, or stubs** at the hub root—Google Drive is the only target so Mac and PC stay in sync.
+## Configure the path
 
-Resolve the synced file on disk (Google Drive for Desktop):
+The Memory Steward and the main agent read the absolute path from gitignored [`Setup/hub-setup.local.md`](./Setup/hub-setup.local.md):
 
-| Machine | Typical absolute path |
-|---------|------------------------|
-| **Mac** | `~/Library/CloudStorage/GoogleDrive-<account>/My Drive/Documents/MEMORY.md` |
-| **PC** | `~/Google Drive/My Drive/Documents/MEMORY.md` (or your Drive letter equivalent, e.g. `G:\My Drive\Documents\MEMORY.md`) |
+```markdown
+## Persistent memory
 
-If the path differs on a machine, locate `Documents/MEMORY.md` inside your synced **My Drive** folder and use that file only.
+- **MEMORY.md path:** `/absolute/path/to/MEMORY.md`
+```
+
+Bootstrap seeds that file from [`Setup/hub-setup.local.example.md`](./Setup/hub-setup.local.example.md). Edit the path on each machine. If the field is missing or still the placeholder, stop and ask the user to set it.
+
+Typical locations:
+
+| Kind | Example |
+|------|---------|
+| Google Drive for Desktop (Mac) | `~/Library/CloudStorage/GoogleDrive-<account>/My Drive/Documents/MEMORY.md` |
+| Google Drive for Desktop (Windows) | `~/Google Drive/My Drive/Documents/MEMORY.md` |
+| Local only | `~/Documents/MEMORY.md` |
+
+**Do not** commit `MEMORY.md`. Hub gitignore already drops a hub-root `/MEMORY.md`. Prefer a path **outside** the clone (cloud sync folder or `~/Documents`).
 
 ## Who reads vs writes
 
 | Actor | Responsibility |
 |--------|----------------|
-| **Main agent** | **Read** Drive `MEMORY.md` once at **session start** (or when starting a new task in a fresh chat). Apply context; do not re-read unless the user says memory may have changed elsewhere. |
-| **Memory Steward** | **Write only.** Invoked for persistence updates; may read the file internally to merge edits—never for session bootstrap. |
+| **Main agent** | Read `hub-setup.local.md` for the path, then read that `MEMORY.md` **once** at **session start**. Apply context; do not re-read unless the user says the file changed or after Memory Steward writes. |
+| **Memory Steward** | **Write only** to that same configured path. May read the file internally to merge edits—never for session bootstrap. |
 
 Do **not** invoke Memory Steward with `mode: read` to load session context (avoids double-read with the main agent).
 
@@ -34,10 +45,10 @@ Main agent should follow the same capture/discard boundaries when deciding *what
 
 ## Main agent responsibilities
 
-1. **Session start:** Read Google Drive `MEMORY.md` before planning work.
+1. **Session start:** Resolve the path from `hub-setup.local.md`, then read that `MEMORY.md` before planning work.
 2. **During work:** Use memory as context; do not paste the full file into chat.
 3. **Persistence:** Delegate **all writes** to Memory Steward (`mode: write`); never edit `MEMORY.md` during feature work.
-4. **User triggers:** “Remember this”, “update memory”, “save session”, or wrap-up → Memory Steward with `mode: write` and a **memory delta** (bullets).
+4. **User triggers:** “Remember this”, “update memory”, “save session”, or wrap-up → Memory Steward with `mode: write`, the configured **path**, and a **memory delta** (bullets).
 
 ## What belongs in `MEMORY.md`
 
