@@ -25,3 +25,5 @@ Structure your findings clearly:
 - **Verified Documentation & Links:** Exact URLs or source titles utilized.
 - **Code / Config Snippets:** Clean, minimal examples extracted from the source.
 - **Caveats & Version Notes:** Any version constraints or platform limitations discovered during the search.
+
+**Durable memory:** Do not read `MEMORY.md`. Use only `related_memory` bullets the parent included (may be empty).

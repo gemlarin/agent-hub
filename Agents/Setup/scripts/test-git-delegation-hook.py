@@ -90,6 +90,7 @@ def assert_git_detection() -> None:
     assert not detect("echo hello")
     hub = mod.hook_hub_root()
     assert mod.targets_hub_repo("git status", str(ROOT), hub)
+    assert mod.targets_hub_repo(f'git -C "{hub}" status', "/tmp", hub)
     assert not mod.targets_hub_repo('git -C "/tmp/some-other-app" status', str(ROOT), hub)
 
 
@@ -145,30 +146,20 @@ def main() -> int:
     run_hook(
         {
             "hook_event_name": "postToolUse",
-            "tool_name": "CallDynamicTool",
-            "tool_use_id": "smoke-1",
-            "tool_input": {
-                "namespace": "cursor",
-                "toolName": "Task",
-                "arguments": {"subagent_type": "git-coordinator"},
-            },
-            "workspace_roots": [str(ROOT)],
-        }
-    )
-    run_hook(
-        {
-            "hook_event_name": "postToolUse",
             "tool_name": "Task",
             "tool_use_id": "smoke-2",
             "tool_input": {"subagent_type": "git-coordinator"},
             "workspace_roots": [str(ROOT)],
         }
     )
+    expect(
+        "postToolUse must not clear marker (background Task)",
+        shell("git status"),
+        "allow",
+    )
     run_hook(
         {
-            "hook_event_name": "subagentStop",
-            "subagent_type": "git-coordinator",
-            "subagent_id": "smoke-3",
+            "hook_event_name": "sessionStart",
             "workspace_roots": [str(ROOT)],
         }
     )

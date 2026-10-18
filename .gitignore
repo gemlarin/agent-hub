@@ -6,6 +6,7 @@
 !/README.md
 !/Agents/
 !/.cursor/
+!/.cursor/README.md
 !/.cursor/agents/
 !/.cursor/rules/
 !/.cursor/hooks/

@@ -13,7 +13,7 @@ Light spec workflow for **new tasks** (features, refactors with a clear goal, in
 1. **Ask for specs** before coding: goal, in/out of scope, acceptance checks, constraints (stack, a11y, time box).
 2. Write **`tasks.md`** at the **project root** (create/overwrite for that task — don’t scatter task lists).
 3. Use a checkbox task list. Check items off as each is done.
-4. **Always** include a **Code sweep** line that points at the sweep prompt (do not auto-run every topic).
+4. **Always** include a **Code sweep** line that points at the topic ids (do not auto-run every topic).
 5. Keep it short — outcomes, not a novel.
 
 **`tasks.md` shape:**
@@ -32,46 +32,20 @@ Light spec workflow for **new tasks** (features, refactors with a clear goal, in
 
 - [ ] …
 - [ ] …
-- [ ] Code sweep (prompt the user for topics — see AGENTS.md)
+- [ ] Code sweep (offer topic ids — [code-sweep options](./Skills/code-sweep/options.md); Code Sweeper runs them)
 ```
 
 ---
 
 ## Code sweep
 
-When the user asks for a **code sweep** (or a `tasks.md` sweep item is due): **do not** run every topic at once.
+When the user asks for a **code sweep** (or a `tasks.md` sweep item is due): **do not** run every topic at once, and **do not** sweep in the parent.
 
-1. Post a **checkbox menu by topic** (markdown `- [ ]`).
-2. Wait for the user to check / name the topics to run.
-3. Sweep **only** the approved topics; report findings per topic; ask before large fixes if Change Control applies.
+1. Offer topic **ids** from [`Skills/code-sweep/options.md`](./Skills/code-sweep/options.md). Confirm **scope** (which app/paths) if unclear.
+2. Wait for the user to name ids.
+3. Delegate to **Code Sweeper** ([`subagents.md`](./subagents.md)) with those `topics` + `scope`. Trust the **Sweep Report**. Ask before applying suggested fixes (Change Control).
 
-**Prompt template** (copy into chat):
-
-```markdown
-Code sweep — check what to run:
-
-### Accessibility
-
-- [ ] ARIA — roles, names, states; dynamic attrs (`aria-invalid`, `aria-expanded`, etc.)
-- [ ] Live regions — `aria-live` / status for loading, errors, success
-- [ ] A11y basics — text sizing/contrast, `alt`, labels, focus order, keyboard, focus styles
-
-### Quality
-
-- [ ] Bugs / edge cases — nulls, races, stale listeners, broken happy path
-- [ ] Typos — UI copy, comments, README, commit messages in scope
-- [ ] Code smell — duplication, god components, logic in templates, dead code
-- [ ] Types — `any`, weak casts, missing return types, magic strings
-- [ ] Async / errors — empty catches, missing loading/error UI, no abort/cleanup
-
-### Ship-readiness (optional)
-
-- [ ] Secrets / env — no hardcoded secrets; `.env.example` in sync
-- [ ] CI / scripts — typecheck/test/build still make sense
-- [ ] DoD — typecheck/build; native controls over clickable `div`s
-```
-
-**Reminders:** If the user is deep in a build and hasn’t swept in a while (e.g. feature roughly done, about to call a task complete, or several sessions without a sweep), **once** gently remind: offer the checkbox menu. Don’t nag every turn.
+**Reminders:** If the user is deep in a build and hasn’t swept in a while (e.g. feature roughly done, about to call a task complete, or several sessions without a sweep), **once** gently remind: offer the topic ids. Don’t nag every turn.
 
 ---
 
@@ -104,7 +78,7 @@ Code sweep — check what to run:
 1. No TS **errors** — `npm run typecheck` if present, else `npm run build`.
 2. `npm run build` succeeds when relevant.
 3. UI: prefer real controls over clickable `div`s; keyboard and focus behave sensibly (Vue specifics → [coding-standards-vue.md](./coding-standards-vue.md#definition-of-done-vue-ui)).
-4. When a **`tasks.md`** exists for the work: checklist items done (or explicitly deferred); **code sweep** offered via topic checkboxes before calling the task complete.
+4. When a **`tasks.md`** exists for the work: checklist items done (or explicitly deferred); **code sweep** offered via topic ids ([`Skills/code-sweep/options.md`](./Skills/code-sweep/options.md)) before calling the task complete.
 
 **Commands:** `npm run dev` · `npm run typecheck` · `npm run build` · `npm run preview`
 

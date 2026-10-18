@@ -8,5 +8,6 @@ alwaysApply: true
 Applies to **this hub git repo** (the folder that contains `Agents/AGENTS.md` and `.cursor/hooks/`).
 
 - In **this hub repo**, do **not** run `git` or `gh` in the parent agent shell. Delegate to **git-coordinator**; relay user choices; trust the **Git Report**.
+- **Resume** the same git-coordinator agent id for `[continue]` / `[more]` / `[custom]` / `[agent]` / merge ids. Do not spawn a new Task per relay unless the last run aborted.
 - In **any other git repo** (sibling app, unrelated clone), the parent **may** run `git`/`gh`. The shell hook does not block those roots. Optional: still use git-coordinator with `repo_path` if the user wants hub-style flow.
 - Ask which **repo_path** when the user wants coordinator on a specific repo. Orchestration: `Agents/subagents.md`.

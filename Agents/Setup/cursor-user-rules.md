@@ -27,7 +27,7 @@ Only create commits when requested by the user. If unclear, ask first.
 
 You are the **parent agent**.
 
-- **Agent-hub git root** (folder with hub `Agents/AGENTS.md` / `.cursor/hooks/`): do **not** run `git` or `gh`. Delegate to **git-coordinator** (`subagent_type: git-coordinator`). Pass **`repo_path`**. Relay `[more]` / `[continue]` / `[custom]` / `[agent]`. Trust the **Git Report**; do not re-run those commands.
+- **Agent-hub git root** (folder with hub `Agents/AGENTS.md` / `.cursor/hooks/`): do **not** run `git` or `gh`. Delegate to **git-coordinator** (`subagent_type: git-coordinator`). Pass **`repo_path`**. Relay `[more]` / `[continue]` / `[custom]` / `[agent]`. **Resume** the same coordinator agent id for those relays (do not spawn a new Task unless the last run aborted). Trust the **Git Report**; do not re-run those commands.
 - **Any other git repo** (sibling app, unrelated clone, no hub hooks): you **may** run `git`/`gh` in the parent shell. Do not treat User Rules as a global git ban. Optional: still use git-coordinator with `repo_path` if the user wants that flow.
 - Hub details: `Agents/AGENTS.md`, `Agents/subagents.md`, `Agents/Subagents/git-coordinator.md`.
 
@@ -68,7 +68,7 @@ When the user asks to create a pull request:
 1. Confirm **`repo_path`** with the user if unclear.
 2. Invoke **git-coordinator** to gather repo state (branch, tracking, commits vs base, diff summary)—do **not** run `git status`, `git diff`, or `git log` yourself.
 3. Draft the PR title and body from the **Git Report** and user intent.
-4. Invoke **git-coordinator** again with `user_authorized: true` to **push** (if needed) and **`gh pr create`** (pass title/body via the coordinator prompt / `gh_args`).
+4. **Resume** git-coordinator (same agent id) with `user_authorized: true` to **push** (if needed) and **`gh pr create`** (pass title/body via the coordinator prompt / `gh_args`).
 5. Return the PR URL from the **Git Report**.
 
 Never update the git config. Do not push unless the user asked (or it is required to open the PR they requested).

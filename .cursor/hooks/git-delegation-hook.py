@@ -101,6 +101,10 @@ def parse_git_c_path(command: str) -> str | None:
     return None
 
 
+def _norm_path_text(value: str) -> str:
+    return str(Path(value)).replace("\\", "/").rstrip("/")
+
+
 def find_git_root(start: Path) -> Path | None:
     try:
         path = start.resolve()
@@ -116,12 +120,20 @@ def find_git_root(start: Path) -> Path | None:
 
 def targets_hub_repo(command: str, cwd: str, hub: Path) -> bool:
     """Enforce the shell block only for the agent-hub git root, not sibling/other repos."""
-    hub = hub.resolve()
+    try:
+        hub = hub.resolve()
+    except OSError:
+        pass
+    hub_text = _norm_path_text(str(hub))
+    raw = parse_git_c_path(command)
+    if raw and _norm_path_text(raw) == hub_text:
+        return True
     try:
         workdir = Path(cwd).resolve() if cwd else Path.cwd()
     except OSError:
         workdir = Path.cwd()
-    raw = parse_git_c_path(command)
+    if not raw and _norm_path_text(str(workdir)) == hub_text:
+        return True
     start = workdir
     if raw:
         candidate = Path(raw)
@@ -130,6 +142,8 @@ def targets_hub_repo(command: str, cwd: str, hub: Path) -> bool:
             start = start.resolve()
         except OSError:
             return False
+        if start == hub:
+            return True
     root = find_git_root(start)
     if root is not None:
         return root == hub
@@ -199,8 +213,9 @@ def prune_stale_markers(state_dirs: list) -> None:
                 pass
 
 
-def coordinator_active(state_dirs: list) -> bool:
-    prune_stale_markers(state_dirs)
+def coordinator_active(state_dirs: list, *, prune: bool = False) -> bool:
+    if prune:
+        prune_stale_markers(state_dirs)
     return any(
         state_dir.is_dir() and any(state_dir.glob("coordinator-*.active"))
         for state_dir in state_dirs
@@ -247,6 +262,7 @@ def main() -> int:
 
     if event == "sessionStart":
         deactivate_coordinator(state_dirs)
+        prune_stale_markers(state_dirs)
         return 0
 
     if event == "preToolUse":
@@ -256,8 +272,7 @@ def main() -> int:
         return 0
 
     if event in ("postToolUse", "postToolUseFailure"):
-        if is_git_coordinator_spawn(data):
-            deactivate_coordinator(state_dirs, coordinator_marker_id(data))
+        # Background Task fires postToolUse at spawn. Do not clear the marker here.
         return 0
 
     if event == "subagentStart":

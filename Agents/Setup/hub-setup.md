@@ -86,13 +86,13 @@ Hooks apply **only in Cursor** when this hub’s `.cursor/hooks.json` is loaded 
 
 **Other repos — nothing extra.** The pointer does not install hooks into apps. Setup does **not** install User-level hooks. If User Rules still say “never run git,” update them from [cursor-user-rules.md](./cursor-user-rules.md).
 
-The hook is **Python** (`.cursor/hooks/git-delegation-hook.py`), started through `.cursor/hooks/git-delegation-hook.cmd` (Windows `cmd` and POSIX `sh`). Needs **Python 3.8+**. Do not feed Python via a bash heredoc — that replaces stdin and denies every `git` command.
+The hot path is **POSIX sh** (`.cursor/hooks/git-delegation-hook.sh`), started through `.cursor/hooks/git-delegation-hook.cmd`. Do **not** run Python for `beforeShellExecution` on Unix — Python 3 is SIGKILL'd in this workspace and `failClosed` made every `git` look hung. Windows still uses the Python file. `failClosed` is **false** so a dead hook cannot freeze git. Markers clear on **`subagentStop`** only (not `postToolUse`), or background Git Coordinator loses its allow marker at spawn.
 
 **Smoke test:**
 
 ```bash
-python3 Agents/Setup/scripts/test-git-delegation-hook.py
-# Windows: py -3 Agents/Setup/scripts/test-git-delegation-hook.py
+sh Agents/Setup/scripts/test-git-delegation-hook.sh
+# Windows (Python fallback): py -3 Agents/Setup/scripts/test-git-delegation-hook.py
 ```
 
 Expect `"permission":"deny"` with no marker, `"allow"` after a git-coordinator spawn, then deny again after stop. If a test **allows** `git status` with no marker, run `rm -f .cursor/hooks/state/coordinator-*.active`.
@@ -127,3 +127,4 @@ Expect `"permission":"deny"` with no marker, `"allow"` after a git-coordinator s
 | Hook test **allow** for `git status` | `rm -f .cursor/hooks/state/coordinator-*.active` |
 | Hook “permission denied” | `chmod +x .cursor/hooks/git-delegation-hook.cmd` (Unix). On Windows, install Python 3. |
 | Every `git` denied, even coordinator | Hook must read JSON on stdin. Re-run `./Agents/Setup/scripts/test-git-delegation-hook.sh`. |
+| Git Coordinator slow / git hung | Unix hook must be **sh** (not Python). Markers clear on **subagentStop** only. Preflight is one `status -sb` + `--stat` chain. Resume the same agent id. |

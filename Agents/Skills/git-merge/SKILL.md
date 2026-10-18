@@ -8,7 +8,7 @@ tools: [shell, read_file, write_file, edit_file]
 
 Use this skill when the Git Coordinator handles **`git merge`**, **`git pull`** (merge or rebase), **`git rebase`**, or **`git cherry-pick`**, or when the repo is already in a conflicted state from those operations.
 
-The **main agent** relays all prompts and user decisions. The **coordinator** runs all git commands and reads conflicted files.
+User-facing ids: [`options.md`](./options.md). The **main agent** relays those ids. The **coordinator** runs all git commands and reads conflicted files.
 
 ---
 
@@ -52,16 +52,18 @@ Return **`Git Report: AWAIT_MERGE_APPROVAL`** to the parent with:
 
 ### User choices (parent must relay)
 
-- **Approve** — execute the recommendation exactly as described.
-- **Decline** — abort the operation (section 5).
+Offer the ids in [`options.md`](./options.md). Map aliases `approve_merge_plan` → `approve`, `decline_merge_plan` → `decline`.
 
-Do **not** edit conflicted files or `git add` until approval.
+Do **not** edit conflicted files or `git add` until `approve`, `ours`, `theirs`, or `revise`.
 
 ---
 
-## 4. On approve
+## 4. On `approve` / `ours` / `theirs` / `revise`
 
-1. Apply resolutions (edit files, `git checkout --ours/--theirs` only when that matches the approved plan).
+1. Apply resolutions:
+   - **`approve`** — the recommendation exactly.
+   - **`ours` / `theirs`** — `git checkout --ours/--theirs` on remaining conflicted paths, or only the paths the user named.
+   - **`revise`** — the user’s alternate plan (treat the rest of their message as the plan). If it is still ambiguous, `NEED_INPUT`.
 2. `git add` resolved paths; verify `git diff --check` and no remaining `<<<<<<<`.
 3. Continue the operation:
    - **Merge:** complete merge commit if needed.
@@ -69,11 +71,13 @@ Do **not** edit conflicted files or `git add` until approval.
    - **Cherry-pick:** `git cherry-pick --continue`.
 4. Return **`Git Report: SUCCESS`** with final status, commit hash(es), and brief summary.
 
-If approval was partial or ambiguous, return **`NEED_INPUT`** instead of guessing.
+On **`detail`:** return hunks for the named path only; stay **`AWAIT_MERGE_APPROVAL`** and offer [`options.md`](./options.md) again. Do not resolve.
+
+If the choice is missing or unknown, return **`NEED_INPUT`** with the option table instead of guessing.
 
 ---
 
-## 5. On decline
+## 5. On `decline`
 
 Run the correct abort for the in-progress operation:
 
@@ -103,3 +107,8 @@ Treat **`git pull`** that stops with conflicts the same as **merge**: summarize,
 - No force-push to `main`/`master` as part of “finishing” a merge.
 - Do not delete branches unless the user approved in this thread.
 - Lockfile conflicts: recommend regenerating from the preferred package manager when in doubt, and say so in the recommendation.
+
+## 8. Parent
+
+- After `AWAIT_MERGE_APPROVAL`, list the **ids** from [`options.md`](./options.md) unless the user already picked.
+- Re-invoke Git Coordinator with `user_choice` set to that id. Do not run `git` in the parent on this hub.

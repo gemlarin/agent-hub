@@ -111,7 +111,7 @@ Examples:
 | Google Drive for Desktop (Windows) | `~/Google Drive/My Drive/Documents/MEMORY.md` |
 | Local only | `~/Documents/MEMORY.md` |
 
-Never commit `MEMORY.md`. Prefer a path **outside** this clone. Policy for agents: [`Agents/memory.md`](./Agents/memory.md). The Memory Steward reads that path and writes only that file.
+Never commit `MEMORY.md`. Prefer a path **outside** this clone. Keep the file **short** (target ≤80 lines) so new chats stay cheap. Policy for agents: [`Agents/memory.md`](./Agents/memory.md). The main agent reads it once per session and auto-saves viable facts mid-session (you’ll see `Durable memory saved to MEMORY file`). Option ids appear when you ask to save or at wrap-up. Memory Steward writes only that file. Other specialists do not load it.
 
 ---
 
@@ -120,9 +120,9 @@ Never commit `MEMORY.md`. Prefer a path **outside** this clone. Policy for agent
 | Path | Purpose |
 |------|---------|
 | [`Agents/AGENTS.md`](./Agents/AGENTS.md) | Entry point for agents (on-demand module table) |
-| [`Agents/`](./Agents/) | Subagents, coding standards, memory, **[Setup/](./Agents/Setup/)**, **[Skills/](./Agents/Skills/)** |
-| [`.cursor/`](./.cursor/) | Cursor agents, rules, hooks — **hub workspace root only** |
-| [`.githooks/`](./.githooks/) | Hub-repo git hooks (post-merge regen); not inherited by apps |
+| [`Agents/`](./Agents/) | Subagents, coding standards, memory, **[Setup/](./Agents/Setup/)**, **[Skills/](./Agents/Skills/)** — [how to contribute](./Agents/README.md) |
+| [`.cursor/`](./.cursor/) | Cursor agents, rules, hooks — **hub workspace root only** — [how to contribute](./.cursor/README.md) |
+| [`.githooks/`](./.githooks/) | Hub-repo git hooks (post-merge regen); not inherited by apps — [how to contribute](./.githooks/README.md) |
 | App folders | Separate git repos (siblings of `Agents/` in the Projects layout) |
 
 **Memory:** path in gitignored `Agents/Setup/hub-setup.local.md` — [`Agents/memory.md`](./Agents/memory.md).
@@ -132,7 +132,8 @@ Never commit `MEMORY.md`. Prefer a path **outside** this clone. Policy for agent
 ## Highlights
 
 - **Git Coordinator** — [`Agents/Subagents/git-coordinator.md`](./Agents/Subagents/git-coordinator.md)
-- **Subagents** — [`Agents/subagents.md`](./Agents/subagents.md)
+- **Job Finder** — [`Agents/Subagents/job-finder.md`](./Agents/Subagents/job-finder.md) (only if you ask for a job search)
+- **Subagents** — [`Agents/subagents.md`](./Agents/subagents.md) · [using them](./Agents/Subagents/README.md#using-the-agents-users)
 - **Coding standards** — core + optional Vue split
 
 After editing `Agents/Subagents/`:
@@ -144,6 +145,23 @@ After editing `Agents/Subagents/`:
 Windows: `Agents\Setup\scripts\bootstrap.cmd` already ran sync on first install; regen with Git Bash (`./Agents/Setup/scripts/install-cursor-integration.sh --force`) or `py -3 Agents/Setup/scripts/sync_cursor_agents.py`.
 
 ---
+
+## Contributing
+
+This repo is **policy + Cursor glue**, not an application. Each folder has a README that covers design and how to change it:
+
+| Level | README |
+|-------|--------|
+| Hub clone (this file) | Install, pointers, memory path |
+| [`Agents/`](./Agents/README.md) | Canonical agent policy |
+| [`Agents/Subagents/`](./Agents/Subagents/README.md) | Specialist specs ([how to use each agent](./Agents/Subagents/README.md#using-the-agents-users)) |
+| [`Agents/Skills/`](./Agents/Skills/README.md) | Load-on-demand skills ([how to run one](./Agents/Skills/README.md#activate-a-skill-independently-users); [research options](./Agents/Skills/research/options.md)) |
+| [`Agents/Setup/`](./Agents/Setup/README.md) | Bootstrap and Cursor install |
+| [`Agents/Setup/scripts/`](./Agents/Setup/scripts/README.md) | Setup scripts |
+| [`.cursor/`](./.cursor/README.md) | Generated Cursor agents, rules, hooks |
+| [`.githooks/`](./.githooks/README.md) | Hub-only git `post-merge` |
+
+**Do not** put hub policy in app repos (pointer `AGENTS.md` only). **Do not** commit `MEMORY.md` or `Agents/Setup/hub-setup.local.md`. After editing `Agents/Subagents/`, regen Cursor agents ([Highlights](#highlights)). In **this** git root, parent agents must not run `git`/`gh` — Git Coordinator only.
 
 ## Forking
 

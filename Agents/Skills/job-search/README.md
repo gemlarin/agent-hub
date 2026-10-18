@@ -1,0 +1,18 @@
+# job-search
+
+**What:** Resume-matched job search across public boards, ranked, saved to the Desktop.
+
+**Source:** [`SKILL.md`](./SKILL.md). Boards: [`boards.md`](./boards.md). Export ids: [`options.md`](./options.md). File shapes: [`output.md`](./output.md).
+
+## Design
+
+**Job Finder** loads this skill when the user asks for a job search. It collects resume + filters first, searches public pages only (no logins), ranks by resume fit, then offers the same export ids as research: `out-chat`, `out-md`, `out-xml`, `out-raw`.
+
+The parent must not run this skill unless Job Finder is unavailable. Do not commit resumes or result files to the hub.
+
+## Contribute
+
+- Edit [`SKILL.md`](./SKILL.md) for the interview/search/rank/save flow.
+- Edit [`boards.md`](./boards.md) for `site:` patterns.
+- Edit [`options.md`](./options.md) / [`output.md`](./output.md) for export ids and Desktop schemas. Keep ids aligned with [`../research/options.md`](../research/options.md).
+- Keep the skill listed in [`../SKILLS.md`](../SKILLS.md).

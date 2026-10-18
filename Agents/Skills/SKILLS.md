@@ -7,13 +7,34 @@ When a task matches a skill's description, load and follow its instructions.
 ### 1. `memory-management` (`./memory-management/`)
 
 - **Skill file:** [`./memory-management/SKILL.md`](./memory-management/SKILL.md)
+- **User options:** [`options.md`](./memory-management/options.md) (`mem-save`, `mem-skip`, `mem-prefs`, `mem-projects`, `mem-solutions`, `mem-blockers`, `mem-forget`, `mem-prune`)
 - **Orchestration (paths, triggers, steward):** [`memory.md`](../memory.md)
-- **When to use:** Memory Steward **writes** (sanitization, dedupe). Main agent **reads** the configured `MEMORY.md` at session start—see `Agents/memory.md`.
+- **When to use:** Memory Steward **writes** (sanitize, dedupe, prune). Main agent **reads** once at session start, **auto-writes** viable facts mid-session, **offers option ids** only on explicit save or wrap-up, and passes a **slice** to other subagents—see `Agents/memory.md`.
 
 ### 2. `git-merge` (`./git-merge/`)
 
 - **Skill file:** [`./git-merge/SKILL.md`](./git-merge/SKILL.md)
+- **User options:** [`options.md`](./git-merge/options.md) (`approve`, `decline`, `ours`, `theirs`, `detail`, `revise`)
 - **Orchestration:** [Git Coordinator](../Subagents/git-coordinator.md) in [`subagents.md`](../subagents.md)
 - **When to use:** Merge, pull-with-merge, rebase, or cherry-pick conflicts. Coordinator must load this skill before resolving or aborting.
+
+### 3. `job-search` (`./job-search/`)
+
+- **Skill file:** [`./job-search/SKILL.md`](./job-search/SKILL.md)
+- **Boards / output:** [`boards.md`](./job-search/boards.md), [`options.md`](./job-search/options.md), [`output.md`](./job-search/output.md)
+- **When to use:** Loaded by **Job Finder** when the user asks for a job search (or names that subagent). Parent must not run this skill itself. Do not invent postings.
+
+### 4. `research` (`./research/`)
+
+- **Skill file:** [`./research/SKILL.md`](./research/SKILL.md)
+- **User options:** [`options.md`](./research/options.md) (tasks + `out-chat` / `out-md` / `out-xml` / `out-raw`)
+- **When to use:** Loaded by **Research Scout**. First pass is a brief; then the parent offers follow-up ids (`compare`, `cite`, `verify`, …). Not for job search or a one-line web lookup.
+
+### 5. `code-sweep` (`./code-sweep/`)
+
+- **Skill file:** [`./code-sweep/SKILL.md`](./code-sweep/SKILL.md)
+- **User options:** [`options.md`](./code-sweep/options.md) (`aria`, `live`, `a11y`, `bugs`, `typos`, `smell`, `types`, `async`, `secrets`, `ci`, `dod`)
+- **Orchestration:** [Code Sweeper](../Subagents/code-sweeper.md) in [`subagents.md`](../subagents.md)
+- **When to use:** Loaded by **Code Sweeper** when the user asks for a code sweep (or names that subagent) or a `tasks.md` sweep item is due. Parent must not run a multi-topic sweep itself. Not Code Reviewer (git diffs).
 
 ---

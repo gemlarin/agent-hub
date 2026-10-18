@@ -16,6 +16,11 @@
       "readonly": true
     },
     {
+      "name": "code-sweeper",
+      "source": "code-sweeper.md",
+      "readonly": true
+    },
+    {
       "name": "web-researcher",
       "source": "web-researcher.md",
       "readonly": true
@@ -24,6 +29,11 @@
       "name": "research-scout",
       "source": "deep-document-research.md",
       "readonly": true
+    },
+    {
+      "name": "job-finder",
+      "source": "job-finder.md",
+      "readonly": false
     }
   ]
 }

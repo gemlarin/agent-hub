@@ -5,18 +5,23 @@ On-demand rules for **token-efficient orchestration**. Subagent caps: [subagents
 ## Git & GitHub
 
 - Delegate **all** `git` / `gh` to **Git Coordinator**; use the **Git Report** as repo truth for that step.
+- **Resume** the same coordinator agent id for `[continue]` / `[more]` / `[custom]` / `[agent]` / merge ids. Do not cold-start a new Task per click.
 - **Do not** re-run the same git commands, re-fetch `status`/`diff`/`log`, or paste full diffs after a report.
 - For code review before commit/PR: pass the coordinator’s **diff summary** (or scoped paths) to Code Reviewer—not a parent-shell `git diff`.
+- For a **code sweep**: offer [topic ids](./Skills/code-sweep/options.md), then delegate to **Code Sweeper**. Do not grep the app in the parent.
 
 ## Memory
 
-- Resolve the path from `Setup/hub-setup.local.md`, then read that `MEMORY.md` **once** at session start ([memory.md](./memory.md)).
+- Resolve the path from `Setup/hub-setup.local.md`, then read that `MEMORY.md` **once** at session start ([memory.md](./memory.md)). Keep the file **lean** (target ≤80 lines) so that read stays cheap.
 - **Do not** re-read unless the user says memory changed on another device or after Memory Steward writes.
 - **Do not** paste the full file into chat; use short paraphrases.
+- **Auto-write** viable durable facts mid-session in the **background** (`mem-save` + `memory_path`). Do not block this chat on Drive I/O. Print `Durable memory saved to MEMORY file` when SUCCESS arrives. Show [option ids](./Skills/memory-management/options.md) only on explicit save or session wrap-up ([memory.md](./memory.md#auto-save-vs-option-menu)).
+- **Subagents** do not read `MEMORY.md`. Pass **`related_memory`** (task-relevant bullets only) in the specialist prompt.
 
 ## Subagents & skills
 
 - Trust specialist reports (≤80 lines default); **do not** re-open sources the subagent already summarized unless verifying a specific claim.
+- Long I/O specialists (Job Finder, Research Scout, Code Sweeper, Web Researcher, Memory Steward) run in the **background** by default ([subagents.md](./subagents.md#background-vs-foreground)). Do not poll them; relay the report when it arrives.
 - Load **skill** files only when the trigger matrix says so (`git-merge`, `memory-management`, etc.).
 - **Do not** `@`-attach whole `Agents/` trees; reference paths and read targeted files.
 

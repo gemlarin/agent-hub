@@ -8,3 +8,4 @@
 - Keep explanations under 3 sentences. Skip teaching standard APIs (`map`, `ref`, etc.) unless it prevents a hidden bug.
 - Bold paths; bullets over walls of text.
 - If unclear what to build, ask for specs (see [Spec-driven tasks](./coding-standards.md#spec-driven-tasks)) before coding.
+- After a durable-memory write, print exactly `Durable memory saved to MEMORY file`. Show memory option ids only when the user asked to save or the session is ending ([memory.md](./memory.md#auto-save-vs-option-menu)). Do not dump `MEMORY.md`.
