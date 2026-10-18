@@ -2,6 +2,8 @@
 
 Use this when you **first wire up** the hub on a machine or need a **refresher** after cloning. Day-to-day coding does not require opening this file.
 
+The hub is **not Cursor-only**. Any agent that can read `AGENTS.md` and `Agents/` can follow the same policy. **Cursor-specific** files (`.cursor/agents/`, hooks, User Rules) are optional—install them only when you use Cursor.
+
 ---
 
 ## What you are setting up
@@ -12,6 +14,7 @@ Use this when you **first wire up** the hub on a machine or need a **refresher**
 | **App repos** | Sibling folders under `Projects/` | Each has its own remote |
 | **Memory** | Google Drive `Documents/MEMORY.md` | Never in hub git |
 | **Your remotes/paths** | `Agents/hub-setup.local.md` | Gitignored |
+| **Cursor integration** (optional) | `.cursor/agents/`, `.cursor/hooks.json`, User Rules | `.cursor/` committed; User Rules are account-local |
 
 **Wrong layout:** `git clone agent-hub` into `Projects/agent-hub/` when apps use pointer `AGENTS.md` with `../` — pointers break. The **Projects directory itself** is the hub git root.
 
@@ -31,15 +34,22 @@ cp Agents/hub-setup.local.example.md Agents/hub-setup.local.md
 
 - [ ] (Recommended) Google Drive desktop sync for `Documents/MEMORY.md` — see [memory.md](./memory.md).
 
+**Check for Cursor (optional):**
+
+```bash
+./Agents/scripts/detect-cursor-env.sh
+# or: ./Agents/scripts/detect-cursor-env.sh --json
+```
+
+If this fails, complete **Hub core** below and skip [Cursor integration](#cursor-integration-optional).
+
 ---
 
-## Scenario A — Hub git not initialized yet
+## Hub core (all environments)
 
-Your `Projects` folder has apps but **no** hub `.git` yet (only `AGENTS.md` / `Agents/` from a copy or partial sync).
+### Scenario A — Hub git not initialized yet
 
-**1.** `cd` to hub root (same path you put in `hub-setup.local.md`).
-
-**2.** Initialize and track **only** hub files (existing `.gitignore` ignores sibling app folders):
+Your `Projects` folder has apps but **no** hub `.git` yet.
 
 ```bash
 cd /path/to/Projects
@@ -49,66 +59,72 @@ git fetch origin
 git checkout -b main origin/main
 ```
 
-**3.** Continue with [Cursor subagents](#cursor-subagents) below.
-
----
-
-## Scenario B — Hub already a git clone
-
-You already have `Projects` as a clone of agent-hub (or you completed Scenario A).
-
-**Update hub files:**
+### Scenario B — Hub already a git clone
 
 ```bash
 cd /path/to/Projects
 git pull
 ```
 
-If you use git hooks (step below), `.cursor/agents/` refreshes automatically when `Agents/Subagents/` changes on pull.
+Pulled commits already include `.cursor/agents/` for Cursor users; you only need a local regen when **you** edit `Agents/Subagents/` (see Cursor section).
 
----
-
-## Scenario C — New machine, empty Projects folder
-
-**1.** Create the folder and clone **into the folder root**, not into a subfolder:
+### Scenario C — New machine, empty Projects folder
 
 ```bash
 mkdir -p ~/Projects && cd ~/Projects
 git clone <your-agent-hub-url> .
+cp Agents/hub-setup.local.example.md Agents/hub-setup.local.md
+# edit local file; clone app repos as siblings; pointer AGENTS.md in each app
 ```
 
-**2.** Add `hub-setup.local.md` (copy from example and edit).
+### After hub core
 
-**3.** Clone or move app repos **as siblings** next to `AGENTS.md`.
-
-**4.** In each app repo, ensure pointer stub `AGENTS.md` links to hub (`../AGENTS.md` or `../../AGENTS.md`).
-
-**5.** Continue with [Cursor subagents](#cursor-subagents).
+- Point app repos at hub `AGENTS.md` (`../` or `../../`).
+- Use [memory.md](./memory.md) for Drive `MEMORY.md`.
+- **If you use Cursor:** continue with [Cursor integration](#cursor-integration-optional).
 
 ---
 
-## Cursor subagents
+## Cursor integration (optional)
 
-Registers hub specialists (`git-coordinator`, `memory-steward`, etc.) for Cursor’s Task tool.
+Only run this when [detect-cursor-env.sh](./scripts/detect-cursor-env.sh) succeeds, or when you know you use Cursor.
 
-**One-time per clone** (from hub root):
+**One command** (recommended):
 
 ```bash
 cd /path/to/Projects
-chmod +x Agents/scripts/sync-cursor-agents.sh .githooks/post-merge
-./Agents/scripts/sync-cursor-agents.sh
-git config core.hooksPath .githooks
+chmod +x Agents/scripts/*.sh .githooks/post-merge .cursor/hooks/git-delegation-hook.sh 2>/dev/null || true
+./Agents/scripts/install-cursor-integration.sh
 ```
 
-Then **reload Cursor** (or restart) so custom agent names appear.
+If Cursor hooks are already enabled, run `chmod` in a normal terminal (outside Agent shell) if hook scripts report “permission denied”.
 
-| What | Where |
-|------|--------|
-| Edit specs | `Agents/Subagents/*.md` |
-| Manifest | `Agents/cursor-agents.json` |
-| Generated output (commit with hub) | `.cursor/agents/<name>.md` |
+- **Without Cursor detected:** exits 0 and prints skip message (use `--force` to sync `.cursor/agents/` anyway).
+- **With Cursor:** runs [sync-cursor-agents.sh](./scripts/sync-cursor-agents.sh), chmods hooks.
 
-**After you change a subagent spec:** run `./Agents/scripts/sync-cursor-agents.sh` and commit both the spec and `.cursor/agents/` (unless `post-merge` hook already ran on pull).
+Then:
+
+```bash
+git config core.hooksPath .githooks   # optional: regen .cursor/agents after pull when Subagents/ change
+```
+
+Reload **Cursor**. Align **Settings → Rules** from [cursor-user-rules.md](./cursor-user-rules.md) (Cursor account only—not in this repo).
+
+### What gets installed
+
+| Item | Purpose |
+|------|---------|
+| `.cursor/agents/*.md` | Task subagent types (`git-coordinator`, …) |
+| `.cursor/rules/git-delegation.mdc` | Parent must not run `git`/`gh` |
+| `.cursor/hooks.json` + hook script | Optional shell block for `git`/`gh` when coordinator inactive |
+
+**Canonical specs** stay in `Agents/Subagents/`; manifest: [cursor-agents.json](./cursor-agents.json).
+
+**After you edit a subagent spec:** `./Agents/scripts/install-cursor-integration.sh` (or sync script with `--force`) and commit spec + `.cursor/agents/`.
+
+### Git delegation hook
+
+Hooks apply **only in Cursor** when the project loads `.cursor/hooks.json`. They block `git`/`gh` unless **git-coordinator** is active. See **Settings → Hooks** if commands are blocked unexpectedly.
 
 ---
 
@@ -117,8 +133,10 @@ Then **reload Cursor** (or restart) so custom agent names appear.
 | Task | Command |
 |------|---------|
 | Pull hub updates | `cd /path/to/Projects && git pull` |
-| Regenerate Cursor agents | `./Agents/scripts/sync-cursor-agents.sh` |
-| Hub remote / paths | `Agents/hub-setup.local.md` (not committed) |
+| Detect Cursor | `./Agents/scripts/detect-cursor-env.sh` |
+| Cursor install / regen agents | `./Agents/scripts/install-cursor-integration.sh` |
+| Force regen (no detect) | `./Agents/scripts/install-cursor-integration.sh --force` |
+| Hub remote / paths | `Agents/hub-setup.local.md` |
 
 ---
 
@@ -126,8 +144,9 @@ Then **reload Cursor** (or restart) so custom agent names appear.
 
 | Problem | Check |
 |---------|--------|
-| `git pull` wants to add app folders | Hub root should be `Projects` with sparse `.gitignore`; apps are not part of hub repo. |
-| App can’t find `AGENTS.md` | Pointer path: one level up vs two (`../` vs `../../`) from app root to hub root. |
-| Cursor doesn’t list `git-coordinator` | Run sync script; reload IDE; confirm `.cursor/agents/git-coordinator.md` exists. |
-| Sync script fails | Try `/usr/bin/python3 Agents/scripts/sync_cursor_agents.py` from hub root. |
-| Hook doesn’t run | `git config core.hooksPath .githooks` from hub root; hooks must be executable (`chmod +x`). |
+| `git pull` wants to add app folders | Hub root = `Projects` with sparse `.gitignore`. |
+| App can’t find `AGENTS.md` | Pointer `../` vs `../../` from app root. |
+| Setup assumes Cursor but I use another IDE | Use **Hub core** only; ignore `.cursor/` and [cursor-user-rules.md](./cursor-user-rules.md). |
+| Cursor doesn’t list `git-coordinator` | Run `install-cursor-integration.sh`; reload IDE. |
+| Sync script fails | `/usr/bin/python3 Agents/scripts/sync_cursor_agents.py` |
+| post-merge didn’t regen agents | `git config core.hooksPath .githooks`; Cursor detect may skip—use `--force` sync. |

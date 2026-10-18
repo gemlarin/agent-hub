@@ -1,12 +1,18 @@
 # Monorepo workspace: only version the shared agent hub files below.
 /*
 !/.gitignore
+!/README.md
 !/AGENTS.md
 !/Agents/
 !/Skills/
 !/.cursor/
 !/.cursor/agents/
 !/.cursor/rules/
+!/.cursor/hooks/
+!/.cursor/hooks.json
+# Runtime hook state (coordinator active markers)
+.cursor/hooks/state/*
+!.cursor/hooks/state/.gitkeep
 !/.githooks/
 
 # Safety net: ignore hub-root stub only (canonical memory is on Google Drive)

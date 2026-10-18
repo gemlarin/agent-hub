@@ -14,7 +14,8 @@
 | Comms | [Agents/personality-communication.md](./Agents/personality-communication.md) | Tone; **the user** = person directing the agent this session |
 | Hub setup & sync | [Agents/hub-setup.md](./Agents/hub-setup.md) (local paths: [example](./Agents/hub-setup.local.example.md) → `hub-setup.local.md`) | New machine, clone, `git pull`, or Cursor agent sync |
 | Context discipline | [Agents/context-discipline.md](./Agents/context-discipline.md) | Orchestrating git, memory, subagents, or large reads |
-| Cursor agents | `.cursor/agents/` (sync via [sync-cursor-agents.sh](./Agents/scripts/sync-cursor-agents.sh)) | After hub install/pull or editing `Agents/Subagents/` |
+| Cursor integration | [hub-setup § Cursor](./Agents/hub-setup.md#cursor-integration-optional); [install-cursor-integration.sh](./Agents/scripts/install-cursor-integration.sh) | **Cursor only** — after `detect-cursor-env.sh` succeeds |
+| Cursor User Rules | [Agents/cursor-user-rules.md](./Agents/cursor-user-rules.md) | **Cursor only** — paste into Settings → Rules (git/gh delegation) |
 
 ## Non‑negotiables (always)
 

@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": ".cursor/hooks/git-delegation-hook.sh"
+      }
+    ],
+    "subagentStart": [
+      {
+        "command": ".cursor/hooks/git-delegation-hook.sh",
+        "matcher": "git-coordinator"
+      }
+    ],
+    "subagentStop": [
+      {
+        "command": ".cursor/hooks/git-delegation-hook.sh",
+        "matcher": "git-coordinator"
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": ".cursor/hooks/git-delegation-hook.sh",
+        "matcher": "\\bgit\\b|\\bgh\\b",
+        "failClosed": true
+      }
+    ]
+  }
+}

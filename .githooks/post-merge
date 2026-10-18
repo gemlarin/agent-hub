@@ -1,8 +1,12 @@
 #!/bin/sh
-# Regenerate Cursor subagents when hub subagent specs change.
+# Regenerate .cursor/agents when Subagents/ change (Cursor integration; skipped if Cursor not detected).
 set -e
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
-if [ -x "./Agents/scripts/sync-cursor-agents.sh" ]; then
-  ./Agents/scripts/sync-cursor-agents.sh
+
+CHANGED="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD 2>/dev/null || true)"
+echo "$CHANGED" | grep -q '^Agents/Subagents/' || exit 0
+
+if [ -x "./Agents/scripts/install-cursor-integration.sh" ]; then
+  ./Agents/scripts/install-cursor-integration.sh
 fi
