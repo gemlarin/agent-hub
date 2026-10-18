@@ -1,10 +1,12 @@
 # Coding Standards (core)
 
-Shared rules for any stack. **Vue greenfield** (layout, Tailwind, Vue 3, new-app checklist): read [coding-standards-vue.md](./coding-standards-vue.md) only when that applies.
+Shared rules for any stack. **Vue greenfield** (layout, Tailwind, Vue 3, new-app checklist): read [coding-standards-vue.md](../coding-standards-vue/coding-standards-vue.md) only when that applies.
+
+**This machine:** After this file, read `user-config.md` in this folder when it exists. Additions extend the rule. Overrides replace the matching part on this machine only. Never commit that file. Copy [user-config.example.md](./user-config.example.md) to create it.
 
 **Scope:** Do not rewrite existing apps (styles, READMEs, aliases, structure) unless the user asks.
 
-**New apps:** Pointer `AGENTS.md` at the project root → relative path to this clone’s `Agents/AGENTS.md`. Do not symlink this file as `AGENTS.md`. See [README.md](../README.md#point-app-repos-at-the-hub).
+**New apps:** Pointer `AGENTS.md` at the project root → relative path to this clone’s `Agents/AGENTS.md`. Do not symlink this file as `AGENTS.md`. See [README.md](../../../README.md#point-app-repos-at-the-hub).
 
 ## Spec-driven tasks
 
@@ -32,7 +34,7 @@ Light spec workflow for **new tasks** (features, refactors with a clear goal, in
 
 - [ ] …
 - [ ] …
-- [ ] Code sweep (offer topic ids — [code-sweep options](./Skills/code-sweep/options.md); Code Sweeper runs them)
+- [ ] Code sweep (offer topic ids — [code-sweep options](../../Skills/code-sweep/options.md); Code Sweeper runs them)
 ```
 
 ---
@@ -41,9 +43,9 @@ Light spec workflow for **new tasks** (features, refactors with a clear goal, in
 
 When the user asks for a **code sweep** (or a `tasks.md` sweep item is due): **do not** run every topic at once, and **do not** sweep in the parent.
 
-1. Offer topic **ids** from [`Skills/code-sweep/options.md`](./Skills/code-sweep/options.md). Confirm **scope** (which app/paths) if unclear.
+1. Offer topic **ids** from [`Skills/code-sweep/options.md`](../../Skills/code-sweep/options.md). Confirm **scope** (which app/paths) if unclear.
 2. Wait for the user to name ids.
-3. Delegate to **Code Sweeper** ([`subagents.md`](./subagents.md)) with those `topics` + `scope`. Trust the **Sweep Report**. Ask before applying suggested fixes (Change Control).
+3. Delegate to **Code Sweeper** ([`subagents.md`](../../subagents.md)) with those `topics` + `scope`. Trust the **Sweep Report**. Ask before applying suggested fixes (Change Control).
 
 **Reminders:** If the user is deep in a build and hasn’t swept in a while (e.g. feature roughly done, about to call a task complete, or several sessions without a sweep), **once** gently remind: offer the topic ids. Don’t nag every turn.
 
@@ -77,8 +79,8 @@ When the user asks for a **code sweep** (or a `tasks.md` sweep item is due): **d
 
 1. No TS **errors** — `npm run typecheck` if present, else `npm run build`.
 2. `npm run build` succeeds when relevant.
-3. UI: prefer real controls over clickable `div`s; keyboard and focus behave sensibly (Vue specifics → [coding-standards-vue.md](./coding-standards-vue.md#definition-of-done-vue-ui)).
-4. When a **`tasks.md`** exists for the work: checklist items done (or explicitly deferred); **code sweep** offered via topic ids ([`Skills/code-sweep/options.md`](./Skills/code-sweep/options.md)) before calling the task complete.
+3. UI: prefer real controls over clickable `div`s; keyboard and focus behave sensibly (Vue specifics → [coding-standards-vue.md](../coding-standards-vue/coding-standards-vue.md#definition-of-done-vue-ui)).
+4. When a **`tasks.md`** exists for the work: checklist items done (or explicitly deferred); **code sweep** offered via topic ids ([`Skills/code-sweep/options.md`](../../Skills/code-sweep/options.md)) before calling the task complete.
 
 **Commands:** `npm run dev` · `npm run typecheck` · `npm run build` · `npm run preview`
 

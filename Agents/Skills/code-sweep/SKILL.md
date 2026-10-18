@@ -33,7 +33,7 @@ Grep and narrow reads only. Cite `path:line`. Do not dump whole files.
 | `async` | Empty `catch`, missing loading/error UI, no abort/`finally` cleanup. |
 | `secrets` | Hardcoded keys/URLs with credentials; `.env` committed; `.env.example` missing or out of date. |
 | `ci` | `package.json` scripts for typecheck/test/build still match the repo. Do not invent CI. |
-| `dod` | Core [Definition of Done](../../coding-standards.md#definition-of-done). Vue in scope → also [Vue UI DoD](../../coding-standards-vue.md#definition-of-done-vue-ui). Optional: `npm run typecheck` then `build` in **scope** (never `git`). |
+| `dod` | Core [Definition of Done](../../Rules/coding-standards/coding-standards.md#definition-of-done). Vue in scope → also [Vue UI DoD](../../Rules/coding-standards-vue/coding-standards-vue.md#definition-of-done-vue-ui). Optional: `npm run typecheck` then `build` in **scope** (never `git`). |
 
 ## 3. Report
 

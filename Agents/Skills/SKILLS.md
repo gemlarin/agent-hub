@@ -21,7 +21,7 @@ When a task matches a skill's description, load and follow its instructions.
 ### 3. `job-search` (`./job-search/`)
 
 - **Skill file:** [`./job-search/SKILL.md`](./job-search/SKILL.md)
-- **Boards / output:** [`boards.md`](./job-search/boards.md), [`options.md`](./job-search/options.md), [`output.md`](./job-search/output.md)
+- **Boards / output:** [`boards.md`](./job-search/boards.md) or gitignored `boards.local.md` ([example](./job-search/boards.local.example.md)), [`options.md`](./job-search/options.md), [`output.md`](./job-search/output.md)
 - **When to use:** Loaded by **Job Finder** when the user asks for a job search (or names that subagent). Parent must not run this skill itself. Do not invent postings.
 
 ### 4. `research` (`./research/`)

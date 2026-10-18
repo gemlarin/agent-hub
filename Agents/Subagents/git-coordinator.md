@@ -40,7 +40,7 @@ test -e "<repo_path>/.git" && git -C "<repo_path>" status -sb && git -C "<repo_p
 - **Avoid** `git commit --amend` unless the user explicitly requested amend **and** the parent confirms HEAD was not pushed (you verify with `git status` / `git log -1 @{u}` when upstream exists).
 - **Never** `git clean -fd` (or `-x`) without the user’s explicit approval in this thread.
 - **Never** commit or push unless the user asked to commit/push (parent passes `user_authorized: true` for that action).
-- Before **commit** or **push**: scan staged/names for `.env`, credentials, keys, tokens; refuse and list paths if suspicious (see [Secrets & Git](../../Agents/coding-standards.md#secrets--git)).
+- Before **commit** or **push**: scan staged/names for `.env`, credentials, keys, tokens; refuse and list paths if suspicious (see [Secrets & Git](../../Agents/Rules/coding-standards/coding-standards.md#secrets--git)).
 - Do not commit files that are clearly secrets; return **`BLOCKED`** with paths and reason.
 
 ## Inputs (from parent)

@@ -12,7 +12,7 @@ The parent launches you in the **background** so the user can keep chatting. Sti
 
 ## Required skill
 
-Load and follow [`Agents/Skills/job-search/SKILL.md`](../../Agents/Skills/job-search/SKILL.md) (boards: [`boards.md`](../../Agents/Skills/job-search/boards.md), export ids: [`options.md`](../../Agents/Skills/job-search/options.md), shapes: [`output.md`](../../Agents/Skills/job-search/output.md)) before searching.
+Load and follow [`Agents/Skills/job-search/SKILL.md`](../../Agents/Skills/job-search/SKILL.md) before searching. Boards: `boards.local.md` if that file exists, otherwise [`boards.md`](../../Agents/Skills/job-search/boards.md). Personal list template: [`boards.local.example.md`](../../Agents/Skills/job-search/boards.local.example.md). Export ids: [`options.md`](../../Agents/Skills/job-search/options.md). Shapes: [`output.md`](../../Agents/Skills/job-search/output.md).
 
 ## Inputs (from the parent)
 
@@ -30,7 +30,7 @@ Pass whatever the user already gave. Typical fields:
 ## Protocol
 
 1. If required skill inputs are missing, return **`Job Report: NEED_INPUT`** listing only the missing fields. Do not search. Do not guess a resume.
-2. When inputs are complete, follow the skill: parse resume, search the listed boards (public pages only), rank best → worst, never invent openings.
+2. When inputs are complete, follow the skill: parse resume, search rows marked `yes` in the active board file (public pages only), rank best → worst, never invent openings.
 3. Return a **Job Report** (default **≤80 lines**; if the user wants the full list in chat, include it and note the cap was waived). If `output` is missing, list export ids (`out-chat`, `out-md`, `out-xml`, `out-raw`) in the report and wait. Write Desktop files for `out-md` / `out-xml` / `out-raw` only.
 
 **Forbidden:** editing the hub repo, committing resumes or result files, writing resume text to `MEMORY.md`, reading `MEMORY.md` (use `related_memory` only), logging into job boards.

@@ -2,7 +2,7 @@
 
 **What:** Resume-matched job search across public boards, ranked, saved to the Desktop.
 
-**Source:** [`SKILL.md`](./SKILL.md). Boards: [`boards.md`](./boards.md). Export ids: [`options.md`](./options.md). File shapes: [`output.md`](./output.md).
+**Source:** [`SKILL.md`](./SKILL.md). Boards: [`boards.md`](./boards.md) (defaults) or gitignored `boards.local.md` (yours; start from [`boards.local.example.md`](./boards.local.example.md)). Export ids: [`options.md`](./options.md). File shapes: [`output.md`](./output.md).
 
 ## Design
 
@@ -13,6 +13,6 @@ The parent must not run this skill unless Job Finder is unavailable. Do not comm
 ## Contribute
 
 - Edit [`SKILL.md`](./SKILL.md) for the interview/search/rank/save flow.
-- Edit [`boards.md`](./boards.md) for `site:` patterns.
+- Edit [`boards.md`](./boards.md) to change the shared default boards. For a personal list, copy [`boards.local.example.md`](./boards.local.example.md) to `boards.local.md` (gitignored). Set **On** to `yes` or `no`, or add and delete rows. Do not hardcode board names in `SKILL.md`.
 - Edit [`options.md`](./options.md) / [`output.md`](./output.md) for export ids and Desktop schemas. Keep ids aligned with [`../research/options.md`](../research/options.md).
 - Keep the skill listed in [`../SKILLS.md`](../SKILLS.md).

@@ -1,6 +1,6 @@
 ---
 name: job-search
-description: Searches public job boards for openings that match a resume and filters (salary, remote/hybrid/on-site, location). Use when the user asks to find jobs, job opportunities, openings, or to search LinkedIn, BuiltIn, Indeed, Dice, The Ladders, Glassdoor, ZipRecruiter, or Greenhouse.
+description: Searches public job boards for openings that match a resume and filters (salary, remote/hybrid/on-site, location). Use when the user asks to find jobs, job opportunities, openings, or to search a board. Which boards run is the table in boards.md, or boards.local.md when that file exists.
 ---
 
 # Skill: Job search
@@ -32,9 +32,7 @@ Use web search and page fetch (public pages only). Do **not** log into sites, by
 
 Query with profile titles + skills + mode + location + `salary` / `$min`. Prefer postings with an **apply URL**.
 
-Boards (search **each**; query patterns in [`boards.md`](./boards.md)):
-
-LinkedIn, BuiltIn (`builtin.com`), Indeed, Dice, The Ladders, Glassdoor, ZipRecruiter, Greenhouse (`boards.greenhouse.io`).
+Boards come from one table. If `boards.local.md` exists in this folder, search **only** that file. Otherwise search [`boards.md`](./boards.md). Use each row whose **On** value is `yes`. Skip `no`. Use that row's **Site / query**. Do not add boards that are not in the active table. To make a personal list, copy [`boards.local.example.md`](./boards.local.example.md) to `boards.local.md`.
 
 If a board returns nothing or blocks, record it under **Sources skipped** and continue. Do not fabricate listings from that board.
 

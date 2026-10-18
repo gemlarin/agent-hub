@@ -2,11 +2,13 @@
 
 **Read when:** new Vue 3 + Vite projects, or Vue-specific structure/stack work in this hub.
 
-**Always apply first:** [coding-standards.md](./coding-standards.md) (change control, secrets, spec/tasks, code sweep, TypeScript, testing).
+**Always apply first:** [coding-standards.md](../coding-standards/coding-standards.md) (change control, secrets, spec/tasks, code sweep, TypeScript, testing).
+
+**This machine:** After this file, read `user-config.md` in this folder when it exists. Additions extend the rule. Overrides replace the matching part on this machine only. Never commit that file. Copy [user-config.example.md](./user-config.example.md) to create it.
 
 **Scope:** Rules below apply to **new Vue projects only**. Do not rewrite existing apps unless the user asks. React and other stacks → local patterns + core standards only.
 
-**New apps:** Pointer `AGENTS.md` at project root → relative path to this clone’s `Agents/AGENTS.md`. Do not symlink this file as `AGENTS.md`. See [README.md](../README.md#point-app-repos-at-the-hub).
+**New apps:** Pointer `AGENTS.md` at project root → relative path to this clone’s `Agents/AGENTS.md`. Do not symlink this file as `AGENTS.md`. See [README.md](../../../README.md#point-app-repos-at-the-hub).
 
 ---
 
@@ -55,7 +57,7 @@ Use `bg-background`, `text-foreground`, `border-border`, `text-success`.
 
 ## Definition of Done (Vue UI)
 
-In addition to [core DoD](./coding-standards.md#definition-of-done):
+In addition to [core DoD](../coding-standards/coding-standards.md#definition-of-done):
 
 - Real controls over clickable `div`s; keyboard works; ARIA only when native isn’t enough; keep focus styles.
 
@@ -97,5 +99,5 @@ In addition to [core DoD](./coding-standards.md#definition-of-done):
 4. Layout folders above; Pinia only if needed
 5. Vue 3 + TS + Vite + Tailwind v4 + starter tokens
 6. Short README: what it does, install, env, `dev` / `typecheck` / `build`
-7. Optional CI as in core [Testing & CI](./coding-standards.md#testing--ci-new-projects)
+7. Optional CI as in core [Testing & CI](../coding-standards/coding-standards.md#testing--ci-new-projects)
 8. Stay on request; ask before deps, UI kits, test runners, vendor/env/seeds

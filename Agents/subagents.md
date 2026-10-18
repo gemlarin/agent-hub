@@ -34,7 +34,7 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 - Verify the subagent's summary against project goals before taking direct action.
 - **Report size:** Subagents return **≤80 lines** by default (summaries, capped lists, truncated diffs/snippets). Expand only when the user or parent asks for detail.
 - **Parent relay:** Prefer the report summary in chat; pass full reports only when the user needs them.
-- **Runtime:** Follow [context discipline](./context-discipline.md) (no duplicate git/memory reads, narrow file scope).
+- **Runtime:** Follow [context discipline](./Rules/context-discipline/context-discipline.md) (no duplicate git/memory reads, narrow file scope).
 
 ### Git Coordinator (`./Subagents/git-coordinator.md`)
 
@@ -83,7 +83,7 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 - **When to Trigger:**
   - The user asks for a code sweep or names Code Sweeper.
   - A `tasks.md` **Code sweep** item is due.
-  - The one-time wrap-up reminder in [coding-standards.md](./coding-standards.md#code-sweep) (offer the topic menu first).
+  - The one-time wrap-up reminder in [coding-standards.md](./Rules/coding-standards/coding-standards.md#code-sweep) (offer the topic menu first).
 - **Do not trigger** for git-diff / security review (Code Reviewer), job search, or implementing the feature.
 - **Invocation Parameters:** `scope` (app root / paths), `topics` from [code-sweep options](./Skills/code-sweep/options.md), optional `related_memory`. If topics are missing, **show the option ids** and wait — do not sweep all topics. Do not run the skill in the parent. Do not tell Code Sweeper to read `MEMORY.md`.
 - **Handling Results:** Trust the Sweep Report. Relay findings by topic. **Ask before** applying suggested fixes (Change Control). Do not re-read the swept files unless verifying one finding.
@@ -109,7 +109,7 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 
 - **When to Trigger (only):**
   - The user asks for help finding jobs, openings, or a job search.
-  - The user names Job Finder or a job board in that context (LinkedIn, BuiltIn, Indeed, Dice, Ladders, Glassdoor, ZipRecruiter, Greenhouse).
+  - The user names Job Finder or a job board in that context (a default board, or one they added in `boards.local.md`).
 - **Do not trigger** for coding, git, memory, code review, or general documentation/web lookup. Use Web Researcher / Research Scout for those.
 - **Invocation Parameters:** Pass resume path/attachment and any filters already collected, plus optional `related_memory` (search prefs only). Job Finder returns `NEED_INPUT` for the rest; parent asks the user and re-invokes. Do not run the job-search skill in the parent. Do not tell Job Finder to read `MEMORY.md`. Launch **in the background** (see [Background vs foreground](#background-vs-foreground)).
 - **Handling Results:** Trust the Job Report. Relay ranked matches and **output ids** (`out-chat`, `out-md`, `out-xml`, `out-raw`) unless already chosen. Re-invoke with `output` to save; do not re-run board searches.

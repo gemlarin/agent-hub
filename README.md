@@ -185,7 +185,7 @@ Never commit `MEMORY.md`. Prefer a path **outside** this clone. Keep the file **
 | Path | Purpose |
 |------|---------|
 | [`Agents/AGENTS.md`](./Agents/AGENTS.md) | Entry point for agents (on-demand module table) |
-| [`Agents/`](./Agents/) | Subagents, coding standards, memory, **[Setup/](./Agents/Setup/)**, **[Skills/](./Agents/Skills/)** — [how to contribute](./Agents/README.md) |
+| [`Agents/`](./Agents/) | Subagents, **[Rules/](./Agents/Rules/)**, memory, **[Setup/](./Agents/Setup/)**, **[Skills/](./Agents/Skills/)** — [how to contribute](./Agents/README.md) |
 | [`.cursor/`](./.cursor/) | Cursor agents, rules, hooks — **hub workspace root only** — [how to contribute](./.cursor/README.md) |
 | [`.githooks/`](./.githooks/) | Hub-repo git hooks (post-merge regen); not inherited by apps — [how to contribute](./.githooks/README.md) |
 | App folders | Separate git repos. Siblings of `Agents/` when the work folder is the hub root; otherwise next to the `agent-hub/` clone |
@@ -221,12 +221,13 @@ This repo is **policy + Cursor glue**, not an application. Each folder has a REA
 | [`Agents/`](./Agents/README.md) | Canonical agent policy |
 | [`Agents/Subagents/`](./Agents/Subagents/README.md) | Specialist specs ([how to use each agent](./Agents/Subagents/README.md#using-the-agents-users)) |
 | [`Agents/Skills/`](./Agents/Skills/README.md) | Load-on-demand skills ([how to run one](./Agents/Skills/README.md#activate-a-skill-independently-users); [research options](./Agents/Skills/research/options.md)) |
+| [`Agents/Rules/`](./Agents/Rules/README.md) | Shared standards. Each rule folder has a contribute README. Copy `user-config.example.md` to `user-config.md` for machine-only overrides (gitignored). |
 | [`Agents/Setup/`](./Agents/Setup/README.md) | Bootstrap and Cursor install |
 | [`Agents/Setup/scripts/`](./Agents/Setup/scripts/README.md) | Setup scripts |
 | [`.cursor/`](./.cursor/README.md) | Generated Cursor agents, rules, hooks |
 | [`.githooks/`](./.githooks/README.md) | Hub-only git `post-merge` |
 
-**Do not** put hub policy in app repos (pointer `AGENTS.md` only). **Do not** commit `MEMORY.md` or `Agents/Setup/hub-setup.local.md`. After editing `Agents/Subagents/`, regen Cursor agents ([Highlights](#highlights)). In **this** git root, parent agents must not run `git`/`gh` — Git Coordinator only.
+**Do not** put hub policy in app repos (pointer `AGENTS.md` only). **Do not** commit `MEMORY.md`, `Agents/Setup/hub-setup.local.md`, or `Agents/Rules/**/user-config.md`. After editing `Agents/Subagents/`, regen Cursor agents ([Highlights](#highlights)). In **this** git root, parent agents must not run `git`/`gh` — Git Coordinator only.
 
 ## Forking
 

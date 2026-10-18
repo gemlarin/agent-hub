@@ -21,3 +21,9 @@
 
 # Per-machine hub remotes & accounts (template: Agents/Setup/hub-setup.local.example.md)
 /Agents/Setup/hub-setup.local.md
+
+# Personal job-board list (template: Agents/Skills/job-search/boards.local.example.md)
+/Agents/Skills/job-search/boards.local.md
+
+# Per-machine rule overrides (template: user-config.example.md in each Rules folder)
+/Agents/Rules/**/user-config.md

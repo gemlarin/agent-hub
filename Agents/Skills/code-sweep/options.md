@@ -16,4 +16,4 @@ Parent **shows this list** when the user asks for a code sweep, a `tasks.md` swe
 | `ci` | “CI / scripts” | typecheck/test/build scripts still make sense |
 | `dod` | “Definition of Done” | typecheck/build; native controls over clickable `div`s |
 
-Pick **only** the topics they named. Vue SFCs: also apply [`coding-standards-vue.md`](../../coding-standards-vue.md) DoD when `a11y` or `dod` is on. Catalog owner: [`SKILL.md`](./SKILL.md).
+Pick **only** the topics they named. Vue SFCs: also apply [`coding-standards-vue.md`](../../Rules/coding-standards-vue/coding-standards-vue.md) DoD when `a11y` or `dod` is on. Catalog owner: [`SKILL.md`](./SKILL.md).
