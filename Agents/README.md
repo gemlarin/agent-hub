@@ -6,14 +6,14 @@ Agents enter through **[`AGENTS.md`](./AGENTS.md)** (on-demand table). They do n
 
 ## Design
 
-| File / folder | Role |
-|---------------|------|
-| [`AGENTS.md`](./AGENTS.md) | Load table + non-negotiables |
+| File / folder                | Role                                                                                                                                |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| [`AGENTS.md`](./AGENTS.md)   | Load table + non-negotiables                                                                                                        |
 | [`Subagents/`](./Subagents/) | When to delegate ([`subagents.md`](./Subagents/subagents.md)). Each specialist has its own folder and a gitignored `user-config.md` |
-| [`Skills/`](./Skills/) | Procedural skills. Each skill folder has a gitignored `user-config.md` that extends `SKILL.md` |
-| [`Setup/`](./Setup/) | Bootstrap, Cursor install, local config template |
-| [`Memory/`](./Memory/) | Persistent `MEMORY.md` path and read/write split. No local override file |
-| [`Rules/`](./Rules/) | Standards. Each rule has its own folder, a contribute README, and a gitignored `user-config.md` |
+| [`Skills/`](./Skills/)       | Procedural skills. Each skill folder has a gitignored `user-config.md` that extends `SKILL.md`                                      |
+| [`Setup/`](./Setup/)         | Bootstrap, Cursor install, local config template                                                                                    |
+| [`Memory/`](./Memory/)       | Persistent `MEMORY.md` path and read/write split. No local override file                                                            |
+| [`Rules/`](./Rules/)         | Standards. Each rule has its own folder, a contribute README, and a gitignored `user-config.md`                                     |
 
 Policy is **markdown in git**. App repos get a **pointer** to `AGENTS.md`, not a copy. Skills and subagent bodies stay out of `AGENTS.md` so the parent loads them only when the table says so.
 

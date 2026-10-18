@@ -147,10 +147,10 @@ When your AI app has an **app** open, that pointer is how it loads hub **policy*
 
 The stub is the generic contract. It does **not** pull the hub’s `.cursor/` or `.githooks/` into the app.
 
-| Follows the `AGENTS.md` pointer | Stays at this clone’s git / workspace root |
-|---------------------------------|--------------------------------------------|
+| Follows the `AGENTS.md` pointer                | Stays at this clone’s git / workspace root                           |
+| ---------------------------------------------- | -------------------------------------------------------------------- |
 | Policy, skills, subagent specs under `Agents/` | [`.cursor/`](./.cursor/) — Task types, git-delegation rule and hooks |
-| Nested `AGENTS.md` in the app | [`.githooks/`](./.githooks/) — hub-only git hooks (`core.hooksPath`) |
+| Nested `AGENTS.md` in the app                  | [`.githooks/`](./.githooks/) — hub-only git hooks (`core.hooksPath`) |
 
 Do **not** move `.cursor/` or `.githooks/` into `Agents/`. Cursor only reads `.cursor/` from the **opened workspace root**. Git hooks only run in the repo that sets `core.hooksPath`. Opening an app therefore gets hub rules via the pointer, but not `git-coordinator` as a Cursor Task type unless that workspace has its own `.cursor/agents/` (or you open this hub). User-level `~/.cursor/` is the other way to share Cursor extras across apps.
 
@@ -170,11 +170,11 @@ Configure the absolute path in gitignored [`Agents/Setup/hub-setup.local.md`](./
 
 Examples:
 
-| Kind | Path |
-|------|------|
-| Google Drive for Desktop (Mac) | `~/Library/CloudStorage/GoogleDrive-<account>/My Drive/Documents/MEMORY.md` |
-| Google Drive for Desktop (Windows) | `~/Google Drive/My Drive/Documents/MEMORY.md` |
-| Local only | `~/Documents/MEMORY.md` |
+| Kind                               | Path                                                                        |
+| ---------------------------------- | --------------------------------------------------------------------------- |
+| Google Drive for Desktop (Mac)     | `~/Library/CloudStorage/GoogleDrive-<account>/My Drive/Documents/MEMORY.md` |
+| Google Drive for Desktop (Windows) | `~/Google Drive/My Drive/Documents/MEMORY.md`                               |
+| Local only                         | `~/Documents/MEMORY.md`                                                     |
 
 Never commit `MEMORY.md`. Prefer a path **outside** this clone. Keep the file **short** (target ≤80 lines) so new chats stay cheap. Policy for agents: [`Agents/Memory/memory.md`](./Agents/Memory/memory.md). The main agent reads it once per session and auto-saves viable facts mid-session (you’ll see `Durable memory saved to MEMORY file`). Option ids appear when you ask to save or at wrap-up. Memory Steward writes only that file. Other specialists do not load it.
 
@@ -182,13 +182,13 @@ Never commit `MEMORY.md`. Prefer a path **outside** this clone. Keep the file **
 
 ## Layout
 
-| Path | Purpose |
-|------|---------|
-| [`Agents/AGENTS.md`](./Agents/AGENTS.md) | Entry point for agents (on-demand module table) |
-| [`Agents/`](./Agents/) | Subagents, **[Rules/](./Agents/Rules/)**, memory, **[Setup/](./Agents/Setup/)**, **[Skills/](./Agents/Skills/)** — [how to contribute](./Agents/README.md) |
-| [`.cursor/`](./.cursor/) | Cursor agents, rules, hooks — **hub workspace root only** — [how to contribute](./.cursor/README.md) |
-| [`.githooks/`](./.githooks/) | Hub-repo git hooks (post-merge regen); not inherited by apps — [how to contribute](./.githooks/README.md) |
-| App folders | Separate git repos. Siblings of `Agents/` when the work folder is the hub root; otherwise next to the `agent-hub/` clone |
+| Path                                     | Purpose                                                                                                                                                    |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`Agents/AGENTS.md`](./Agents/AGENTS.md) | Entry point for agents (on-demand module table)                                                                                                            |
+| [`Agents/`](./Agents/)                   | Subagents, **[Rules/](./Agents/Rules/)**, memory, **[Setup/](./Agents/Setup/)**, **[Skills/](./Agents/Skills/)** — [how to contribute](./Agents/README.md) |
+| [`.cursor/`](./.cursor/)                 | Cursor agents, rules, hooks — **hub workspace root only** — [how to contribute](./.cursor/README.md)                                                       |
+| [`.githooks/`](./.githooks/)             | Hub-repo git hooks (post-merge regen); not inherited by apps — [how to contribute](./.githooks/README.md)                                                  |
+| App folders                              | Separate git repos. Siblings of `Agents/` when the work folder is the hub root; otherwise next to the `agent-hub/` clone                                   |
 
 **Memory:** path in gitignored `Agents/Setup/hub-setup.local.md` — [`Agents/Memory/memory.md`](./Agents/Memory/memory.md).
 
@@ -215,18 +215,18 @@ Windows: `Agents\Setup\scripts\setup.cmd` already ran sync on first install; reg
 
 This repo is **policy + Cursor glue**, not an application. Each folder has a README that covers design and how to change it:
 
-| Level | README |
-|-------|--------|
-| Hub clone (this file) | Install, pointers, memory path |
-| [`Agents/`](./Agents/README.md) | Canonical agent policy |
-| [`Agents/Subagents/`](./Agents/Subagents/README.md) | Specialist specs ([how to use each agent](./Agents/Subagents/README.md#using-the-agents-users); [attach a skill](./Agents/Subagents/README.md#attach-a-skill-to-a-specialist)). Copy `user-config.example.md` to `user-config.md` in a specialist folder for machine-only overrides (gitignored). |
-| [`Agents/Memory/`](./Agents/Memory/README.md) | Session contract for `MEMORY.md`. No local override file |
-| [`Agents/Skills/`](./Agents/Skills/README.md) | Load-on-demand skills ([how to run one](./Agents/Skills/README.md#activate-a-skill-independently-users)). Copy `user-config.example.md` to `user-config.md` in a skill folder for machine-only overrides (gitignored). |
-| [`Agents/Rules/`](./Agents/Rules/README.md) | Shared standards. Each rule folder has a contribute README. Copy `user-config.example.md` to `user-config.md` for machine-only overrides (gitignored). |
-| [`Agents/Setup/`](./Agents/Setup/README.md) | Bootstrap and Cursor install |
-| [`Agents/Setup/scripts/`](./Agents/Setup/scripts/README.md) | Setup scripts |
-| [`.cursor/`](./.cursor/README.md) | Generated Cursor agents, rules, hooks |
-| [`.githooks/`](./.githooks/README.md) | Hub-only git `post-merge` |
+| Level                                                       | README                                                                                                                                                                                                                                                                                            |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hub clone (this file)                                       | Install, pointers, memory path                                                                                                                                                                                                                                                                    |
+| [`Agents/`](./Agents/README.md)                             | Canonical agent policy                                                                                                                                                                                                                                                                            |
+| [`Agents/Subagents/`](./Agents/Subagents/README.md)         | Specialist specs ([how to use each agent](./Agents/Subagents/README.md#using-the-agents-users); [attach a skill](./Agents/Subagents/README.md#attach-a-skill-to-a-specialist)). Copy `user-config.example.md` to `user-config.md` in a specialist folder for machine-only overrides (gitignored). |
+| [`Agents/Memory/`](./Agents/Memory/README.md)               | Session contract for `MEMORY.md`. No local override file                                                                                                                                                                                                                                          |
+| [`Agents/Skills/`](./Agents/Skills/README.md)               | Load-on-demand skills ([how to run one](./Agents/Skills/README.md#activate-a-skill-independently-users)). Copy `user-config.example.md` to `user-config.md` in a skill folder for machine-only overrides (gitignored).                                                                            |
+| [`Agents/Rules/`](./Agents/Rules/README.md)                 | Shared standards. Each rule folder has a contribute README. Copy `user-config.example.md` to `user-config.md` for machine-only overrides (gitignored).                                                                                                                                            |
+| [`Agents/Setup/`](./Agents/Setup/README.md)                 | Bootstrap and Cursor install                                                                                                                                                                                                                                                                      |
+| [`Agents/Setup/scripts/`](./Agents/Setup/scripts/README.md) | Setup scripts                                                                                                                                                                                                                                                                                     |
+| [`.cursor/`](./.cursor/README.md)                           | Generated Cursor agents, rules, hooks                                                                                                                                                                                                                                                             |
+| [`.githooks/`](./.githooks/README.md)                       | Hub-only git `post-merge`                                                                                                                                                                                                                                                                         |
 
 **Do not** put hub policy in app repos (pointer `AGENTS.md` only). **Do not** commit `MEMORY.md`, `Agents/Setup/hub-setup.local.md`, `Agents/Rules/**/user-config.md`, `Agents/Skills/**/user-config.md`, or `Agents/Subagents/**/user-config.md`. After editing `Agents/Subagents/`, regen Cursor agents ([Highlights](#highlights)). In **this** git root, parent agents must not run `git`/`gh` — Git Coordinator only.
 
