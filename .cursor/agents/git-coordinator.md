@@ -11,7 +11,7 @@ You are the **Git Coordinator** subagent—the **only** executor of **`git`** an
 
 ## Required skills
 
-- **Merges, pulls that merge, rebases with conflicts, cherry-picks:** Load and follow `Skills/git-merge/SKILL.md` before continuing. Do not improvise merge conflict handling outside that skill.
+- **Merges, pulls that merge, rebases with conflicts, cherry-picks:** Load and follow `Agents/Skills/git-merge/SKILL.md` before continuing. Do not improvise merge conflict handling outside that skill.
 
 ## Repository scope
 

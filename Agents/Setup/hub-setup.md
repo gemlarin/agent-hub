@@ -1,8 +1,8 @@
 # Agent hub — setup & sync
 
-Use this when you **first wire up** the hub on a machine or need a **refresher** after cloning. Index: [Setup/README.md](./README.md).
+Use this when you **first wire up** the hub on a machine or need a **refresher** after cloning. Overview: [Agents/README.md](../README.md). This folder: [Setup/README.md](./README.md).
 
-The hub is **not Cursor-only**. Any agent that can read `AGENTS.md` and `Agents/` can follow the same policy. **Cursor-specific** steps are optional—install them only when you use Cursor.
+The hub is **not Cursor-only**. Any agent that can read `Agents/AGENTS.md` can follow the same policy. **Cursor-specific** steps are optional.
 
 ---
 
@@ -10,136 +10,85 @@ The hub is **not Cursor-only**. Any agent that can read `AGENTS.md` and `Agents/
 
 | Piece | Location | Git |
 |--------|-----------|-----|
-| **Agent hub** (rules, subagents, skills) | `Projects/` folder root — `AGENTS.md`, `Agents/`, `Skills/` | One git repo (e.g. `agent-hub` remote) |
+| **Agent hub** (rules, subagents, skills) | `Projects/Agents/` — `AGENTS.md`, `Skills/`, `Setup/` | One git repo at the **Projects** folder (e.g. `agent-hub` remote) |
 | **App repos** | Sibling folders under `Projects/` | Each has its own remote |
 | **Memory** | Google Drive `Documents/MEMORY.md` | Never in hub git |
-| **Your remotes/paths** | `Agents/Setup/hub-setup.local.md` | Gitignored |
+| **Your remotes/paths** | `Agents/Setup/hub-setup.local.md` | Gitignored; seeded by bootstrap |
 | **Cursor integration** (optional) | `.cursor/agents/`, `.cursor/hooks.json`, User Rules | `.cursor/` committed; User Rules are account-local |
 
-**Wrong layout:** `git clone agent-hub` into `Projects/agent-hub/` when apps use pointer `AGENTS.md` with `../` — pointers break. The **Projects directory itself** is the hub git root.
+**Wrong layout:** `git clone agent-hub` into `Projects/agent-hub/` when apps use pointer `AGENTS.md` with `../Agents/AGENTS.md` — pointers break. The **Projects directory itself** is the hub git root; hub files live under `Agents/`.
 
 ---
 
-## Before you start
+## First run
 
-- [ ] A folder that will be **hub root** (e.g. `~/Projects`) — may already contain app repos.
-- [ ] Git installed; access to your **agent-hub** remote on GitHub (or fork).
-- [ ] **Local config:** copy the example file (once per machine):
+You need: Git, access to the **agent-hub** remote, and a folder that will be hub root (e.g. `~/Projects` — may already contain app repos).
 
 ```bash
-cd /path/to/Projects
-cp Agents/Setup/hub-setup.local.example.md Agents/Setup/hub-setup.local.md
-# Edit hub-setup.local.md: agent-hub URL, hub root path, GitHub user for apps.
+# macOS / Linux / Git Bash — empty folder, or cd into existing Projects then clone into .
+git clone https://github.com/gemlarin/agent-hub.git ~/Projects
+cd ~/Projects
+./Agents/Setup/scripts/bootstrap.sh
 ```
 
-- [ ] (Recommended) Google Drive desktop sync for `Documents/MEMORY.md` — see [memory.md](../memory.md).
-
-**Check for Cursor (optional):**
-
-```bash
-./Agents/Setup/scripts/detect-cursor-env.sh
-# or: ./Agents/Setup/scripts/detect-cursor-env.sh --json
+```bat
+REM Windows cmd / PowerShell (Git for Windows)
+git clone https://github.com/gemlarin/agent-hub.git %USERPROFILE%\Projects
+cd %USERPROFILE%\Projects
+Agents\Setup\scripts\bootstrap.cmd
 ```
 
-If this fails, complete **Hub core** below and skip [Cursor integration](#cursor-integration-optional).
+Already a clone: `cd` to the hub root, `git pull`, then `bootstrap.sh` / `bootstrap.cmd` **once per machine**.
 
----
+`bootstrap` seeds `hub-setup.local.md` if missing (origin + hub path; Windows Git Bash paths are stored as `C:/...`), runs [install-cursor-integration.sh](./scripts/install-cursor-integration.sh) when Cursor is detected, and sets local `core.hooksPath=.githooks` if unset. Missing Python does **not** abort hub core — you get a warning and `.cursor/agents/` from git.
 
-## Hub core (all environments)
+### After bootstrap (not automated)
 
-### Scenario A — Hub git not initialized yet
-
-```bash
-cd /path/to/Projects
-git init
-git remote add origin <your-agent-hub-url>   # from hub-setup.local.md
-git fetch origin
-git checkout -b main origin/main
-```
-
-### Scenario B — Hub already a git clone
-
-```bash
-cd /path/to/Projects
-git pull
-```
-
-Pulled commits already include `.cursor/agents/` for Cursor users; regen locally only when **you** edit `Agents/Subagents/` (see Cursor section).
-
-### Scenario C — New machine, empty Projects folder
-
-```bash
-mkdir -p ~/Projects && cd ~/Projects
-git clone <your-agent-hub-url> .
-cp Agents/Setup/hub-setup.local.example.md Agents/Setup/hub-setup.local.md
-# edit local file; clone app repos as siblings; pointer AGENTS.md in each app
-```
-
-### After hub core
-
-- Point app repos at hub `AGENTS.md` (`../` or `../../`).
+- Point app repos at hub [`Agents/AGENTS.md`](../AGENTS.md) (`../Agents/AGENTS.md` or `../../Agents/AGENTS.md`). See [README.md](../README.md#point-app-repos-at-the-hub).
 - Use [memory.md](../memory.md) for Drive `MEMORY.md`.
-- **If you use Cursor:** continue with [Cursor integration](#cursor-integration-optional).
+- **Cursor:** paste [cursor-user-rules.md](./cursor-user-rules.md) **only if** default git User Rules tell the parent to run `git`. Then reload Cursor.
 
 ---
 
 ## Cursor integration (optional)
 
-Only when [detect-cursor-env.sh](./scripts/detect-cursor-env.sh) succeeds, or when you know you use Cursor.
-
-**One command** (from hub root):
+`.cursor/agents/` is already in git. Regen only after **you** edit `Agents/Subagents/`:
 
 ```bash
-cd /path/to/Projects
-chmod +x Agents/Setup/scripts/*.sh .githooks/post-merge .cursor/hooks/git-delegation-hook.sh .cursor/hooks/git-delegation-hook.cmd 2>/dev/null || true
-./Agents/Setup/scripts/install-cursor-integration.sh
+./Agents/Setup/scripts/install-cursor-integration.sh --force
 ```
 
-**Windows:** run the same from **Git Bash**, or skip chmod and run `python Agents/Setup/scripts/sync_cursor_agents.py` after Python 3 is on `PATH` (`python3`, `python`, or `py -3`). If hook scripts report “permission denied” on macOS, `chmod` from Terminal.app (not the agent shell).
-
-- **Without Cursor detected:** exits 0 and skips (use `--force` to sync `.cursor/agents/` anyway).
+- **Without Cursor detected:** install exits 0 and skips (use `--force` to sync `.cursor/agents/` anyway).
 - **With Cursor:** runs [sync-cursor-agents.sh](./scripts/sync-cursor-agents.sh), chmods hooks.
 
-```bash
-git config core.hooksPath .githooks   # optional: regen .cursor/agents when Subagents/ change on pull
-```
-
-Reload **Cursor**. Align **User Rules** from [cursor-user-rules.md](./cursor-user-rules.md).
+If hook scripts report “permission denied” on macOS, `chmod` from Terminal.app (not the agent shell). Python 3 on `PATH` (`python3`, `python`, or `py -3`) is required for sync on Windows.
 
 ### What gets installed
 
 | Item | Purpose |
 |------|---------|
 | `.cursor/agents/*.md` | Task subagent types (`git-coordinator`, …) |
-| `.cursor/rules/git-delegation.mdc` | Parent must not run `git`/`gh` |
+| `.cursor/rules/git-delegation.mdc` | Parent must not run `git`/`gh` **in this hub** |
 | `.cursor/hooks.json` + hook script | Optional shell block for `git`/`gh` when coordinator inactive |
 
-**Canonical specs:** `Agents/Subagents/`; manifest: [cursor-agents.json](./cursor-agents.json).
-
-**After editing a subagent spec:** `./Agents/Setup/scripts/install-cursor-integration.sh` (or `--force`) and commit spec + `.cursor/agents/`.
+**Canonical specs:** `Agents/Subagents/`; manifest: [cursor-agents.json](./cursor-agents.json). Commit spec + `.cursor/agents/` after regen.
 
 ### Git delegation hook
 
-Hooks apply **only in Cursor** when this hub’s `.cursor/hooks.json` is loaded (the hub folder is the workspace, or a multi-root workspace includes it). They block `git`/`gh` **only for the agent-hub git root**, unless **git-coordinator** is active (marker under `.cursor/hooks/state/`, set on `preToolUse` / `subagentStart` for `subagent_type: git-coordinator`). `git -C <other-repo>` and a shell `cwd` in another git root are **allowed**. After editing hooks, Cursor reloads `hooks.json` automatically. See **Settings → Hooks** if commands are blocked unexpectedly.
+Hooks apply **only in Cursor** when this hub’s `.cursor/hooks.json` is loaded. They block `git`/`gh` **only for the agent-hub git root**, unless **git-coordinator** is active. `git -C <other-repo>` and a shell `cwd` in another git root are **allowed**.
 
-**Other repos after install — nothing extra.** Setup scripts do **not** install User-level hooks. A Cursor window opened on an app (or any clone without this `.cursor/hooks.json`) has **no** shell blocker. If the hub window is still open, the parent can git in sibling/other repos; use git-coordinator only when working **in the hub**, or when you pass `repo_path` on purpose.
+**Other repos — nothing extra.** Setup does **not** install User-level hooks. If User Rules still say “never run git,” update them from [cursor-user-rules.md](./cursor-user-rules.md).
 
-If User Rules still say “never run git,” update them from [cursor-user-rules.md](./cursor-user-rules.md) so delegation applies to the hub only.
+The hook is **Python** (`.cursor/hooks/git-delegation-hook.py`), started through `.cursor/hooks/git-delegation-hook.cmd` (Windows `cmd` and POSIX `sh`). Needs **Python 3.8+**. Do not feed Python via a bash heredoc — that replaces stdin and denies every `git` command.
 
-The hook is **Python** (`.cursor/hooks/git-delegation-hook.py`). Cursor starts it through `.cursor/hooks/git-delegation-hook.cmd`, a polyglot so **Windows `cmd`** and **POSIX `sh`** both work. The launcher looks up `PYTHON`, then `python3`, `python`, or `py -3`. Do not feed Python via a bash heredoc — that replaces stdin and denies every `git` command. Markers live under `.cursor/hooks/state/` when writable, otherwise the process temp dir (`/tmp` or `%TEMP%`).
-
-Requires **Python 3.8+** that actually runs (`python3`, `python`, `py -3`, or `/usr/bin/python3`). The launcher skips broken PATH stubs.
-
-**Smoke test (full deny → allow → clear flow):**
+**Smoke test:**
 
 ```bash
 python3 Agents/Setup/scripts/test-git-delegation-hook.py
-# or: ./Agents/Setup/scripts/test-git-delegation-hook.sh
+# Windows: py -3 Agents/Setup/scripts/test-git-delegation-hook.py
 ```
 
 Expect `"permission":"deny"` with no marker, `"allow"` after a git-coordinator spawn, then deny again after stop. If a test **allows** `git status` with no marker, run `rm -f .cursor/hooks/state/coordinator-*.active`.
-
-**Still blocked?** Confirm **Settings → Hooks** shows no errors. Parent agents may spawn coordinators via native `Task` or `CallDynamicTool` (`cursor` / `Task`); `preToolUse` matches both.
 
 ---
 
@@ -147,10 +96,10 @@ Expect `"permission":"deny"` with no marker, `"allow"` after a git-coordinator s
 
 | Task | Command |
 |------|---------|
+| First run / new machine | `./Agents/Setup/scripts/bootstrap.sh` (Windows: `bootstrap.cmd`) |
 | Pull hub updates | `cd /path/to/Projects && git pull` |
 | Detect Cursor | `./Agents/Setup/scripts/detect-cursor-env.sh` |
-| Cursor install / regen | `./Agents/Setup/scripts/install-cursor-integration.sh` |
-| Force regen | `./Agents/Setup/scripts/install-cursor-integration.sh --force` |
+| Cursor regen | `./Agents/Setup/scripts/install-cursor-integration.sh --force` |
 | Hub remote / paths | `Agents/Setup/hub-setup.local.md` |
 
 ---
@@ -160,11 +109,12 @@ Expect `"permission":"deny"` with no marker, `"allow"` after a git-coordinator s
 | Problem | Check |
 |---------|--------|
 | `git pull` wants to add app folders | Hub root = `Projects` with sparse `.gitignore`. |
-| App can’t find `AGENTS.md` | Pointer `../` vs `../../` from app root. |
-| Non-Cursor IDE | **Hub core** only; skip `.cursor/` and [cursor-user-rules.md](./cursor-user-rules.md). |
-| Cursor missing `git-coordinator` | `install-cursor-integration.sh`; reload IDE. |
+| App can’t find `AGENTS.md` | Pointer `../Agents/AGENTS.md` vs `../../Agents/AGENTS.md` from app root. |
+| Cloned into `Projects/agent-hub/` | Move/reclone so **Projects** is the hub root. |
+| Non-Cursor IDE | Skip Cursor User Rules; hub still works via `Agents/AGENTS.md`. |
+| Cursor missing `git-coordinator` | `install-cursor-integration.sh --force`; reload IDE. |
 | Sync fails | `python3 Agents/Setup/scripts/sync_cursor_agents.py` (or `py -3` on Windows) |
-| post-merge didn’t regen | `git config core.hooksPath .githooks`; use `--force` sync. |
+| post-merge didn’t regen | `bootstrap.sh` (or `git config core.hooksPath .githooks`); `--force` sync. |
 | Hook test **allow** for `git status` | `rm -f .cursor/hooks/state/coordinator-*.active` |
-| Hook “permission denied” | `chmod +x .cursor/hooks/git-delegation-hook.cmd` (Unix). On Windows, install Python 3 and confirm `py -3` or `python`. |
+| Hook “permission denied” | `chmod +x .cursor/hooks/git-delegation-hook.cmd` (Unix). On Windows, install Python 3. |
 | Every `git` denied, even coordinator | Hook must read JSON on stdin. Re-run `./Agents/Setup/scripts/test-git-delegation-hook.sh`. |

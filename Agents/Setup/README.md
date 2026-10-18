@@ -1,13 +1,14 @@
 # Agent hub — setup
 
-Install, sync, and optional **Cursor** integration. Policy and subagents live elsewhere under `Agents/`.
+Install, sync, and optional **Cursor** integration. Hub overview: [../README.md](../README.md). Policy and subagents live elsewhere under `Agents/`.
 
 | File / folder | Purpose |
 |---------------|---------|
-| [hub-setup.md](./hub-setup.md) | Hub git layout, scenarios A/B/C, Cursor optional, troubleshooting |
-| [hub-setup.local.example.md](./hub-setup.local.example.md) | Template → copy to `hub-setup.local.md` (gitignored) |
-| [cursor-user-rules.md](./cursor-user-rules.md) | Paste into Cursor **User Rules** (account settings) |
+| [hub-setup.md](./hub-setup.md) | Layout, bootstrap, Cursor regen, troubleshooting |
+| [scripts/bootstrap.sh](./scripts/bootstrap.sh) / [bootstrap.cmd](./scripts/bootstrap.cmd) | First run / new machine (`.cmd` for Windows) |
+| [hub-setup.local.example.md](./hub-setup.local.example.md) | Template → `hub-setup.local.md` (gitignored; bootstrap seeds this) |
+| [cursor-user-rules.md](./cursor-user-rules.md) | Paste into Cursor **User Rules** only if default git User Rules tell the parent to run git |
 | [cursor-agents.json](./cursor-agents.json) | Manifest for generating `.cursor/agents/` |
 | [scripts/](./scripts/) | `detect-cursor-env.sh`, `install-cursor-integration.sh`, `sync-cursor-agents.sh`, `test-git-delegation-hook.py` |
 
-**Quick command (hub root):** `./Agents/Setup/scripts/install-cursor-integration.sh`
+**Quick command (hub root):** `./Agents/Setup/scripts/bootstrap.sh` (Windows: `Agents\Setup\scripts\bootstrap.cmd`)

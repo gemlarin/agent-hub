@@ -18,7 +18,7 @@ On-demand rules for **token-efficient orchestration**. Subagent caps: [subagents
 
 - Trust specialist reports (≤80 lines default); **do not** re-open sources the subagent already summarized unless verifying a specific claim.
 - Load **skill** files only when the trigger matrix says so (`git-merge`, `memory-management`, etc.).
-- **Do not** `@`-attach whole `Agents/` or `Skills/` trees; reference paths and read targeted files.
+- **Do not** `@`-attach whole `Agents/` trees; reference paths and read targeted files.
 
 ## Codebase reads
 
@@ -33,4 +33,4 @@ On-demand rules for **token-efficient orchestration**. Subagent caps: [subagents
 
 ## Hub setup
 
-- Use [Setup/hub-setup.md](./Setup/hub-setup.md) for layout/sync; read **gitignored** [Setup/hub-setup.local.md](./Setup/hub-setup.local.md) for remotes/accounts when cloning or pulling the hub (do not commit local file).
+- Humans: [README.md](./README.md). First run: [Setup/scripts/bootstrap.sh](./Setup/scripts/bootstrap.sh) (Windows: `bootstrap.cmd`). Layout/troubleshooting: [Setup/hub-setup.md](./Setup/hub-setup.md). Read **gitignored** [Setup/hub-setup.local.md](./Setup/hub-setup.local.md) for remotes/accounts (do not commit local file).

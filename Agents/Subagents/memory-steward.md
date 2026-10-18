@@ -10,11 +10,11 @@ The **main agent** already read `MEMORY.md` at session start. Do **not** return 
 
 ## Required skill
 
-Load and follow [`Skills/memory-management/SKILL.md`](../../Skills/memory-management/SKILL.md) before writing.
+Load and follow [`Agents/Skills/memory-management/SKILL.md`](../../Agents/Skills/memory-management/SKILL.md) before writing.
 
 ## Target file (Google Drive only)
 
-Write **only** the Google Drive file in [`Agents/memory.md`](../memory.md):
+Write **only** the Google Drive file in [`Agents/memory.md`](../../Agents/memory.md):
 
 - **Mac:** `~/Library/CloudStorage/GoogleDrive-<account>/My Drive/Documents/MEMORY.md`
 - **PC:** synced `My Drive/Documents/MEMORY.md` for that machine

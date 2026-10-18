@@ -28,7 +28,7 @@ Do **not** invoke Memory Steward with `mode: read` to load session context (avoi
 
 When **writing** memory, the steward loads:
 
-[`Skills/memory-management/SKILL.md`](../Skills/memory-management/SKILL.md)
+[`Skills/memory-management/SKILL.md`](./Skills/memory-management/SKILL.md)
 
 Main agent should follow the same capture/discard boundaries when deciding *what* to ask the steward to save.
 

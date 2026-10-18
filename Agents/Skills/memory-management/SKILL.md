@@ -6,7 +6,7 @@ tools: [read_file, write_file, edit_file]
 
 # Skill: Memory & Cross-Session Persistence
 
-Apply this skill when **writing** Google Drive `Documents/MEMORY.md` (Memory Steward). The **main agent** reads memory at session start without invoking the steward. Paths: [`Agents/memory.md`](../../Agents/memory.md). Never use a local `Projects/MEMORY.md` or commit memory to agent-hub. Evaluate new facts against the sections below before persisting.
+Apply this skill when **writing** Google Drive `Documents/MEMORY.md` (Memory Steward). The **main agent** reads memory at session start without invoking the steward. Paths: [`memory.md`](../../memory.md). Never use a local `Projects/MEMORY.md` or commit memory to agent-hub. Evaluate new facts against the sections below before persisting.
 
 ---
 

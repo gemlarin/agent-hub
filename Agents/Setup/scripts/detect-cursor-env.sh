@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Detect whether Cursor IDE / agent is likely in use on this machine or shell.
-# Exit 0 = Cursor likely; exit 1 = not detected (hub still works via AGENTS.md alone).
+# Exit 0 = Cursor likely; exit 1 = not detected (hub still works via Agents/AGENTS.md alone).
 set -euo pipefail
 
 QUIET=false
@@ -73,6 +73,6 @@ if $found; then
 fi
 
 if ! $QUIET; then
-  echo "Cursor not detected. Skip Cursor-only steps; use AGENTS.md and Agents/Subagents/ with your agent." >&2
+  echo "Cursor not detected. Skip Cursor-only steps; use Agents/AGENTS.md and Agents/Subagents/ with your agent." >&2
 fi
 exit 1

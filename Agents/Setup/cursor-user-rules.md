@@ -1,6 +1,6 @@
 # Cursor User Rules — align with agent hub
 
-**Cursor only.** If you do not use Cursor, skip this file; follow **AGENTS.md** and **Agents/Subagents/** with your agent.
+**Cursor only.** Skip this file if you do not use Cursor, or if your User Rules do **not** tell the parent to run `git`/`gh` (clone already ships `.cursor/rules/git-delegation.mdc`). Paste the blocks below **only when** Cursor’s default `<committing-changes-with-git>` / `<creating-pull-requests>` rules would make the parent run git in this hub.
 
 **User Rules** are account-level (not in this repo). **Where to edit (macOS):**
 
@@ -9,7 +9,7 @@
 
 Not under **⌘,** (editor settings) and not **General → Rules for AI** (old UI). **New Cursor Rule** in the palette creates **project** rules (`.cursor/rules/`), not User Rules.
 
-Run `./Agents/Setup/scripts/detect-cursor-env.sh` before setup if unsure.
+First-run: `./Agents/Setup/scripts/bootstrap.sh`. This paste is the leftover Cursor step bootstrap cannot do.
 
 Replace or merge the blocks below so they match **AGENTS.md** and **git-coordinator**. Project rules: `.cursor/rules/git-delegation.mdc` in the hub.
 
@@ -27,9 +27,9 @@ Only create commits when requested by the user. If unclear, ask first.
 
 You are the **parent agent**.
 
-- **Agent-hub git root** (folder with hub `AGENTS.md` / `.cursor/hooks/`): do **not** run `git` or `gh`. Delegate to **git-coordinator** (`subagent_type: git-coordinator`). Pass **`repo_path`**. Relay `[more]` / `[continue]` / `[custom]` / `[agent]`. Trust the **Git Report**; do not re-run those commands.
+- **Agent-hub git root** (folder with hub `Agents/AGENTS.md` / `.cursor/hooks/`): do **not** run `git` or `gh`. Delegate to **git-coordinator** (`subagent_type: git-coordinator`). Pass **`repo_path`**. Relay `[more]` / `[continue]` / `[custom]` / `[agent]`. Trust the **Git Report**; do not re-run those commands.
 - **Any other git repo** (sibling app, unrelated clone, no hub hooks): you **may** run `git`/`gh` in the parent shell. Do not treat User Rules as a global git ban. Optional: still use git-coordinator with `repo_path` if the user wants that flow.
-- Hub details: `AGENTS.md`, `Agents/subagents.md`, `Agents/Subagents/git-coordinator.md`.
+- Hub details: `Agents/AGENTS.md`, `Agents/subagents.md`, `Agents/Subagents/git-coordinator.md`.
 
 ## When the user asks to commit
 
@@ -84,7 +84,7 @@ For other GitHub tasks (issues, checks, releases), delegate **`gh`** to **git-co
 Add anywhere in User Rules if commits still run git in the parent:
 
 ```markdown
-When the workspace uses the agent hub (`AGENTS.md` at Projects root), git/gh policy in hub and User Rules overrides any impulse to run git in the parent thread.
+When the workspace uses the agent hub (`Agents/AGENTS.md`), git/gh policy in hub and User Rules overrides any impulse to run git in the parent thread.
 ```
 
 ---
@@ -97,6 +97,7 @@ Keep your other User Rules (communication, code principles, name/preferences) as
 
 ## Checklist
 
+- [ ] Needed only if default git User Rules tell the parent to run git
 - [ ] Replaced `<committing-changes-with-git>` in **⌘⇧J → Rules → User Rules** (or Customize → Rules)
 - [ ] Replaced `<creating-pull-requests>` in the same place
 - [ ] Reloaded Cursor or started a new chat

@@ -19,7 +19,7 @@ done
 
 if ! $FORCE && ! "$SCRIPTS/detect-cursor-env.sh" --quiet; then
   echo "Skipping Cursor integration (not detected)."
-  echo "Hub works without Cursor: AGENTS.md, Agents/subagents.md, Skills/."
+  echo "Hub works without Cursor: Agents/AGENTS.md, Agents/subagents.md, Agents/Skills/."
   echo "To install anyway: $0 --force"
   echo "Details: Agents/Setup/hub-setup.md#cursor-integration-optional"
   exit 0
@@ -29,7 +29,10 @@ echo "Installing Cursor integration from hub root: $ROOT"
 cd "$ROOT"
 
 chmod +x "$SCRIPTS/sync-cursor-agents.sh" "$SCRIPTS/detect-cursor-env.sh" 2>/dev/null || true
-"$SCRIPTS/sync-cursor-agents.sh"
+if ! "$SCRIPTS/sync-cursor-agents.sh"; then
+  echo "Warning: could not sync .cursor/agents (need Python 3.8+: python3, python, or py -3)."
+  echo ".cursor/agents/ from this clone is still used."
+fi
 
 if [[ -f "$ROOT/.githooks/post-merge" ]]; then
   chmod +x "$ROOT/.githooks/post-merge"
@@ -50,8 +53,11 @@ if [[ ! -f "$ROOT/.cursor/hooks.json" ]]; then
   echo "Note: .cursor/hooks.json missing in this clone — pull latest hub or see Agents/Setup/hub-setup.md"
 fi
 
-echo ""
-echo "Recommended (Cursor only):"
-echo "  git config core.hooksPath .githooks   # from hub root"
-echo "  Align User Rules: Agents/Setup/cursor-user-rules.md"
-echo "  Reload Cursor after first install."
+if [[ "${HUB_BOOTSTRAP:-}" != 1 ]]; then
+  echo ""
+  echo "Recommended (Cursor only):"
+  echo "  Prefer bootstrap.sh (or bootstrap.cmd on Windows) on a new machine (sets hooksPath)."
+  echo "  Or: git config core.hooksPath .githooks   # from hub root"
+  echo "  User Rules: Agents/Setup/cursor-user-rules.md — only if default git User Rules tell the parent to run git"
+  echo "  Reload Cursor after first install."
+fi

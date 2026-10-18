@@ -1,10 +1,9 @@
 # Monorepo workspace: only version the shared agent hub files below.
+# Root README.md / AGENTS.md are the user's (ignored). Hub: Agents/README.md, Agents/AGENTS.md
 /*
 !/.gitignore
-!/README.md
-!/AGENTS.md
+!/.gitattributes
 !/Agents/
-!/Skills/
 !/.cursor/
 !/.cursor/agents/
 !/.cursor/rules/

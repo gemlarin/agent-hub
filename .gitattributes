@@ -1,0 +1,8 @@
+# Keep POSIX scripts and the polyglot hook usable on Windows checkouts.
+*.sh text eol=lf
+*.py text eol=lf
+.githooks/** text eol=lf
+.cursor/hooks/** text eol=lf
+
+# cmd.exe is happier with CRLF; the polyglot hook above stays LF on purpose.
+Agents/Setup/scripts/bootstrap.cmd text eol=crlf

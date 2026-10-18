@@ -6,7 +6,7 @@
 
 **Scope:** Rules below apply to **new Vue projects only**. Do not rewrite existing apps unless the user asks. React and other stacks → local patterns + core standards only.
 
-**New apps:** Pointer `AGENTS.md` at project root → hub `../AGENTS.md` or `../../AGENTS.md`. Do not symlink this file as `AGENTS.md`.
+**New apps:** Pointer `AGENTS.md` at project root → hub `../Agents/AGENTS.md` or `../../Agents/AGENTS.md`. Do not symlink this file as `AGENTS.md`. See [README.md](./README.md#point-app-repos-at-the-hub).
 
 ---
 
@@ -91,7 +91,7 @@ In addition to [core DoD](./coding-standards.md#definition-of-done):
 
 ## New Project Checklist
 
-1. Pointer `AGENTS.md` to the hub `AGENTS.md` at the Projects root (`../` or `../../`)
+1. Pointer `AGENTS.md` to hub `Agents/AGENTS.md` (`../Agents/AGENTS.md` or `../../Agents/AGENTS.md`)
 2. `.gitignore` for env + `.env.example`
 3. `@` alias in vite + tsconfig
 4. Layout folders above; Pinia only if needed
