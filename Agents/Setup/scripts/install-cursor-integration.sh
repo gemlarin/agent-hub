@@ -37,6 +37,12 @@ fi
 if [[ -f "$ROOT/.cursor/hooks/git-delegation-hook.sh" ]]; then
   chmod +x "$ROOT/.cursor/hooks/git-delegation-hook.sh"
 fi
+if [[ -f "$ROOT/.cursor/hooks/git-delegation-hook.py" ]]; then
+  chmod +x "$ROOT/.cursor/hooks/git-delegation-hook.py"
+fi
+if [[ -f "$ROOT/Agents/Setup/scripts/test-git-delegation-hook.sh" ]]; then
+  chmod +x "$ROOT/Agents/Setup/scripts/test-git-delegation-hook.sh"
+fi
 
 if [[ ! -f "$ROOT/.cursor/hooks.json" ]]; then
   echo "Note: .cursor/hooks.json missing in this clone — pull latest hub or see Agents/Setup/hub-setup.md"

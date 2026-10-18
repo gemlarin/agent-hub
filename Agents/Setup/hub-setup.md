@@ -120,16 +120,19 @@ Reload **Cursor**. Align **User Rules** from [cursor-user-rules.md](./cursor-use
 
 ### Git delegation hook
 
-Hooks apply **only in Cursor** when `.cursor/hooks.json` loads. They block `git`/`gh` unless **git-coordinator** is active. See **Settings → Hooks** if commands are blocked unexpectedly.
+Hooks apply **only in Cursor** when `.cursor/hooks.json` loads. They block `git`/`gh` unless **git-coordinator** is active (marker file under `.cursor/hooks/state/`, set on `preToolUse` / `subagentStart` for a Task with `subagent_type: git-coordinator`). After editing hooks, Cursor reloads `hooks.json` automatically. See **Settings → Hooks** if commands are blocked unexpectedly.
 
-**Smoke test (deny when no coordinator marker):**
+The hook must be a **Python file** (`.cursor/hooks/git-delegation-hook.py`). Do not feed Python via a bash heredoc — that replaces stdin, so Cursor’s JSON never arrives and every `git` command is denied. Markers live under `.cursor/hooks/state/` when writable, otherwise `/tmp/cursor-agent-hub-git-delegation/`.
+
+**Smoke test (full deny → allow → clear flow):**
 
 ```bash
-echo '{"hook_event_name":"beforeShellExecution","command":"git status","workspace_roots":["/path/to/Projects"]}' \
-  | ./.cursor/hooks/git-delegation-hook.sh
+./Agents/Setup/scripts/test-git-delegation-hook.sh
 ```
 
-If you see **allow**, remove stale `rm -f .cursor/hooks/state/coordinator-*.active`.
+Expect `"permission":"deny"` with no marker, `"allow"` after a git-coordinator spawn, then deny again after stop. If a test **allows** `git status` with no marker, run `rm -f .cursor/hooks/state/coordinator-*.active`.
+
+**Still blocked?** Confirm **Settings → Hooks** shows no errors. Parent agents may spawn coordinators via native `Task` or `CallDynamicTool` (`cursor` / `Task`); `preToolUse` matches both.
 
 ---
 
@@ -156,4 +159,5 @@ If you see **allow**, remove stale `rm -f .cursor/hooks/state/coordinator-*.acti
 | Sync fails | `/usr/bin/python3 Agents/Setup/scripts/sync_cursor_agents.py` |
 | post-merge didn’t regen | `git config core.hooksPath .githooks`; use `--force` sync. |
 | Hook test **allow** for `git status` | `rm -f .cursor/hooks/state/coordinator-*.active` |
-| Hook “permission denied” | `chmod +x .cursor/hooks/git-delegation-hook.sh` |
+| Hook “permission denied” | `chmod +x .cursor/hooks/git-delegation-hook.sh` (Cursor should invoke the `.py` via `/usr/bin/python3`) |
+| Every `git` denied, even coordinator | Hook must read JSON on stdin. Re-run `./Agents/Setup/scripts/test-git-delegation-hook.sh`. |
