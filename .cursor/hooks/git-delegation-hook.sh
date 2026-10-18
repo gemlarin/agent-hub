@@ -55,6 +55,7 @@ def deny_shell() -> None:
 
 
 def coordinator_active() -> bool:
+    prune_stale_markers()
     return any(state_dir.glob("coordinator-*.active"))
 
 
@@ -66,6 +67,21 @@ if event == "sessionStart":
     for f in state_dir.glob("coordinator-*.active"):
         f.unlink(missing_ok=True)
     sys.exit(0)
+
+# Stale markers (crashed subagent, manual tests) look like an active coordinator.
+MAX_MARKER_AGE_SEC = 4 * 3600  # 4 hours
+
+
+def prune_stale_markers() -> None:
+    import time
+
+    now = time.time()
+    for f in state_dir.glob("coordinator-*.active"):
+        try:
+            if now - f.stat().st_mtime > MAX_MARKER_AGE_SEC:
+                f.unlink(missing_ok=True)
+        except OSError:
+            pass
 
 if event == "subagentStart":
     if data.get("subagent_type") == "git-coordinator":

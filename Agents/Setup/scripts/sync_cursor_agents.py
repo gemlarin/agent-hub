@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate .cursor/agents/*.md from Agents/Subagents/ per Agents/cursor-agents.json."""
+"""Generate .cursor/agents/*.md from Agents/Subagents/ per Agents/Setup/cursor-agents.json."""
 
 from __future__ import annotations
 
@@ -8,11 +8,11 @@ import re
 import sys
 from pathlib import Path
 
-HUB_ROOT = Path(__file__).resolve().parents[2]
+HUB_ROOT = Path(__file__).resolve().parents[3]
 SUBAGENTS_DIR = HUB_ROOT / "Agents" / "Subagents"
-MANIFEST = HUB_ROOT / "Agents" / "cursor-agents.json"
+MANIFEST = HUB_ROOT / "Agents" / "Setup" / "cursor-agents.json"
 OUT_DIR = HUB_ROOT / ".cursor" / "agents"
-GENERATOR = "Agents/scripts/sync-cursor-agents.sh"
+GENERATOR = "Agents/Setup/scripts/sync-cursor-agents.sh"
 
 
 def split_frontmatter(text: str) -> tuple[dict[str, str], str]:

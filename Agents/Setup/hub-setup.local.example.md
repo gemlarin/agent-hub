@@ -4,7 +4,7 @@
 
 ```bash
 # From hub root (your Projects folder):
-cp Agents/hub-setup.local.example.md Agents/hub-setup.local.md
+cp Agents/Setup/hub-setup.local.example.md Agents/Setup/hub-setup.local.md
 ```
 
 Edit `hub-setup.local.md` with your values. Agents may read it when setting up remotes or paths.

@@ -2,8 +2,8 @@
 # Optional: sync .cursor/agents, chmod hooks. Safe to run; no-op if Cursor not detected unless --force.
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-SCRIPTS="$ROOT/Agents/scripts"
+ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+SCRIPTS="$ROOT/Agents/Setup/scripts"
 FORCE=false
 
 for arg in "$@"; do
@@ -21,7 +21,7 @@ if ! $FORCE && ! "$SCRIPTS/detect-cursor-env.sh" --quiet; then
   echo "Skipping Cursor integration (not detected)."
   echo "Hub works without Cursor: AGENTS.md, Agents/subagents.md, Skills/."
   echo "To install anyway: $0 --force"
-  echo "Details: Agents/hub-setup.md#cursor-integration-optional"
+  echo "Details: Agents/Setup/hub-setup.md#cursor-integration-optional"
   exit 0
 fi
 
@@ -39,11 +39,11 @@ if [[ -f "$ROOT/.cursor/hooks/git-delegation-hook.sh" ]]; then
 fi
 
 if [[ ! -f "$ROOT/.cursor/hooks.json" ]]; then
-  echo "Note: .cursor/hooks.json missing in this clone — pull latest hub or see hub-setup."
+  echo "Note: .cursor/hooks.json missing in this clone — pull latest hub or see Agents/Setup/hub-setup.md"
 fi
 
 echo ""
 echo "Recommended (Cursor only):"
 echo "  git config core.hooksPath .githooks   # from hub root"
-echo "  Align User Rules: Agents/cursor-user-rules.md"
+echo "  Align User Rules: Agents/Setup/cursor-user-rules.md"
 echo "  Reload Cursor after first install."

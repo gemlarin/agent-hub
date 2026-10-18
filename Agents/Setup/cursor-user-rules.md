@@ -2,7 +2,14 @@
 
 **Cursor only.** If you do not use Cursor, skip this file; follow **AGENTS.md** and **Agents/Subagents/** with your agent.
 
-**User Rules** live in **Cursor → Settings → Rules** (account-level), not in this repo. Run `./Agents/scripts/detect-cursor-env.sh` before setup if unsure.
+**User Rules** are account-level (not in this repo). **Where to edit (macOS):**
+
+1. **⌘⇧J** → **Rules** tab → **User Rules** → add or edit text, or  
+2. Sidebar **Customize** → **Rules** → **User Rules**
+
+Not under **⌘,** (editor settings) and not **General → Rules for AI** (old UI). **New Cursor Rule** in the palette creates **project** rules (`.cursor/rules/`), not User Rules.
+
+Run `./Agents/Setup/scripts/detect-cursor-env.sh` before setup if unsure.
 
 Replace or merge the blocks below so they match **AGENTS.md** and **git-coordinator**. Project rules: `.cursor/rules/git-delegation.mdc` in the hub.
 
@@ -92,7 +99,7 @@ Keep your other User Rules (communication, code principles, name/preferences) as
 
 ## Checklist
 
-- [ ] Replaced `<committing-changes-with-git>` in Cursor Settings → Rules
-- [ ] Replaced `<creating-pull-requests>` in Cursor Settings → Rules
+- [ ] Replaced `<committing-changes-with-git>` in **⌘⇧J → Rules → User Rules** (or Customize → Rules)
+- [ ] Replaced `<creating-pull-requests>` in the same place
 - [ ] Reloaded Cursor or started a new chat
 - [ ] Test: “commit hub changes” → parent should call **git-coordinator**, not `git status` in parent shell

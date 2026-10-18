@@ -33,4 +33,4 @@ On-demand rules for **token-efficient orchestration**. Subagent caps: [subagents
 
 ## Hub setup
 
-- Use generic [hub-setup.md](./hub-setup.md) for layout/sync; read **gitignored** [hub-setup.local.md](./hub-setup.local.md) for remotes/accounts when cloning or pulling the hub (do not commit local file).
+- Use [Setup/hub-setup.md](./Setup/hub-setup.md) for layout/sync; read **gitignored** [Setup/hub-setup.local.md](./Setup/hub-setup.local.md) for remotes/accounts when cloning or pulling the hub (do not commit local file).

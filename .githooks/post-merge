@@ -7,6 +7,6 @@ cd "$ROOT"
 CHANGED="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD 2>/dev/null || true)"
 echo "$CHANGED" | grep -q '^Agents/Subagents/' || exit 0
 
-if [ -x "./Agents/scripts/install-cursor-integration.sh" ]; then
-  ./Agents/scripts/install-cursor-integration.sh
+if [ -x "./Agents/Setup/scripts/install-cursor-integration.sh" ]; then
+  ./Agents/Setup/scripts/install-cursor-integration.sh
 fi
