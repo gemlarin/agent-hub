@@ -1,0 +1,18 @@
+---
+description: Use clickable choices when asking the user to pick
+alwaysApply: true
+---
+
+# Interactive inputs
+
+When the user must pick from a known set, use Cursor's structured question UI. One option per choice. Multi-select only for code-sweep topics. A typed number, label, or option id still counts.
+
+If this session has no structured question UI, number the choices and accept the number or the label.
+
+Free text stays typed: a path, a line count, a commit message, a custom merge plan, or file paths.
+
+An option label capitalizes the first letter of the first word. Every other letter is lowercase: **Agent generated**, **Yes**, **No**. A typed id, **YES**, **NO**, or an older label still counts.
+
+Catalog and host notes: `Agents/Rules/interactive-inputs/interactive-inputs.md`.
+
+Applies to the help menu, Change code settings, the code test default, Yes/No memory questions, git Yes/No/Preview, add-before-commit Yes/No, Yes/No when a git verb omits `git`, **Custom** / **Agent generated**, the git-merge menus, the memory save menu, code-sweep topics, research follow-ups, save-as-file ids, and setup's test default and memory-file choices.

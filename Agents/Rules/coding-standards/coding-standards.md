@@ -10,7 +10,7 @@ Shared rules for any stack. **Vue greenfield** (layout, Tailwind, Vue 3, new-app
 
 ## Tests after an update
 
-Read **Test default** in [`Agents/Settings/CONFIG.md`](../../Settings/CONFIG.md). After a code or UI update, run that default: `UNIT`, `BROWSER`, `BOTH`, or `NONE`. A request that asks for a unit test or a browser test overrides the default for that request only. The user changes the stored default by prompting `CHANGE CODE SETTINGS`.
+Read **Test default** in [`Agents/Settings/CONFIG.md`](../../Settings/CONFIG.md). After a code or UI update, run that default: `UNIT`, `BROWSER`, `BOTH`, or `NONE`. A request that asks for a unit test or a browser test overrides the default for that request only. The user changes the stored default from `HELP` → **Change code settings** → **Change code test settings**. Offer **Unit**, **Browser**, **Both**, and **None** as an interactive choice. Write the matching token. ([interactive inputs](../interactive-inputs/interactive-inputs.md)).
 
 ## Spec-driven tasks
 

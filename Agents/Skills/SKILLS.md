@@ -14,9 +14,9 @@ When a task matches a skill's description, load and follow its instructions. Aft
 ### 2. `git-merge` (`./git-merge/`)
 
 - **Skill file:** [`./git-merge/SKILL.md`](./git-merge/SKILL.md)
-- **User options:** [`options.md`](./git-merge/options.md) (`approve`, `decline`, `ours`, `theirs`, `detail`, `revise`)
+- **User options:** [`options.md`](./git-merge/options.md) (manage the merge, conflict menu, merge tool, unsure hunk, auto-fix)
 - **Orchestration:** [Git Coordinator](../Subagents/git-coordinator/git-coordinator.md) in [`subagents.md`](../Subagents/subagents.md)
-- **When to use:** Merge, pull-with-merge, rebase, or cherry-pick conflicts. Coordinator must load this skill before resolving or aborting.
+- **When to use:** Merge, pull-with-merge, rebase, cherry-pick, or a non-fast-forward push. Coordinator must load this skill before resolving or aborting. The conflicted files are listed first.
 
 ### 3. `job-search` (`./job-search/`)
 
@@ -40,7 +40,7 @@ When a task matches a skill's description, load and follow its instructions. Aft
 ### 6. `help-getter` (`./help-getter/`)
 
 - **Skill file:** [`./help-getter/SKILL.md`](./help-getter/SKILL.md)
-- **User options:** [`options.md`](./help-getter/options.md) (`Display Configuration`, `List Agents`, `List Skills`, `Memory Information`, `Cancel`)
+- **User options:** [`options.md`](./help-getter/options.md) (`Cancel`, `Change code settings`, `Display configuration`, `List agents`, `List skills`, `Memory information`)
 - **When to use:** The prompt is `HELP` by itself, or the user invokes `/help`. The main agent runs it. Not a subagent.
 
 ---

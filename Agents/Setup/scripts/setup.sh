@@ -342,7 +342,7 @@ if $INTERACTIVE; then
   MEMORY_MAX_LINES="${max_reply:-80}"
 
   echo "Project directories are linked by bootstrap next (it lists folders that already look like apps)."
-  echo "Change the test default later by prompting CHANGE CODE SETTINGS."
+  echo "Change the test default later from HELP, then Change code settings."
   APPLY=true
 fi
 
@@ -503,7 +503,7 @@ echo "cursor=$CURSOR"
 echo "tests=$TEST_DEFAULT"
 echo "memory_max_lines=$MEMORY_MAX_LINES"
 echo "config=$CONFIG"
-echo "Change the test default later by prompting CHANGE CODE SETTINGS."
+echo "Change the test default later from HELP, then Change code settings."
 "$SCRIPTS/sync-cursor-skills.sh"
 if [[ "$CURSOR" == yes ]]; then
   echo "Still manual: if Cursor User Rules tell the parent to run git, paste Agents/Setup/cursor-user-rules.md, then reload Cursor."

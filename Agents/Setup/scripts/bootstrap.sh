@@ -381,7 +381,7 @@ fi
 
 echo ""
 echo "Next (not automated):"
-echo "  - Settings: Agents/Settings/CONFIG.md (test default, MEMORY.md path, memory max lines). Change the test default by prompting CHANGE CODE SETTINGS."
+echo "  - Settings: Agents/Settings/CONFIG.md (test default, MEMORY.md path, memory max lines). Change the test default from HELP, then Change code settings."
 if $NO_LINK; then
   echo "  - App repos: pointer AGENTS.md at the app root → ../Agents/AGENTS.md or ../../Agents/AGENTS.md"
 fi

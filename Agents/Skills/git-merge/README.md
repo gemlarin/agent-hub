@@ -6,7 +6,7 @@
 
 ## Design
 
-The parent never runs `git` in this hub. The coordinator loads this skill **before** any merge-class operation and before resolving conflicts. After `AWAIT_MERGE_APPROVAL`, the parent **offers option ids** (`approve`, `decline`, `ours`, `theirs`, `detail`, `revise`). Decline aborts.
+The parent never runs `git` in this hub. The coordinator loads this skill **before** any merge-class operation and before resolving conflicts. It lists every conflicted file first. The parent then offers the active menu in [`options.md`](./options.md): manage the merge, the conflict menu, the merge tool, an unsure hunk, or auto-fix. **Abort merge** restores the pre-merge state.
 
 ## Contribute
 

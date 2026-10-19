@@ -2,7 +2,7 @@
 
 Machine settings for agent-hub. **Not committed.** Setup copies this file to `CONFIG.md` and fills the values.
 
-Any rule, skill, or subagent reads `Agents/Settings/CONFIG.md`. Change the test default by prompting `CHANGE CODE SETTINGS`. Change the memory line cap from `HELP` → Memory Information.
+Any rule, skill, or subagent reads `Agents/Settings/CONFIG.md`. Change the test default from `HELP` → Change code settings. Change the memory line cap from `HELP` → Memory information.
 
 ## Code tests
 

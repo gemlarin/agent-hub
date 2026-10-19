@@ -62,7 +62,7 @@ Already a clone: `cd` to the hub root, `git pull`, then `setup.sh` / `setup.cmd`
 ### After bootstrap (not automated)
 
 - Point app repos at hub [`Agents/AGENTS.md`](../AGENTS.md) with a relative path from the app (this layout: `../Agents/AGENTS.md` or `../../Agents/AGENTS.md`). See [README.md](../../README.md#point-app-repos-at-the-hub).
-- Set **MEMORY.md path**, **Memory max lines**, and **Test default** in [CONFIG.md](../Settings/CONFIG.md). Setup writes that file. See [memory.md](../Memory/memory.md) and [README — Persistent memory](../../README.md#persistent-memory). Change the test default later by prompting `CHANGE CODE SETTINGS`.
+- Set **MEMORY.md path**, **Memory max lines**, and **Test default** in [CONFIG.md](../Settings/CONFIG.md). Setup writes that file. See [memory.md](../Memory/memory.md) and [README — Persistent memory](../../README.md#persistent-memory). Change the test default later from `HELP` → **Change code settings**.
 - **Cursor:** paste [cursor-user-rules.md](./cursor-user-rules.md) **only if** default git User Rules tell the parent to run `git`. Then reload Cursor.
 
 ---

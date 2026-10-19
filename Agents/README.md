@@ -14,7 +14,7 @@ Agents enter through **[`AGENTS.md`](./AGENTS.md)** (on-demand table). They do n
 | [`Setup/`](./Setup/)         | Bootstrap, Cursor install, local config template                                                                                    |
 | [`Memory/`](./Memory/)       | Persistent `MEMORY.md` path and read/write split. No local override file                                                            |
 | [`Settings/`](./Settings/)   | Gitignored `CONFIG.md`: test default, memory path, memory line cap                                                                  |
-| [`Rules/`](./Rules/)         | Standards. Each rule has its own folder, a contribute README, and a gitignored `user-config.md`                                     |
+| [`Rules/`](./Rules/)         | Standards, including interactive inputs. Each rule has its own folder, a contribute README, and a gitignored `user-config.md`       |
 
 Policy is **markdown in git**. App repos get a **pointer** to `AGENTS.md`, not a copy. Skills and subagent bodies stay out of `AGENTS.md` so the parent loads them only when the table says so.
 

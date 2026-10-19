@@ -13,7 +13,7 @@ Install, sync, and optional **Cursor** integration. Hub overview: [../../README.
 
 **Quick command (hub root):** `./Agents/Setup/scripts/setup.sh` (Windows: `Agents\Setup\scripts\setup.cmd`). That detects the OS, asks the remaining questions, and runs bootstrap. In Cursor: say **set up the hub**.
 
-Setup asks where `MEMORY.md` lives, how many lines it may hold, and which checks to run after an update (`UNIT`, `BROWSER`, `BOTH`, or `NONE`). It writes those to `Agents/Settings/CONFIG.md`. Change the test default later by prompting `CHANGE CODE SETTINGS`. View or edit memory settings from `HELP`. See [Settings](../Settings/README.md) and [help-getter](../Skills/help-getter/README.md).
+Setup asks where `MEMORY.md` lives, how many lines it may hold, and which checks to run after an update (`UNIT`, `BROWSER`, `BOTH`, or `NONE`). It writes those to `Agents/Settings/CONFIG.md`. Change the test default later from `HELP` → **Change code settings**. View or edit memory settings from `HELP` → **Memory information**. See [Settings](../Settings/README.md) and [help-getter](../Skills/help-getter/README.md).
 
 ## Design
 

@@ -15,7 +15,7 @@ The Memory Steward and the main agent read the path and the line cap from gitign
 - **Memory max lines:** `80`
 ```
 
-Setup writes that file from [`Settings/CONFIG.example.md`](../Settings/CONFIG.example.md). If the path is missing or still the placeholder, stop and ask the user to set it (`HELP` → Memory Information, or setup). If `CONFIG.md` has no path yet, `Setup/hub-setup.local.md` may still have **MEMORY.md path** from an older install. Prefer `CONFIG.md` when both are set.
+Setup writes that file from [`Settings/CONFIG.example.md`](../Settings/CONFIG.example.md). If the path is missing or still the placeholder, stop and ask the user to set it (`HELP` → Memory information, or setup). If `CONFIG.md` has no path yet, `Setup/hub-setup.local.md` may still have **MEMORY.md path** from an older install. Prefer `CONFIG.md` when both are set.
 
 Typical locations:
 

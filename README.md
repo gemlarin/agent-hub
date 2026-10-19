@@ -191,25 +191,26 @@ Never commit `MEMORY.md` or `CONFIG.md`. Prefer a memory path **outside** this c
 
 | Field | Change it by |
 |-------|----------------|
-| **Test default** (`UNIT`, `BROWSER`, `BOTH`, `NONE`) | Prompt `CHANGE CODE SETTINGS` |
-| **MEMORY.md path** | `HELP` → Memory Information |
-| **Memory max lines** | `HELP` → Memory Information |
+| **Test default** (`UNIT`, `BROWSER`, `BOTH`, `NONE`) | `HELP` → Change code settings → Change code test settings |
+| **MEMORY.md path** | `HELP` → Memory information |
+| **Memory max lines** | `HELP` → Memory information |
 
 After a code or UI update, the agent runs **Test default**. Ask for a unit test or a browser test in that same request to override it once. `NONE` skips both and calls the change done.
 
-`CHANGE CODE SETTINGS` only changes the test default. It does not run tests.
+**Change code test settings** only changes the test default. It does not run tests. **Cancel** on that list returns to the help menu.
 
 ---
 
 ## Help
 
-Send a prompt that is only `HELP`, or invoke `/help`. The agent shows:
+Send a prompt that is only `HELP`, or invoke `/help`. When the app can show a clickable choice, the menu is that control. Otherwise it is a numbered list. The items are:
 
-1. **Display Configuration** — `CONFIG.md` in a code block
-2. **List Agents** — each agent, what it does, and when it runs on its own
-3. **List Skills** — each skill, which agent uses it, and how to call it
-4. **Memory Information** — memory path, lines with data, the line cap, and a new file location
-5. **Cancel** — leaves help. The agent says you have exited the help context.
+1. **Cancel** — leaves help. The agent says you have exited the help context.
+2. **Change code settings** — **Change code test settings** writes **Test default**. **Cancel** returns to this list.
+3. **Display configuration** — `CONFIG.md` in a code block
+4. **List agents** — each agent, what it does, and when it runs on its own
+5. **List skills** — each skill, which agent uses it, and how to call it
+6. **Memory information** — memory path, lines with data, the line cap, and a new file location
 
 Menu details: [`Agents/Skills/help-getter/README.md`](./Agents/Skills/help-getter/README.md).
 
@@ -258,7 +259,7 @@ Copy `user-config.example.md` to `user-config.md` in a Rules, Skills, or Subagen
 - **Job Finder** — [`Agents/Subagents/job-finder/job-finder.md`](./Agents/Subagents/job-finder/job-finder.md) (only if you ask for a job search)
 - **Subagents** — [`Agents/Subagents/subagents.md`](./Agents/Subagents/subagents.md) · [using them](./Agents/Subagents/README.md#using-the-agents-users)
 - **Help** — prompt `HELP` or `/help` · [`Agents/Skills/help-getter/README.md`](./Agents/Skills/help-getter/README.md)
-- **Global config** — [`Agents/Settings/README.md`](./Agents/Settings/README.md). Prompt `CHANGE CODE SETTINGS` for the test default.
+- **Global config** — [`Agents/Settings/README.md`](./Agents/Settings/README.md). Change the test default from `HELP` → **Change code settings**.
 - **Coding standards** — core + optional Vue split
 
 After editing `Agents/Subagents/`:

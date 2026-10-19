@@ -6,6 +6,8 @@ Help menu for agent-hub. The main agent runs it. It is not a subagent.
 
 ## Open it
 
+The menu is a clickable choice when the app supports one, and a numbered list otherwise. See [interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md).
+
 Send a prompt that is only:
 
 ```text
@@ -20,27 +22,35 @@ or invoke `/help`.
 
 | Item | What you get |
 |------|----------------|
-| Display Configuration | `Agents/Settings/CONFIG.md` in a code block. If that file is missing, the example file is shown instead. |
-| List Agents | Each installed agent, a one-line synopsis, and when it runs on its own. |
-| List Skills | Each installed skill, which agent uses it, the phrase to type, and the `/` command. |
-| Memory Information | Memory path, how many lines in that file have data, and **Memory max lines**. Can point the file at a new path or change the line cap. |
-| Cancel | Leaves the menu. The agent says: You have exited the help context. |
+| Cancel | Leaves help. The agent says: You have exited the help context. |
+| Change code settings | A second choice. **Change code test settings** stores a new **Test default**. **Cancel** returns to this list. |
+| Display configuration | `Agents/Settings/CONFIG.md` in a code block. If that file is missing, the example file is shown instead. |
+| List agents | Each installed agent, a one-line synopsis, and when it runs on its own. |
+| List skills | Each installed skill, which agent uses it, the phrase to type, and the `/` command. |
+| Memory information | Memory path, how many lines in that file have data, and **Memory max lines**. Can point the file at a new path or change the line cap. |
 
-After every item except Cancel, the menu is shown again.
+The list stays alphabetical. After every item except **Cancel**, the menu is shown again.
 
-## Memory Information
+## Change code settings
+
+| Item | What you get |
+|------|----------------|
+| Change code test settings | **Unit**, **Browser**, **Both**, or **None**. The agent writes the matching token to **Test default** in `CONFIG.md`, confirms it, and does not run tests. |
+| Cancel | The main help list again. Help stays open. |
+
+## Memory information
 
 When **MEMORY.md path** is empty or still the placeholder, the agent shows:
 
 `ERROR: Unset memory file path`
 
-**YES** walks through where the file should live, writes the path into `CONFIG.md` and `hub-setup.local.md`, and creates the file if it is missing. **NO** returns to the help menu.
+**Yes** walks through where the file should live, writes the path into `CONFIG.md` and `hub-setup.local.md`, and creates the file if it is missing. **No** returns to the help menu.
 
-When the path is set, the agent asks whether to set up a new MEMORY file. **YES** asks for a path. An existing memory file is moved there. If none exists, a new `MEMORY.md` is created. If the path cannot be written, the agent says so and offers to help fix it. **NO** leaves the file where it is.
+When the path is set, the agent asks whether to set up a new MEMORY file. **Yes** asks for a path. An existing memory file is moved there. If none exists, a new `MEMORY.md` is created. If the path cannot be written, the agent says so and offers to help fix it. **No** leaves the file where it is.
 
-The agent then asks whether to change the line cap. **YES** asks how many lines and writes **Memory max lines** in `CONFIG.md`. **NO** returns to the help menu.
+The agent then asks whether to change the line cap. **Yes** asks how many lines and writes **Memory max lines** in `CONFIG.md`. **No** returns to the help menu.
 
-The test default is not changed here. Prompt `CHANGE CODE SETTINGS` for that. Details: [`../../Settings/README.md`](../../Settings/README.md).
+The test default is changed from **Change code settings** on this menu. Details: [`../../Settings/README.md`](../../Settings/README.md).
 
 ## Contribute
 

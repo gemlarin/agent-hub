@@ -1,6 +1,6 @@
 # Memory write options
 
-Show this list **only** when (1) the user asked to remember / save / update memory, or (2) the session looks finished. During the session, do **not** show these ids — auto-write viable facts with `mem-save` (see [`SKILL.md`](./SKILL.md) §5).
+Show this list **only** when (1) the user asked to remember / save / update memory, or (2) the session looks finished. Offer it as an interactive choice when the host supports one ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Otherwise number it. During the session, do **not** show these ids — auto-write viable facts with `mem-save` (see [`SKILL.md`](./SKILL.md) §5).
 
 Show the **proposed bullets** with the ids. User replies with an **id** or the prompt.
 

@@ -1,5 +1,5 @@
 ---
-description: Test default from CONFIG.md, CHANGE CODE SETTINGS, and HELP
+description: Test default from CONFIG.md, and HELP
 alwaysApply: true
 ---
 
@@ -20,9 +20,7 @@ If `CONFIG.md` is missing, or **Test default** is not one of those four, skip te
 
 One-shot override: if that same prompt asks for a unit test or a browser test, run the requested check for this update only. Do not change `CONFIG.md`.
 
-## CHANGE CODE SETTINGS
-
-When the prompt is `CHANGE CODE SETTINGS`, ask which default to store: **UNIT**, **BROWSER**, **BOTH**, **NONE**. Write **Test default** in `Agents/Settings/CONFIG.md`. Confirm the new value. Do not run tests in that turn.
+The stored default changes from `HELP` or `/help`, then **Change code settings**, then **Change code test settings**. Offer **Unit**, **Browser**, **Both**, and **None**. Write the matching token. Follow `Agents/Skills/help-getter/SKILL.md`. Do not ask the user to type `CHANGE CODE SETTINGS`.
 
 ## HELP
 

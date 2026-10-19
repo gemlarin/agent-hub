@@ -34,10 +34,10 @@ Setup asks for the test default and the line cap. The suggested line cap is 80.
 
 ## How to change a value
 
-- **Test default:** prompt `CHANGE CODE SETTINGS`. The agent asks for `UNIT`, `BROWSER`, `BOTH`, or `NONE`, writes **Test default**, and confirms it. That prompt does not run tests.
+- **Test default:** prompt `HELP` or `/help`, then choose **Change code settings**, then **Change code test settings**. The agent asks for **Unit**, **Browser**, **Both**, or **None**, writes the matching token to **Test default**, and confirms it. That choice does not run tests. **Cancel** on that list returns to the help menu.
 - **One update only:** ask for a unit test or a browser test in the same change request. That overrides **Test default** for that request and leaves `CONFIG.md` unchanged.
-- **Memory path or line cap:** prompt `HELP` or `/help`, then choose **Memory Information**. A new file path moves the existing `MEMORY.md` when one is already there. See [help-getter](../Skills/help-getter/README.md).
-- **See every value:** `HELP` → **Display Configuration**. The agent shows `CONFIG.md` in a code block.
+- **Memory path or line cap:** prompt `HELP` or `/help`, then choose **Memory information**. A new file path moves the existing `MEMORY.md` when one is already there. See [help-getter](../Skills/help-getter/README.md).
+- **See every value:** `HELP` → **Display configuration**. The agent shows `CONFIG.md` in a code block.
 
 If `CONFIG.md` is missing, or **Test default** is not one of the four values, the agent skips tests and says the test default is unset. Copy the example to `CONFIG.md`, or run setup.
 

@@ -27,20 +27,21 @@ Only create commits when requested by the user. If unclear, ask first.
 
 You are the **parent agent**.
 
-- **Agent-hub git root** (folder with hub `Agents/AGENTS.md` / `.cursor/hooks/`): do **not** run `git` or `gh`. Delegate to **git-coordinator** (`subagent_type: git-coordinator`). Pass **`repo_path`**. Relay `Yes` / `No` / `Preview`, `git add all`, `[custom]` / `[agent]`. **Resume** the same coordinator agent id for those relays (do not spawn a new Task unless the last run aborted). Trust the **Git Report**; do not re-run those commands.
-- Git commands start with **`git`**. If the user says `add`, `commit`, `push`, or another git verb without `git`, ask if they want Git Coordinator and suggest `git <keyword>` next time. Do not run it until they say yes.
-- **Any other git repo** (sibling app, unrelated clone, no hub hooks): you **may** run `git`/`gh` in the parent shell. Do not treat User Rules as a global git ban. The add list still applies before a commit. Do not stage files until they reply **`git add all`** or name the paths. Optional: use git-coordinator with `repo_path`.
+- **Agent-hub git root** (folder with hub `Agents/AGENTS.md` / `.cursor/hooks/`): do **not** run `git` or `gh`. Delegate to **git-coordinator** (`subagent_type: git-coordinator`). Pass **`repo_path`**. Relay `Yes` / `No` / `Preview`, add-before-commit **Yes** / **No**, **Custom** / **Agent generated**, and merge-menu ids as one interactive choice each. **Resume** the same coordinator agent id for those relays (do not spawn a new Task unless the last run aborted). Trust the **Git Report**; do not re-run those commands.
+- Git commands start with **`git`**. If the user says `add`, `commit`, `push`, or another git verb without `git`, offer **Yes** / **No**. **Yes** runs Git Coordinator for `git <keyword>`. **No** stops. Tell them to start with `git` next time. Do not run until they pick **Yes**.
+- **Any other git repo** (sibling app, unrelated clone, no hub hooks): you **may** run `git`/`gh` in the parent shell. Do not treat User Rules as a global git ban. The same push and merge choices apply. Do not stage unstaged files until they pick **Yes** or name the paths. Optional: use git-coordinator with `repo_path`.
 - Hub details: `Agents/AGENTS.md`, `Agents/Subagents/subagents.md`, `Agents/Subagents/git-coordinator/git-coordinator.md`.
 
 ## When the user asks to commit
 
 The command is **`git commit`**, **`git add`**, **`git push`**, or **`git auto push`**.
 
-1. **`git auto push`:** ask `about to add, commit and push all modified files to current repo. Are you sure?` Options: **Yes**, **No**, **Preview**. Preview lists the files. **Yes** drafts the message from the Git Report and has the coordinator add, commit, and push the current branch.
-2. **`git add`:** list each changed file and a one-line summary. Offer **`git add all`** or let them name files.
-3. **`git commit`:** if nothing is staged, start **`git add`** in every repo, including sibling apps. List each file and a one-line summary. Wait for **`git add all`** or named paths. A sentence that describes the work is not that approval. If something is staged, offer **`[custom]`** vs **`[agent]`**. If they pick **`[agent]`**, draft the message from the coordinator’s diff summary and send it on the next invocation as `commit_message`.
-4. **`git push`:** if nothing is staged and files are modified, start **`git add`** and ask whether to commit first. **`git add all`** or named paths commit those files, then push. **No** pushes the current branch and does not commit. If files are already staged, commit those, then push.
-5. Invoke **git-coordinator** with `repo_path` and `user_authorized: true`. Do **not** run `git status`, `git diff`, or `git log` yourself.
+1. **`git auto push`:** offer **Yes**, **No**, **Preview** as one interactive choice. The question is `about to add, commit and push all modified files to current repo. Are you sure?` Preview lists the files. **Yes** drafts the message from the Git Report and has the coordinator add, commit, and push the current branch.
+2. **`git add`:** list each changed file and a one-line summary. Offer **Git add all** as one interactive choice. A typed `git add all` still counts. Named paths stay typed.
+3. **`git commit`:** if nothing is staged, start **`git add`** in every repo, including sibling apps. List each file and a one-line summary. Wait for **Git add all** or named paths. A sentence that describes the work is not that approval. If something is staged, offer **Custom** and **Agent generated** as one interactive choice. The message text stays typed. If they pick **Agent generated**, draft the message from the coordinator’s diff summary and send it on the next invocation as `commit_message`.
+4. **`git push`:** if any file is unstaged, offer **Yes** / **No**: add those files before the commit? **Yes** stages them, then the message choice, then the commit. **No** leaves them unstaged. Named paths stay typed. A non-fast-forward push offers **Yes** / **No** to manage the merge. **No** stops. **Yes** uses the git-merge skill. Do not force-push.
+5. **Merge:** list every conflicted file, then offer the active menu in `Agents/Skills/git-merge/options.md`. **Abort merge** restores the pre-merge state.
+6. Invoke **git-coordinator** with `repo_path` and `user_authorized: true`. Do **not** run `git status`, `git diff`, or `git log` yourself.
 
 ## Safety (coordinator enforces; parent must not bypass)
 

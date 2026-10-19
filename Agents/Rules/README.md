@@ -7,6 +7,7 @@ Shared standards the agent loads from [`../AGENTS.md`](../AGENTS.md). Each rule 
 | Coding (any stack) | [`coding-standards/coding-standards.md`](./coding-standards/coding-standards.md) |
 | Vue greenfield | [`coding-standards-vue/coding-standards-vue.md`](./coding-standards-vue/coding-standards-vue.md) |
 | Tone | [`personality-communication/personality-communication.md`](./personality-communication/personality-communication.md) |
+| Interactive inputs | [`interactive-inputs/interactive-inputs.md`](./interactive-inputs/interactive-inputs.md) |
 | Context use | [`context-discipline/context-discipline.md`](./context-discipline/context-discipline.md) |
 
 Memory, skills, subagents, and setup stay outside this folder.
