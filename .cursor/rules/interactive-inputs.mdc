@@ -13,6 +13,8 @@ Free text stays typed: a path, a line count, a commit message, a custom merge pl
 
 An option label capitalizes the first letter of the first word. Every other letter is lowercase: **Agent generated**, **Yes**, **No**. A typed id, **YES**, **NO**, or an older label still counts.
 
+**Cancel**, **Exit**, and **Return to previous menu** are the last item in that menu. **Abort merge** is just before that last item when the menu has one.
+
 Catalog and host notes: `Agents/Rules/interactive-inputs/interactive-inputs.md`.
 
-Applies to the help menu, Change code settings, the code test default, Yes/No memory questions, git Yes/No/Preview, add-before-commit Yes/No, Yes/No when a git verb omits `git`, **Custom** / **Agent generated**, the git-merge menus, the memory save menu, code-sweep topics, research follow-ups, save-as-file ids, and setup's test default and memory-file choices.
+Applies to the help menu, Change code settings, the code test default, the memory information menu, Yes/No when the memory path is unset, git Yes/No/Preview, add-before-commit Yes/No, Yes/No when a git verb omits `git`, **Custom** / **Agent generated**, the git-merge menus, the memory save menu, code-sweep topics, research follow-ups, save-as-file ids, and setup's test default and memory-file choices.

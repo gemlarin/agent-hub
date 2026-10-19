@@ -12,20 +12,14 @@ Read `Agents/Settings/CONFIG.md` when a menu item needs it. Do not dump `MEMORY.
 
 ## Menu
 
-Offer this list as one interactive choice ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Keep the items in alphabetical order. If the host has no interactive input, number the list in that same order. Wait either way:
+Offer this list as one interactive choice ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Keep the items in alphabetical order, then **Cancel** last. If the host has no interactive input, number the list in that same order. Wait either way:
 
-1. Cancel
-2. Change code settings
-3. Display configuration
-4. List agents
-5. List skills
-6. Memory information
-
-## Cancel
-
-Tell the user: You have exited the help context.
-
-Do not show the menu again.
+1. Change code settings
+2. Display configuration
+3. List agents
+4. List skills
+5. Memory information
+6. Cancel
 
 ## Change code settings
 
@@ -60,12 +54,35 @@ Include a specialist folder that exists under `Agents/Subagents/` even if the ta
 
 ## List skills
 
-Read `Agents/Skills/SKILLS.md`. List every installed skill:
+Read `Agents/Skills/SKILLS.md`. Show every installed skill as an inline HTML table. Do not use a Markdown table. The chat styles these classes.
 
-- Skill name
-- Which agent uses it
-- Manual phrase for the next prompt
-- Slash command
+```html
+<div class="vis-section-stack">
+  <p class="vis-sr-only">Installed skills, which agent uses each, the phrase to type next, and the slash command.</p>
+  <div class="vis-table-responsive">
+    <table class="vis-table">
+      <thead>
+        <tr>
+          <th>Skill</th>
+          <th>Agent</th>
+          <th>Manual phrase</th>
+          <th>Slash</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>memory-management</code></td>
+          <td>Memory Steward</td>
+          <td>Use the memory-management skill</td>
+          <td><code>/memory-management</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+```
+
+One row per skill. Put the skill name and the slash command in `<code>`. Add any other `Agents/Skills/*/SKILL.md` the rows miss.
 
 | Skill | Agent | Manual phrase | Slash |
 |-------|--------|----------------|-------|
@@ -76,7 +93,7 @@ Read `Agents/Skills/SKILLS.md`. List every installed skill:
 | code-sweep | Code Sweeper | Use the code-sweep skill | `/code-sweep` |
 | help-getter | main agent | HELP | `/help` |
 
-Add any other `Agents/Skills/*/SKILL.md` the table misses. Then show the menu again.
+Then show the menu again.
 
 ## Memory information
 
@@ -97,17 +114,32 @@ Ask whether to set up durable memory as an interactive choice. Options: **Yes** 
 - How many lines in that file have data (a line has data when it is not blank)
 - **Memory max lines** from `CONFIG.md`
 
-5. Ask whether to set up a new MEMORY file as an interactive choice. Options: **Yes** · **No**.
+5. Offer this list as one interactive choice. **Cancel** is last:
 
-- **No:** Continue to the line-limit question below.
-- **Yes:** Ask for the path where the file should be stored. A directory means `MEMORY.md` inside it. The path must be absolute and outside the hub clone.
-  - If that path cannot be created or written, say so and offer to help fix it. Do not change `CONFIG.md` until the file is in place.
-  - If a `MEMORY.md` already exists at the current configured path, move that file to the new path. Do not create a second empty file.
-  - If no memory file exists yet, create `MEMORY.md` at the new path.
-  - If a file is already at the destination, do not overwrite it. Say so and ask for a different path.
-  - Write **MEMORY.md path** in `Agents/Settings/CONFIG.md` and in `Agents/Setup/hub-setup.local.md`. Confirm the new path. Then continue to the line-limit question.
+1. Set up a new memory file
+2. Update the memory line limit
+3. Cancel
 
-6. Ask whether to update the memory line limit as an interactive choice. Options: **Yes** · **No**.
+### Set up a new memory file
 
-- **Yes:** Ask how many lines the max should be. Write that positive integer to **Memory max lines** in `Agents/Settings/CONFIG.md`. Confirm the new value. Then show the help menu again.
-- **No:** Show the help menu again.
+Ask for the path where the file should be stored. A directory means `MEMORY.md` inside it. The path must be absolute and outside the hub clone.
+
+- If that path cannot be created or written, say so and offer to help fix it. Do not change `CONFIG.md` until the file is in place.
+- If a `MEMORY.md` already exists at the current configured path, move that file to the new path. Do not create a second empty file.
+- If no memory file exists yet, create `MEMORY.md` at the new path.
+- If a file is already at the destination, do not overwrite it. Say so and ask for a different path.
+- Write **MEMORY.md path** in `Agents/Settings/CONFIG.md` and in `Agents/Setup/hub-setup.local.md`. Confirm the new path. Then show the main help menu again.
+
+### Update the memory line limit
+
+Ask how many lines the max should be. Write that positive integer to **Memory max lines** in `Agents/Settings/CONFIG.md`. Confirm the new value. Then show the help menu again.
+
+### Cancel
+
+Show the main help menu again. Do not exit help.
+
+## Cancel
+
+Tell the user: You have exited the help context.
+
+Do not show the menu again.

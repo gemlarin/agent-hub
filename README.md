@@ -205,12 +205,12 @@ After a code or UI update, the agent runs **Test default**. Ask for a unit test 
 
 Send a prompt that is only `HELP`, or invoke `/help`. When the app can show a clickable choice, the menu is that control. Otherwise it is a numbered list. The items are:
 
-1. **Cancel** — leaves help. The agent says you have exited the help context.
-2. **Change code settings** — **Change code test settings** writes **Test default**. **Cancel** returns to this list.
-3. **Display configuration** — `CONFIG.md` in a code block
-4. **List agents** — each agent, what it does, and when it runs on its own
-5. **List skills** — each skill, which agent uses it, and how to call it
-6. **Memory information** — memory path, lines with data, the line cap, and a new file location
+1. **Change code settings** — **Change code test settings** writes **Test default**. **Cancel** returns to this list.
+2. **Display configuration** — `CONFIG.md` in a code block
+3. **List agents** — each agent, what it does, and when it runs on its own
+4. **List skills** — each skill, which agent uses it, and how to call it
+5. **Memory information** — memory path, lines with data, the line cap, and a new file location
+6. **Cancel** — leaves help. The agent says you have exited the help context.
 
 Menu details: [`Agents/Skills/help-getter/README.md`](./Agents/Skills/help-getter/README.md).
 

@@ -40,7 +40,7 @@ When a task matches a skill's description, load and follow its instructions. Aft
 ### 6. `help-getter` (`./help-getter/`)
 
 - **Skill file:** [`./help-getter/SKILL.md`](./help-getter/SKILL.md)
-- **User options:** [`options.md`](./help-getter/options.md) (`Cancel`, `Change code settings`, `Display configuration`, `List agents`, `List skills`, `Memory information`)
+- **User options:** [`options.md`](./help-getter/options.md) (`Change code settings`, `Display configuration`, `List agents`, `List skills`, `Memory information`, `Cancel`)
 - **When to use:** The prompt is `HELP` by itself, or the user invokes `/help`. The main agent runs it. Not a subagent.
 
 ---

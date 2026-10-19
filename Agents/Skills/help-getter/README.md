@@ -22,14 +22,14 @@ or invoke `/help`.
 
 | Item | What you get |
 |------|----------------|
-| Cancel | Leaves help. The agent says: You have exited the help context. |
 | Change code settings | A second choice. **Change code test settings** stores a new **Test default**. **Cancel** returns to this list. |
 | Display configuration | `Agents/Settings/CONFIG.md` in a code block. If that file is missing, the example file is shown instead. |
 | List agents | Each installed agent, a one-line synopsis, and when it runs on its own. |
 | List skills | Each installed skill, which agent uses it, the phrase to type, and the `/` command. |
 | Memory information | Memory path, how many lines in that file have data, and **Memory max lines**. Can point the file at a new path or change the line cap. |
+| Cancel | Leaves help. The agent says: You have exited the help context. |
 
-The list stays alphabetical. After every item except **Cancel**, the menu is shown again.
+The other items stay alphabetical. **Cancel** is last. After every item except **Cancel**, the menu is shown again.
 
 ## Change code settings
 
@@ -46,9 +46,13 @@ When **MEMORY.md path** is empty or still the placeholder, the agent shows:
 
 **Yes** walks through where the file should live, writes the path into `CONFIG.md` and `hub-setup.local.md`, and creates the file if it is missing. **No** returns to the help menu.
 
-When the path is set, the agent asks whether to set up a new MEMORY file. **Yes** asks for a path. An existing memory file is moved there. If none exists, a new `MEMORY.md` is created. If the path cannot be written, the agent says so and offers to help fix it. **No** leaves the file where it is.
+When the path is set, the agent shows the path, how many lines have data, and **Memory max lines**. Then it offers:
 
-The agent then asks whether to change the line cap. **Yes** asks how many lines and writes **Memory max lines** in `CONFIG.md`. **No** returns to the help menu.
+| Item | What you get |
+|------|----------------|
+| Set up a new memory file | Asks for a path. An existing memory file is moved there. If none exists, a new `MEMORY.md` is created. If the path cannot be written, the agent says so and offers to help fix it. |
+| Update the memory line limit | Asks how many lines and writes **Memory max lines** in `CONFIG.md`. |
+| Cancel | The main help list again. Help stays open. |
 
 The test default is changed from **Change code settings** on this menu. Details: [`../../Settings/README.md`](../../Settings/README.md).
 

@@ -15,7 +15,7 @@ When a push is not a fast-forward, or a merge is required and may conflict:
 
 ## Conflict menu
 
-Show this after the conflicted paths are listed. One choice.
+Show this after the conflicted paths are listed. One choice. **Abort merge** and **Return to previous menu** stay at the end. **Return to previous menu** is last.
 
 | Id | Label | Result |
 |----|--------|--------|

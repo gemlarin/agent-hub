@@ -6,7 +6,7 @@ When the user must pick from a known set, use the host's interactive input if it
 
 ## Hosts
 
-- **Cursor:** structured question UI. One option per choice. Multi-select only when several ids may be chosen together.
+- **Cursor:** structured question UI. One option per choice. Multi-select only when several ids may be chosen together. That list does not take keyboard focus. A typed number, label, or option id still counts.
 - **Claude** (claude.ai and the desktop app): interactive inputs at the bottom of the chat. Multiple choice for one answer. Multi-select for several. Ranking only when the user is ordering items.
 - **Any other app** with a clickable choice control: use that control the same way.
 - **No such control:** number the choices `1` … `n`. Accept the number or the label.
@@ -15,14 +15,17 @@ Free text stays typed: a path, a line count, a commit message, a custom merge pl
 
 An option label capitalizes the first letter of the first word. Every other letter is lowercase: **Agent generated**, **Yes**, **No**. Ids in each `options.md` stay unchanged. A typed id, **YES**, **NO**, or an older label still counts.
 
+**Cancel**, **Exit**, and **Return to previous menu** are the last item in that menu. Other items stay in their own order. When a menu also has **Abort merge**, that choice is just before the return or cancel item.
+
 ## Where to ask this way
 
 | Ask | Choices | How many |
 | --- | --- | --- |
-| Help menu | Cancel, Change code settings, Display configuration, List agents, List skills, Memory information | One. Alphabetical. |
+| Help menu | Change code settings, Display configuration, List agents, List skills, Memory information, Cancel | One. Alphabetical, then Cancel. |
 | Help: Change code settings | Change code test settings, Cancel | One |
 | Help: code test settings | Unit, Browser, Both, None. The stored value stays `UNIT`, `BROWSER`, `BOTH`, or `NONE`. | One |
-| Memory: set up, new file, or change the line cap | Yes, No | One |
+| Memory: path unset | Yes, No | One |
+| Memory information | Set up a new memory file, Update the memory line limit, Cancel | One. Cancel last. |
 | `git auto push` | Yes, No, Preview | One |
 | `git add` | Git add all. A typed `git add all` still counts. Named paths stay typed. | One, plus text |
 | `git push` with unstaged files | Yes, No. Add them before the commit. Named paths stay typed. | One, plus text |

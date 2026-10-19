@@ -68,7 +68,7 @@ Resolve a hunk without asking when the outcome is clear: both sides match, one s
 When a hunk is not clear, stop. Return `menu: hunk` with that file path and the conflicted code. The parent offers **Keep ours**, **Accept incoming**, **Keep both**, and **Agent suggestion**.
 
 - **Keep ours** / **Accept incoming:** take that side and remove the markers.
-- **Keep both:** keep both text sides, in a working order, with the markers removed. Do not offer this for a binary file. Offer **Keep ours**, **Accept incoming**, and **Abort merge** instead.
+- **Keep both:** keep both text sides, in a working order, with the markers removed. Do not offer this for a binary file. Offer **Keep ours**, **Accept incoming**, then **Abort merge** last.
 - **Agent suggestion:** choose a resolution, apply it, and say what changed.
 
 Then continue with the next unsure hunk. After the last file, run the same marker check as **Retry merge**. Complete the merge only when that check is clean.
