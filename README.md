@@ -114,7 +114,7 @@ Agent rules for this repo are defined at the **agent hub**, not in this file.
 
 **Read and follow:** [`../agent-hub/Agents/AGENTS.md`](../agent-hub/Agents/AGENTS.md).
 
-That hub is the source of truth for agent rules. Apply it (and everything it references) before any task in this repo.
+That hub is the source of truth for agent rules. Follow its load table. Open a linked file only when that row matches the task.
 ```
 
 **App is a sibling of `Agents/`** (work folder is the hub root, app at `work/Portfolio/`):
@@ -126,7 +126,7 @@ Agent rules for this repo are defined at the **agent hub**, not in this file.
 
 **Read and follow:** [`../Agents/AGENTS.md`](../Agents/AGENTS.md).
 
-That hub is the source of truth for agent rules. Apply it (and everything it references) before any task in this repo.
+That hub is the source of truth for agent rules. Follow its load table. Open a linked file only when that row matches the task.
 ```
 
 **App is one extra level down** (`work/Vue/Cairn/`):
@@ -138,7 +138,7 @@ Agent rules for this repo are defined at the **agent hub**, not in this file.
 
 **Read and follow:** [`../../Agents/AGENTS.md`](../../Agents/AGENTS.md).
 
-That hub is the source of truth for agent rules. Apply it (and everything it references) before any task in this repo.
+That hub is the source of truth for agent rules. Follow its load table. Open a linked file only when that row matches the task.
 ```
 
 When your AI app has an **app** open, that pointer is how it loads hub **policy**. When it has this hub clone open, it should read `Agents/AGENTS.md` directly (there is no hub `AGENTS.md` at the clone root). Cursor is one app that can do this. Any other AI app that reads `AGENTS.md` can do the same.
