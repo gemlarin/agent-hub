@@ -31,7 +31,7 @@ You talk to the **main agent** in chat. It should spawn a specialist only when t
 
 A **foreground** specialist holds this chat until it finishes. A **background** one starts and keeps working so you can send another request here. When it finishes, the main agent posts the report. Docs: [subagents (foreground vs background)](https://cursor.com/docs/subagents). Parallel extra requests: `/multitask` ([multi-agent](https://cursor.com/help/ai-features/multi-agent.md)). That is **not** Cursor Cloud “background agents.”
 
-Say **“run that in the background”** if you want this chat free. Job Finder, Research Scout, Code Sweeper, and Web Researcher should already start that way. Git commits, hub setup questions, and durable-memory writes stay in the **foreground** so you can pick `[continue]` / `[custom]`, answer the installer, or see `Durable memory saved to MEMORY file`.
+Say **“run that in the background”** if you want this chat free. Job Finder, Research Scout, Code Sweeper, and Web Researcher should already start that way. Git commits, hub setup questions, and durable-memory writes stay in the **foreground** so you can pick **Yes** / **No** / **Preview**, `git add all`, or `[custom]` / `[agent]`, answer the installer, or see `Durable memory saved to MEMORY file`.
 
 Stop or a new interrupting message can abort a running specialist — that is not the same as a failed search.
 

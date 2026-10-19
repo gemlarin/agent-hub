@@ -7,7 +7,7 @@ On-demand rules for **token-efficient orchestration**. Subagent caps: [subagents
 ## Git & GitHub
 
 - Delegate **all** `git` / `gh` to **Git Coordinator**; use the **Git Report** as repo truth for that step.
-- **Resume** the same coordinator agent id for `[continue]` / `[more]` / `[custom]` / `[agent]` / merge ids. Do not cold-start a new Task per click.
+- **Resume** the same coordinator agent id for `Yes` / `No` / `Preview`, `git add all`, `[custom]` / `[agent]`, and merge ids. Do not cold-start a new Task per click.
 - **Do not** re-run the same git commands, re-fetch `status`/`diff`/`log`, or paste full diffs after a report.
 - For code review before commit/PR: pass the coordinator’s **diff summary** (or scoped paths) to Code Reviewer—not a parent-shell `git diff`.
 - For a **code sweep**: offer [topic ids](../../Skills/code-sweep/options.md), then delegate to **Code Sweeper**. Do not grep the app in the parent.

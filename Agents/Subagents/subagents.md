@@ -21,7 +21,7 @@ When delegating a task, provide the subagent with a complete, self-contained pro
 | Specialist | Default | Why |
 |------------|---------|-----|
 | **Job Finder**, **Research Scout**, **Code Sweeper**, **Web Researcher** | **Background** | Long I/O (boards, docs, greps, web). User can keep chatting here. |
-| **Git Coordinator** | **Foreground** | Relays `[continue]` / `[more]` / `[custom]` / `[agent]` / merge ids in this turn. |
+| **Git Coordinator** | **Foreground** | Relays `Yes` / `No` / `Preview`, `git add all`, `[custom]` / `[agent]`, and merge ids in this turn. |
 | **Memory Steward** | **Background** | Cloud `MEMORY.md` can stall. Do not block this chat. Print `Durable memory saved to MEMORY file` when the report arrives. |
 | **Code Reviewer** | **Foreground** when it gates a commit/PR; **background** if they asked for a review while doing other work | |
 | **Hub Installer** | **Foreground** | Asks memory path, GitHub username, and app folders before it writes config. |
@@ -40,9 +40,14 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 
 - **Cursor:** Registered as `git-coordinator` in `.cursor/agents/` (run [`Setup/scripts/sync-cursor-agents.sh`](../Setup/scripts/sync-cursor-agents.sh) after spec changes).
 - **When (hub repo):** Any **`git`** or **`gh`** on the agent-hub git root. Parent **never** runs those CLIs **in this hub**.
-- **Resume:** After the first Git Coordinator Task in this chat, **resume that same agent id** for `[continue]` / `[more]` / `[custom]` / `[agent]` / merge ids / `commit_message`. Spawn a new coordinator only if the previous run **aborted**, **FAILED** with no id, or this is the first git ask in the chat. Cold-starting every relay is what makes GIT feel stuck.
+- **Resume:** After the first Git Coordinator Task in this chat, **resume that same agent id** for `Yes` / `No` / `Preview`, `git add all`, `[custom]` / `[agent]`, merge ids, and `commit_message`. Spawn a new coordinator only if the previous run **aborted**, **FAILED** with no id, or this is the first git ask in the chat. Cold-starting every relay is what makes GIT feel stuck.
 - **Other repos:** Parent may run `git`/`gh` (shell hook does not block non-hub git roots). Use git-coordinator only if the user wants the hub flow; still pass **`repo_path`**.
-- **Parent only:** Confirm **`repo_path`** with the user if unclear; relay choices and (if `[agent]`) a drafted commit message; surface the **Git Report**—do not re-run git or duplicate its output. On **`AWAIT_MERGE_APPROVAL`**, offer [git-merge option ids](../Skills/git-merge/options.md) unless already chosen. On commit, always relay **`[custom]`** vs **`[agent]`** before a message is sent. Pass `user_choice: continue` with a `commit_message` only after the user has already picked.
+- **Command word:** Git commands start with **`git`** (`git add`, `git commit`, `git push`, `git auto push`, and the other git verbs). If the user says `add`, `commit`, `push`, or another git verb without `git`, do **not** delegate yet. Ask if they want Git Coordinator, and suggest `git <keyword>` next time.
+- **`git auto push`:** First ask, in these words: `about to add, commit and push all modified files to current repo. Are you sure?` Options: **Yes**, **No**, **Preview**. Preview lists the files. **No** stops. **Yes** drafts the message from the report and has the coordinator add, commit, and push the current branch. No `[custom]` / `[agent]` step.
+- **`git add`:** List each changed file and a one-line summary. Offer **`git add all`** or let them name files.
+- **`git commit`:** If nothing is staged, start **`git add`** first. If something is staged, relay **`[custom]`** vs **`[agent]`** before a message is sent.
+- **`git push`:** If the index is empty and files are modified, start **`git add`** and ask whether to commit before pushing. **`git add all`** or named paths stage those files, then the message choice, then commit and push. **No** pushes the current branch and does not commit. If files are already staged, skip add, commit those, then push.
+- **Parent only:** Confirm **`repo_path`** with the user if unclear; relay choices and (if `[agent]` or auto-push **Yes**) a drafted commit message; surface the **Git Report**—do not re-run git or duplicate its output. On **`AWAIT_MERGE_APPROVAL`**, offer [git-merge option ids](../Skills/git-merge/options.md) unless already chosen.
 - **Coordinator spec** (params, commit/merge flows, safety, report statuses): load the subagent file when delegating—not duplicated here.
 
 ---

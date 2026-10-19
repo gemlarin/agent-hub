@@ -50,39 +50,77 @@ test -e "<repo_path>/.git" && git -C "<repo_path>" status -sb && git -C "<repo_p
 
 ## Inputs (from parent)
 
-| Field | Required | Description |
-|--------|----------|-------------|
-| `repo_path` | Yes | Git repository root |
-| `operation` | Yes | e.g. `status`, `diff`, `log`, `add`, `commit`, `pull`, `push`, `merge`, `branch`, `pr_create`, `custom` |
-| `user_authorized` | For mutating ops | `true` only when the user requested that action |
-| `user_choice` | When waiting | e.g. `[continue]`, `[more]`, `[custom]`, `[agent]`, merge ids from [`git-merge/options.md`](../../Agents/Skills/git-merge/options.md) (`approve`, `decline`, `ours`, `theirs`, `detail`, `revise`; aliases `approve_merge_plan` / `decline_merge_plan`), file path for detail |
-| `commit_message` | On commit after `[agent]` | Parent supplies final message text (parent drafts; you only commit) |
-| `custom_commit_message` | On `[custom]` | Text from user via parent |
-| `gh_args` / `git_args` | Optional | Exact flags when parent specifies (e.g. PR title/body) |
-| `notes` | Optional | Branch names, remote, merge target, PR base |
-| `related_memory` | Optional | Task-relevant durable-memory bullets from the parent. Do not read `MEMORY.md`. |
+| Field                   | Required         | Description                            |
+| ----------------------- | ---------------- | -------------------------------------- |
+| `repo_path`             | Yes              | Git repository root                    |
+| `operation`             | Yes              | Which git operation to run             |
+| `user_authorized`       | For mutating ops | `true` only when the user asked        |
+| `user_choice`           | When waiting     | One id from the list below             |
+| `commit_message`        | After `[agent]`  | Final message. Parent drafts it.       |
+| `custom_commit_message` | On `[custom]`    | User text, passed by the parent        |
+| `gh_args` / `git_args`  | Optional         | Exact flags the parent specifies       |
+| `notes`                 | Optional         | Branch, remote, merge target, PR base  |
+| `related_memory`        | Optional         | Task bullets. Do not read `MEMORY.md`. |
 
-## Standard commit workflow
+`user_choice` ids:
 
-When `operation` is `commit` (or user asked to commit):
+- **Yes** / **No** / **Preview** for `git auto push`
+- **`git add all`**, or named paths, for `git add`
+- **`[custom]`** / **`[agent]`** for the commit message
+- Merge ids from [`git-merge/options.md`](../../Agents/Skills/git-merge/options.md): `approve`, `decline`, `ours`, `theirs`, `detail`, `revise`
 
-1. **Preflight (read-only):** the **cheap combined snapshot** in Speed (single shell; parent must not duplicate).
-2. **One-shot:** If `user_authorized: true` **and** parent passed `user_choice: continue` **and** a `commit_message` or `custom_commit_message`, **do not** stop for `AWAIT_ADD_CONFIRM` or `AWAIT_COMMIT_MESSAGE_CHOICE`. Add the hub-scoped set (respect excludes), commit, and **push** if the parent authorized push. Return **`Git Report: SUCCESS`**. Still **BLOCKED** on secrets.
-3. **Stage plan:** If not one-shot and not yet staged, propose `git add` set from changed files (respect the user’s scope). For **`add`** step, return **`Git Report: AWAIT_ADD_CONFIRM`** (see below).
-4. **Message choice:** Return **`Git Report: AWAIT_COMMIT_MESSAGE_CHOICE`** — user picks **`[custom]`** or **`[agent]`** (parent relays). Do not commit until message is set.
-5. **`[agent]`:** Stop and return diff summary + recent log style so parent can draft message; on next invocation with `commit_message`, proceed.
-6. **`[custom]`:** Use `custom_commit_message` from parent.
-7. **Commit:** `git add` (if needed), `git commit` with HEREDOC-style message via `-m` or `-F` from a temp message file—no amend unless allowed above.
-8. Return **`Git Report: SUCCESS`** with commit hash, branch, and short summary.
+## Command words
 
-### Add confirmation UX (`AWAIT_ADD_CONFIRM`)
+The user's command starts with **`git`** (`git add`, `git commit`, `git push`, `git auto push`, `git pull`, `git merge`, `git status`, and the other git verbs).
 
-Return to parent (for the user):
+If they say `add`, `commit`, `push`, or another git verb **without** the word `git`, do **not** run. The parent asks whether they want Git Coordinator, and suggests `git <keyword>` next time. Run only after they say yes.
 
-- List files to be added (from status/diff), **max 25**, then line: `… and N more — reply **[more]** for next 25, **[continue]** to stage and proceed, or name a file for change details.`
-- On **`[more]`:** next page of 25 paths.
-- On **file name:** return truncated `git diff` / `git diff --cached` for that path only.
-- On **`[continue]`:** run `git add` as planned, then move to message choice.
+## git auto push
+
+When the user says **`git auto push`**:
+
+1. **Read-only snapshot.** Do not add, commit, or push yet. If nothing is modified or untracked, say so and stop.
+2. Return **`Git Report: AWAIT_AUTO_PUSH`**. The user-facing text is exactly: `about to add, commit and push all modified files to current repo. Are you sure?` Options: **Yes** · **No** · **Preview**. Put the file list and a one-line change summary per file in **Data for parent** only.
+3. **Preview:** show every path that would be committed, with that one-line summary. Then repeat the same question and the same three options. Do not mutate.
+4. **No:** stop. Nothing is staged, committed, or pushed.
+5. **Yes:** parent drafts `commit_message` from the report summary (no `[custom]` / `[agent]` question) and sends `user_choice: Yes` plus that message. Add every listed file except secrets, commit, and push the **current branch** (no force). Still **BLOCKED** on secrets.
+
+## git add
+
+When the user says **`git add`**, or **`git commit`** while the index is empty:
+
+1. Read-only snapshot. Return **`Git Report: AWAIT_ADD`**.
+2. List each modified and untracked file with a one-line summary of what changed.
+3. Ask them to approve all or name the files to add. Options: **`git add all`**, or reply with the paths.
+4. **`git add all`:** stage that set, excluding secrets.
+5. **Named paths:** stage only those.
+6. If this add was started by **`git commit`**, go on to the message choice. If it was started by **`git push`**, stage the chosen files, then the message choice, then commit and push. If they only said **`git add`**, stop after staging and report what is staged. Do not commit.
+
+## git commit
+
+If the index is empty, start **git add**. Do not ask for a message until something is staged.
+
+If the index already has files, skip add. Return **`Git Report: AWAIT_COMMIT_MESSAGE_CHOICE`**. User picks **`[custom]`** or **`[agent]`**. Do not commit until the message is set.
+
+- **`[agent]`:** return the diff summary and recent log style. Parent drafts `commit_message` and sends it on the next invocation.
+- **`[custom]`:** use `custom_commit_message` from the parent.
+- **Commit:** `git commit` with the message via `-m` or `-F`. Do not push unless they also said **`git push`**, or this is **Yes** on `git auto push`.
+- **One-shot:** only when `user_choice` is **Yes** (auto push) or the user already picked `[custom]` / `[agent]` and `commit_message` or `custom_commit_message` is set. Still **BLOCKED** on secrets.
+
+## git push
+
+No `--force` unless the user explicitly asked. Never force-push `main` or `master`.
+
+**Index already has files.** Skip the add flow. Commit those staged files, then push. Use the message choice (`[custom]` / `[agent]`). Leave unstaged files unstaged.
+
+**Index is empty, and nothing is modified or untracked.** Push the current branch. Do not ask.
+
+**Index is empty, and files are modified or untracked.** Do not push yet.
+
+1. Start **git add**. Return **`Git Report: AWAIT_ADD`**. List each file with a one-line summary.
+2. Ask whether to commit before the push. Options: **`git add all`**, named paths, or **No**.
+3. **`git add all`** or named paths: stage that set (excluding secrets), then the message choice, then commit and push.
+4. **No:** do not stage those files. The index is still empty, so there is nothing to commit. Push the current branch.
 
 ## Merge / pull
 
@@ -104,7 +142,7 @@ Always return one structured report (markdown), **≤80 lines** unless the paren
 
 **Repo:** `<repo_path>`
 **Branch:** …
-**STATUS:** SUCCESS | NEED_INPUT | AWAIT_ADD_CONFIRM | AWAIT_COMMIT_MESSAGE_CHOICE | AWAIT_MERGE_APPROVAL | BLOCKED | MERGE_ABORTED | FAILED
+**STATUS:** SUCCESS | NEED_INPUT | AWAIT_AUTO_PUSH | AWAIT_ADD | AWAIT_COMMIT_MESSAGE_CHOICE | AWAIT_MERGE_APPROVAL | BLOCKED | MERGE_ABORTED | FAILED
 
 ### Summary
 (1–5 sentences: what ran, outcome, next step for the user)
@@ -116,7 +154,11 @@ Always return one structured report (markdown), **≤80 lines** unless the paren
 - Key diff hunks, file lists, hashes, PR URL, conflict file list, etc.
 
 ### User options (if waiting)
-- **[continue]** / **[more]** / **[custom]** / **[agent]** / merge ids (`approve`, `decline`, `ours`, `theirs`, `detail`, `revise`)
+
+- **Yes** / **No** / **Preview**
+- **`git add all`**, or the paths to stage
+- **[custom]** / **[agent]**
+- Merge ids: `approve`, `decline`, `ours`, `theirs`, `detail`, `revise`
 ```
 
 **Do not** dump full multi-hundred-line diffs; truncate hunks and file lists to stay within the cap (per-file detail only on request).

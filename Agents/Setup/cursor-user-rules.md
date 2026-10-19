@@ -27,16 +27,20 @@ Only create commits when requested by the user. If unclear, ask first.
 
 You are the **parent agent**.
 
-- **Agent-hub git root** (folder with hub `Agents/AGENTS.md` / `.cursor/hooks/`): do **not** run `git` or `gh`. Delegate to **git-coordinator** (`subagent_type: git-coordinator`). Pass **`repo_path`**. Relay `[more]` / `[continue]` / `[custom]` / `[agent]`. **Resume** the same coordinator agent id for those relays (do not spawn a new Task unless the last run aborted). Trust the **Git Report**; do not re-run those commands.
+- **Agent-hub git root** (folder with hub `Agents/AGENTS.md` / `.cursor/hooks/`): do **not** run `git` or `gh`. Delegate to **git-coordinator** (`subagent_type: git-coordinator`). Pass **`repo_path`**. Relay `Yes` / `No` / `Preview`, `git add all`, `[custom]` / `[agent]`. **Resume** the same coordinator agent id for those relays (do not spawn a new Task unless the last run aborted). Trust the **Git Report**; do not re-run those commands.
+- Git commands start with **`git`**. If the user says `add`, `commit`, `push`, or another git verb without `git`, ask if they want Git Coordinator and suggest `git <keyword>` next time. Do not run it until they say yes.
 - **Any other git repo** (sibling app, unrelated clone, no hub hooks): you **may** run `git`/`gh` in the parent shell. Do not treat User Rules as a global git ban. Optional: still use git-coordinator with `repo_path` if the user wants that flow.
 - Hub details: `Agents/AGENTS.md`, `Agents/Subagents/subagents.md`, `Agents/Subagents/git-coordinator/git-coordinator.md`.
 
 ## When the user asks to commit
 
-1. Invoke **git-coordinator** with `operation: commit`, `user_authorized: true`, and `repo_path`.
-2. Follow the coordinator workflow (staged-file confirm, then `[custom]` vs `[agent]` message).
-3. If the user picks **`[agent]`**, draft the commit message from the coordinator’s diff summary and send it on the next invocation as `commit_message`.
-4. Do **not** run `git status`, `git diff`, or `git log` yourself for that commit.
+The command is **`git commit`**, **`git add`**, **`git push`**, or **`git auto push`**.
+
+1. **`git auto push`:** ask `about to add, commit and push all modified files to current repo. Are you sure?` Options: **Yes**, **No**, **Preview**. Preview lists the files. **Yes** drafts the message from the Git Report and has the coordinator add, commit, and push the current branch.
+2. **`git add`:** list each changed file and a one-line summary. Offer **`git add all`** or let them name files.
+3. **`git commit`:** if nothing is staged, start **`git add`**. If something is staged, offer **`[custom]`** vs **`[agent]`**. If they pick **`[agent]`**, draft the message from the coordinator’s diff summary and send it on the next invocation as `commit_message`.
+4. **`git push`:** if nothing is staged and files are modified, start **`git add`** and ask whether to commit first. **`git add all`** or named paths commit those files, then push. **No** pushes the current branch and does not commit. If files are already staged, commit those, then push.
+5. Invoke **git-coordinator** with `repo_path` and `user_authorized: true`. Do **not** run `git status`, `git diff`, or `git log` yourself.
 
 ## Safety (coordinator enforces; parent must not bypass)
 
