@@ -17,8 +17,12 @@ SKIP_GITHUB=false
 SKIP_APPS=false
 LINK_ALL=false
 MEMORY_PATH=""
+MEMORY_MAX_LINES=""
+TEST_DEFAULT=""
 GITHUB_USER=""
 APPS=()
+CONFIG="$ROOT/Agents/Settings/CONFIG.md"
+CONFIG_EXAMPLE="$ROOT/Agents/Settings/CONFIG.example.md"
 
 usage() {
   cat <<'EOF'
@@ -31,6 +35,8 @@ From the hub root (any cwd). Detects macOS, Linux, WSL, or Windows Git Bash.
   --apply               Install using flags below (for the Hub Installer agent; never prompts)
   --memory-path PATH    Absolute MEMORY.md path, or "local" for ~/Documents/MEMORY.md
   --skip-memory         Leave the memory path for later
+  --memory-max-lines N  Max lines stored in MEMORY.md before cleanup
+  --test-default MODE   UNIT, BROWSER, BOTH, or NONE (checks after an update)
   --github-user NAME    GitHub username for app-repo links in hub-setup.local.md
   --skip-github         Leave the GitHub username placeholder
   --app PATH            Project directory to link (repeatable). Replaces AGENTS.md with a hub pointer
@@ -55,6 +61,14 @@ while [[ $# -gt 0 ]]; do
     --link-all) LINK_ALL=true ;;
     --memory-path)
       MEMORY_PATH="${2:-}"
+      shift
+      ;;
+    --memory-max-lines)
+      MEMORY_MAX_LINES="${2:-}"
+      shift
+      ;;
+    --test-default)
+      TEST_DEFAULT="${2:-}"
       shift
       ;;
     --github-user)
@@ -304,7 +318,31 @@ if $INTERACTIVE; then
     SKIP_GITHUB=true
   fi
 
+  echo "After a code update, which checks should run?"
+  echo "  1) UNIT"
+  echo "  2) BROWSER"
+  echo "  3) BOTH"
+  echo "  4) NONE"
+  printf 'Choice [4]: '
+  read -r test_choice || true
+  test_choice="${test_choice:-4}"
+  case "$test_choice" in
+    1 | UNIT | unit) TEST_DEFAULT=UNIT ;;
+    2 | BROWSER | browser) TEST_DEFAULT=BROWSER ;;
+    3 | BOTH | both) TEST_DEFAULT=BOTH ;;
+    4 | NONE | none) TEST_DEFAULT=NONE ;;
+    *)
+      echo "Answer 1, 2, 3, or 4." >&2
+      exit 2
+      ;;
+  esac
+
+  printf 'Max lines stored in MEMORY.md before cleanup [80]: '
+  read -r max_reply || true
+  MEMORY_MAX_LINES="${max_reply:-80}"
+
   echo "Project directories are linked by bootstrap next (it lists folders that already look like apps)."
+  echo "Change the test default later by prompting CHANGE CODE SETTINGS."
   APPLY=true
 fi
 
@@ -323,7 +361,9 @@ cursor=$CURSOR
 Ask the user, then re-run with --apply:
 1. MEMORY.md path. Suggested: ${DETECTED_MEMORY:-$HOME/Documents/MEMORY.md} (or local). Flag: --memory-path PATH | --skip-memory
 2. GitHub username for app repos. Suggested: ${DETECTED_GITHUB:-skip}. Flag: --github-user NAME | --skip-github
-3. Link current project directories? Existing AGENTS.md files are replaced with a pointer to the hub.
+3. Test default after an update: UNIT, BROWSER, BOTH, or NONE. Flag: --test-default MODE
+4. Max lines stored in MEMORY.md before cleanup. Suggested: 80. Flag: --memory-max-lines N
+5. Link current project directories? Existing AGENTS.md files are replaced with a pointer to the hub.
 ${PROJECT_LIST:- (none found)}
 Flag: --link-all | --app PATH (repeat) | --skip-apps
 EOF
@@ -344,12 +384,18 @@ fi
 if ! $SKIP_GITHUB && [[ -z "$GITHUB_USER" ]]; then
   missing+=("github-user")
 fi
+if [[ -z "$TEST_DEFAULT" ]]; then
+  missing+=("test-default")
+fi
+if [[ -z "$MEMORY_MAX_LINES" ]]; then
+  missing+=("memory-max-lines")
+fi
 if ! $INTERACTIVE && ! $SKIP_APPS && ! $LINK_ALL && [[ ${#APPS[@]} -eq 0 ]]; then
   missing+=("apps")
 fi
 if [[ ${#missing[@]} -gt 0 ]]; then
   echo "SETUP_NEED_INPUT missing: ${missing[*]}" >&2
-  echo "Pass --memory-path or --skip-memory, --github-user or --skip-github, and --link-all or --app or --skip-apps." >&2
+  echo "Pass --memory-path or --skip-memory, --github-user or --skip-github, --test-default, --memory-max-lines, and --link-all or --app or --skip-apps." >&2
   exit 3
 fi
 
@@ -370,6 +416,18 @@ fi
 
 if [[ -n "$GITHUB_USER" ]] && [[ ! "$GITHUB_USER" =~ ^[A-Za-z0-9-]+$ ]]; then
   echo "GitHub username must be letters, numbers, and hyphens." >&2
+  exit 2
+fi
+
+case "$TEST_DEFAULT" in
+  UNIT | BROWSER | BOTH | NONE) ;;
+  *)
+    echo "Test default must be UNIT, BROWSER, BOTH, or NONE." >&2
+    exit 2
+    ;;
+esac
+if [[ ! "$MEMORY_MAX_LINES" =~ ^[1-9][0-9]*$ ]]; then
+  echo "Memory max lines must be a positive integer." >&2
   exit 2
 fi
 
@@ -407,6 +465,15 @@ if [[ -n "$GITHUB_USER" ]]; then
   set_bullet "$LOCAL" "GitHub (apps)" "https://github.com/${GITHUB_USER}/"
 fi
 
+if [[ ! -f "$CONFIG" ]]; then
+  cp "$CONFIG_EXAMPLE" "$CONFIG"
+fi
+set_bullet "$CONFIG" "Test default" "$TEST_DEFAULT"
+set_bullet "$CONFIG" "Memory max lines" "$MEMORY_MAX_LINES"
+if [[ -n "$MEMORY_PATH" ]]; then
+  set_bullet "$CONFIG" "MEMORY.md path" "$MEMORY_PATH"
+fi
+
 echo ""
 echo "SETUP_OK"
 echo "os=$OS_LABEL"
@@ -433,6 +500,11 @@ else
   echo "apps=asked-by-bootstrap"
 fi
 echo "cursor=$CURSOR"
+echo "tests=$TEST_DEFAULT"
+echo "memory_max_lines=$MEMORY_MAX_LINES"
+echo "config=$CONFIG"
+echo "Change the test default later by prompting CHANGE CODE SETTINGS."
+"$SCRIPTS/sync-cursor-skills.sh"
 if [[ "$CURSOR" == yes ]]; then
   echo "Still manual: if Cursor User Rules tell the parent to run git, paste Agents/Setup/cursor-user-rules.md, then reload Cursor."
 fi

@@ -6,7 +6,7 @@
 
 ## Design
 
-The main agent **reads** the configured `MEMORY.md` at session start (once). Memory Steward **writes** using this skill and **keeps the file lean** (target ≤80 lines). Mid-session, viable facts are **auto-written in the background** (`mem-save` + `memory_path`); the parent prints `Durable memory saved to MEMORY file` when the report arrives. Option ids appear **only** on an explicit save request or session wrap-up. Other subagents **do not** read the file; the parent passes a task-relevant `related_memory` slice. The file path is **not** hardcoded here — it comes from gitignored `Agents/Setup/hub-setup.local.md`.
+The main agent **reads** the configured `MEMORY.md` at session start (once). Memory Steward **writes** using this skill and **prunes to Memory max lines** in `Agents/Settings/CONFIG.md`. Mid-session, viable facts are **auto-written in the background** (`mem-save` + `memory_path` + `memory_max_lines`); the parent prints `Durable memory saved to MEMORY file` when the report arrives. Option ids appear **only** on an explicit save request or session wrap-up. Other subagents **do not** read the file; the parent passes a task-relevant `related_memory` slice. The file path is **not** hardcoded here — it comes from gitignored `Agents/Settings/CONFIG.md`.
 
 ## Contribute
 

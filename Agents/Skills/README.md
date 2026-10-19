@@ -16,11 +16,11 @@ Cursor will not list these under `/` until they also exist in a discovered skill
    Follow Agents/Skills/job-search/SKILL.md
    ```
 
-   Same pattern for `memory-management`, `git-merge`, or `code-sweep` if you really want that procedure in this chat.
+   Same pattern for `memory-management`, `git-merge`, or `code-sweep` if you really want that procedure in this chat. `HELP` alone, or `/help`, opens [help-getter](./help-getter/README.md).
 
 2. **@-attach the file:** in the chat input, `@` → `Agents/Skills/job-search/SKILL.md` (or another `SKILL.md`), then send your request. That forces the agent to read that skill.
 
-3. **Cursor `/` menu** (optional): Cursor only discovers skills from `.cursor/skills/`, `.agents/skills/`, or `~/.cursor/skills/`. Copy or symlink a hub skill there if you want `/job-search` in the picker. Type `/`, choose the skill, **Enter** = this message only. **Option+Enter** (Mac) or **Alt+Enter** (Windows) = keep it on for the session (Custom Mode).
+3. **Cursor `/` menu:** Cursor discovers skills from `.cursor/skills/`. Setup links each hub skill there (`/help` is help-getter). Type `/`, choose the skill, **Enter** = this message only. **Option+Enter** (Mac) or **Alt+Enter** (Windows) = keep it on for the session (Custom Mode). If a skill is missing from `/`, run `Agents/Setup/scripts/sync-cursor-skills.sh` and reload Cursor.
 
 Skills with `disable-model-invocation: true` never auto-apply; they only run when you name them or invoke `/`. Hub skills without that flag may still load when your prompt matches the skill **description** (see [`SKILLS.md`](./SKILLS.md)).
 
@@ -46,6 +46,7 @@ Optional later: `reference.md`, `examples.md`, `scripts/` beside `SKILL.md`.
 | [`job-search/`](./job-search/) | Job Finder | Resume-matched job openings (only if the user asked) |
 | [`research/`](./research/) | Research Scout | Brief + follow-ups + output formats ([option list](./research/options.md)) |
 | [`code-sweep/`](./code-sweep/) | Code Sweeper | Topic-limited a11y/quality sweep ([option list](./code-sweep/options.md)) |
+| [`help-getter/`](./help-getter/) | Main agent | `HELP` alone or `/help` ([option list](./help-getter/options.md)) |
 
 [`SKILLS.md`](./SKILLS.md) is the index. Orchestration paths live in [`../Memory/memory.md`](../Memory/memory.md) and [`../Subagents/subagents.md`](../Subagents/subagents.md), not duplicated as a second trigger matrix here.
 
@@ -62,6 +63,6 @@ Job search board on/off stays in gitignored `boards.local.md`, not in `user-conf
 1. New skill: folder + `SKILL.md` with YAML `name` and a **description that states when to use it**, plus `user-config.example.md`.
 2. List it in [`SKILLS.md`](./SKILLS.md).
 3. Point the owner at the skill. For a specialist, follow [Attach a skill to a specialist](../Subagents/README.md#attach-a-skill-to-a-specialist). Path and read/write rules stay in [`../Memory/memory.md`](../Memory/memory.md).
-4. Keep capture/security rules in the skill; keep **file path** config in `hub-setup.local.md` / `memory.md`. User-facing ids live in that skill’s `options.md`. Personal steps go in `user-config.md`.
+4. Keep capture/security rules in the skill; keep the memory path and line cap in `Agents/Settings/CONFIG.md`. User-facing ids live in that skill’s `options.md`. Personal steps go in `user-config.md`.
 5. Do not instruct the parent to run `git`/`gh` in this hub — that stays Git Coordinator (+ git-merge when needed).
 6. Do not commit `user-config.md`. Gitignore is already `Agents/Skills/**/user-config.md`.

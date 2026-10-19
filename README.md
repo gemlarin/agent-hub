@@ -70,8 +70,12 @@ In that AI app, say **set up the hub**.
 The installer detects your OS and asks:
 
 - where to keep `MEMORY.md` (cloud storage or a file on this computer)
+- how many lines that file may hold before cleanup
+- which checks to run after an update: `UNIT`, `BROWSER`, `BOTH`, or `NONE`
 - your GitHub username
 - which current project folders to link
+
+Those answers are written to gitignored [`Agents/Settings/CONFIG.md`](./Agents/Settings/CONFIG.md). See [Global config](#global-config).
 
 Saying yes to a project writes or replaces that project's `AGENTS.md` so it points at this hub's `Agents/AGENTS.md`. You do not need [Point app repos at the hub](#point-app-repos-at-the-hub) for those folders. That section is only for project folders you add later. The installer does not commit.
 
@@ -89,7 +93,7 @@ The script asks the same questions and links the projects you pick. Folders you 
 
 To skip the script and do it yourself:
 
-1. Copy [`Agents/Setup/hub-setup.local.example.md`](./Agents/Setup/hub-setup.local.example.md) to `Agents/Setup/hub-setup.local.md`. Set the hub path and the [memory path](#persistent-memory).
+1. Copy [`Agents/Setup/hub-setup.local.example.md`](./Agents/Setup/hub-setup.local.example.md) to `Agents/Setup/hub-setup.local.md`. Copy [`Agents/Settings/CONFIG.example.md`](./Agents/Settings/CONFIG.example.md) to `Agents/Settings/CONFIG.md`. Set the hub path and the [memory path](#persistent-memory).
 2. Add a pointer `AGENTS.md` in each app. Use the examples in [Point app repos at the hub](#point-app-repos-at-the-hub).
 3. **Cursor only:** if that app's User Rules tell the agent to run git, paste [`Agents/Setup/cursor-user-rules.md`](./Agents/Setup/cursor-user-rules.md), then reload. Skip this step in every other AI app.
 
@@ -160,12 +164,13 @@ Do **not** move `.cursor/` or `.githooks/` into `Agents/`. Cursor only reads `.c
 
 Agents keep durable notes in **one** `MEMORY.md` file. Use **cloud storage** (Google Drive, iCloud, Dropbox, …) if you want the same file on every machine, or a **local file** if this computer is enough.
 
-Configure the absolute path in gitignored [`Agents/Setup/hub-setup.local.md`](./Agents/Setup/hub-setup.local.md) (bootstrap copies the [example](./Agents/Setup/hub-setup.local.example.md)):
+Configure the absolute path and the line cap in gitignored [`Agents/Settings/CONFIG.md`](./Agents/Settings/CONFIG.md) (setup copies the [example](./Agents/Settings/CONFIG.example.md)):
 
 ```markdown
-## Persistent memory
+## Memory
 
 - **MEMORY.md path:** `/absolute/path/to/MEMORY.md`
+- **Memory max lines:** `80`
 ```
 
 Examples:
@@ -176,7 +181,39 @@ Examples:
 | Google Drive for Desktop (Windows) | `~/Google Drive/My Drive/Documents/MEMORY.md`                               |
 | Local only                         | `~/Documents/MEMORY.md`                                                     |
 
-Never commit `MEMORY.md`. Prefer a path **outside** this clone. Keep the file **short** (target ≤80 lines) so new chats stay cheap. Policy for agents: [`Agents/Memory/memory.md`](./Agents/Memory/memory.md). The main agent reads it once per session and auto-saves viable facts mid-session (you’ll see `Durable memory saved to MEMORY file`). Option ids appear when you ask to save or at wrap-up. Memory Steward writes only that file. Other specialists do not load it.
+Never commit `MEMORY.md` or `CONFIG.md`. Prefer a memory path **outside** this clone. Memory Steward prunes the file to **Memory max lines**. Policy for agents: [`Agents/Memory/memory.md`](./Agents/Memory/memory.md). The main agent reads it once per session and auto-saves viable facts mid-session (you’ll see `Durable memory saved to MEMORY file`). Option ids appear when you ask to save or at wrap-up. Memory Steward writes only that file. Other specialists do not load it. Change the path or the line cap from [Help](#help).
+
+---
+
+## Global config
+
+[`Agents/Settings/CONFIG.md`](./Agents/Settings/CONFIG.md) is the machine config every rule, skill, and subagent reads. Setup copies [`CONFIG.example.md`](./Agents/Settings/CONFIG.example.md) and fills it. The file stays on this computer. Full field list and change steps: [`Agents/Settings/README.md`](./Agents/Settings/README.md).
+
+| Field | Change it by |
+|-------|----------------|
+| **Test default** (`UNIT`, `BROWSER`, `BOTH`, `NONE`) | Prompt `CHANGE CODE SETTINGS` |
+| **MEMORY.md path** | `HELP` → Memory Information |
+| **Memory max lines** | `HELP` → Memory Information |
+
+After a code or UI update, the agent runs **Test default**. Ask for a unit test or a browser test in that same request to override it once. `NONE` skips both and calls the change done.
+
+`CHANGE CODE SETTINGS` only changes the test default. It does not run tests.
+
+---
+
+## Help
+
+Send a prompt that is only `HELP`, or invoke `/help`. The agent shows:
+
+1. **Display Configuration** — `CONFIG.md` in a code block
+2. **List Agents** — each agent, what it does, and when it runs on its own
+3. **List Skills** — each skill, which agent uses it, and how to call it
+4. **Memory Information** — memory path, lines with data, the line cap, and a new file location
+5. **Cancel** — leaves help. The agent says you have exited the help context.
+
+Menu details: [`Agents/Skills/help-getter/README.md`](./Agents/Skills/help-getter/README.md).
+
+`/help` is listed in Cursor after setup links hub skills into `.cursor/skills/`. If it is missing, run `./Agents/Setup/scripts/sync-cursor-skills.sh` and reload Cursor.
 
 ---
 
@@ -186,6 +223,7 @@ Never commit `MEMORY.md`. Prefer a path **outside** this clone. Keep the file **
 Agents/
 ├── AGENTS.md              Load table. Agents start here.
 ├── Memory/                Who reads and writes MEMORY.md. No local override file.
+├── Settings/              CONFIG.example.md. CONFIG.md stays on this machine.
 ├── Rules/<name>/          One shared standard, a contribute README, user-config.example.md
 ├── Skills/<name>/         One procedure, a contribute README, user-config.example.md
 ├── Subagents/
@@ -201,7 +239,8 @@ App folders sit beside `Agents/` when this work folder is the hub root. If the c
 | Path | Purpose |
 | --- | --- |
 | [`Agents/AGENTS.md`](./Agents/AGENTS.md) | Entry point. Opens the other files only when a row applies. |
-| [`Agents/Memory/`](./Agents/Memory/README.md) | Session contract for `MEMORY.md`. The path itself is in gitignored [`Agents/Setup/hub-setup.local.md`](./Agents/Setup/hub-setup.local.md). |
+| [`Agents/Memory/`](./Agents/Memory/README.md) | Session contract for `MEMORY.md`. The path and line cap are in gitignored [`Agents/Settings/CONFIG.md`](./Agents/Settings/CONFIG.md). |
+| [`Agents/Settings/`](./Agents/Settings/README.md) | Shared machine config: test default, memory path, memory line cap. |
 | [`Agents/Rules/`](./Agents/Rules/README.md) | Coding, Vue, tone, and context standards. Each rule is its own folder. |
 | [`Agents/Skills/`](./Agents/Skills/README.md) | Procedures specialists load (`git-merge`, `job-search`, `code-sweep`, and the others). |
 | [`Agents/Subagents/`](./Agents/Subagents/README.md) | One folder per specialist, plus [`subagents.md`](./Agents/Subagents/subagents.md). [How a specialist loads a skill](./Agents/Subagents/README.md#attach-a-skill-to-a-specialist). |
@@ -218,6 +257,8 @@ Copy `user-config.example.md` to `user-config.md` in a Rules, Skills, or Subagen
 - **Git Coordinator** — [`Agents/Subagents/git-coordinator/git-coordinator.md`](./Agents/Subagents/git-coordinator/git-coordinator.md)
 - **Job Finder** — [`Agents/Subagents/job-finder/job-finder.md`](./Agents/Subagents/job-finder/job-finder.md) (only if you ask for a job search)
 - **Subagents** — [`Agents/Subagents/subagents.md`](./Agents/Subagents/subagents.md) · [using them](./Agents/Subagents/README.md#using-the-agents-users)
+- **Help** — prompt `HELP` or `/help` · [`Agents/Skills/help-getter/README.md`](./Agents/Skills/help-getter/README.md)
+- **Global config** — [`Agents/Settings/README.md`](./Agents/Settings/README.md). Prompt `CHANGE CODE SETTINGS` for the test default.
 - **Coding standards** — core + optional Vue split
 
 After editing `Agents/Subagents/`:
@@ -236,8 +277,10 @@ This repo is **policy + Cursor glue**, not an application. Each folder has a REA
 
 | Level                                                       | README                                                                                                                                                                                                                                                                                            |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Hub clone (this file)                                       | Install, pointers, memory path                                                                                                                                                                                                                                                                    |
+| Hub clone (this file)                                       | Install, pointers, [global config](#global-config), [help](#help)                                                                                                                                                                                                                                |
 | [`Agents/`](./Agents/README.md)                             | Canonical agent policy                                                                                                                                                                                                                                                                            |
+| [`Agents/Settings/`](./Agents/Settings/README.md)           | Global `CONFIG.md`: test default, memory path, memory line cap                                                                                                                                                                                                                                   |
+| [`Agents/Skills/help-getter/`](./Agents/Skills/help-getter/README.md) | `HELP` and `/help` menu                                                                                                                                                                                                                                                                           |
 | [`Agents/Subagents/`](./Agents/Subagents/README.md)         | Specialist specs ([how to use each agent](./Agents/Subagents/README.md#using-the-agents-users); [attach a skill](./Agents/Subagents/README.md#attach-a-skill-to-a-specialist)). Copy `user-config.example.md` to `user-config.md` in a specialist folder for machine-only overrides (gitignored). |
 | [`Agents/Memory/`](./Agents/Memory/README.md)               | Session contract for `MEMORY.md`. No local override file                                                                                                                                                                                                                                          |
 | [`Agents/Skills/`](./Agents/Skills/README.md)               | Load-on-demand skills ([how to run one](./Agents/Skills/README.md#activate-a-skill-independently-users)). Copy `user-config.example.md` to `user-config.md` in a skill folder for machine-only overrides (gitignored).                                                                            |
@@ -247,7 +290,7 @@ This repo is **policy + Cursor glue**, not an application. Each folder has a REA
 | [`.cursor/`](./.cursor/README.md)                           | Generated Cursor agents, rules, hooks                                                                                                                                                                                                                                                             |
 | [`.githooks/`](./.githooks/README.md)                       | Hub-only git `post-merge`                                                                                                                                                                                                                                                                         |
 
-**Do not** put hub policy in app repos (pointer `AGENTS.md` only). **Do not** commit `MEMORY.md`, `Agents/Setup/hub-setup.local.md`, `Agents/Rules/**/user-config.md`, `Agents/Skills/**/user-config.md`, or `Agents/Subagents/**/user-config.md`. After editing `Agents/Subagents/`, regen Cursor agents ([Highlights](#highlights)). In **this** git root, parent agents must not run `git`/`gh` — Git Coordinator only.
+**Do not** put hub policy in app repos (pointer `AGENTS.md` only). **Do not** commit `MEMORY.md`, `Agents/Settings/CONFIG.md`, `Agents/Setup/hub-setup.local.md`, `Agents/Rules/**/user-config.md`, `Agents/Skills/**/user-config.md`, or `Agents/Subagents/**/user-config.md`. After editing `Agents/Subagents/`, regen Cursor agents ([Highlights](#highlights)). In **this** git root, parent agents must not run `git`/`gh` — Git Coordinator only.
 
 ## Forking
 

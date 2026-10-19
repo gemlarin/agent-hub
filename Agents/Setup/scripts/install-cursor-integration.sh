@@ -29,6 +29,10 @@ echo "Installing Cursor integration from hub root: $ROOT"
 cd "$ROOT"
 
 chmod +x "$SCRIPTS/sync-cursor-agents.sh" "$SCRIPTS/detect-cursor-env.sh" 2>/dev/null || true
+if [[ -x "$SCRIPTS/sync-cursor-skills.sh" ]]; then
+  "$SCRIPTS/sync-cursor-skills.sh"
+fi
+
 if ! "$SCRIPTS/sync-cursor-agents.sh"; then
   echo "Warning: could not sync .cursor/agents (need Python 3.8+: python3, python, or py -3)."
   echo ".cursor/agents/ from this clone is still used."

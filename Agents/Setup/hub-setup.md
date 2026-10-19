@@ -12,7 +12,7 @@ The hub is **not Cursor-only**. Any agent that can read `Agents/AGENTS.md` can f
 |--------|-----------|-----|
 | **Agent hub** (rules, subagents, skills) | `Agents/` — `AGENTS.md`, `Skills/`, `Setup/` | This clone (work folder is the hub root, or a standalone `agent-hub` folder) |
 | **App repos** | Separate folders; each has a pointer to `Agents/AGENTS.md` | Each has its own remote |
-| **Memory** | Path in `hub-setup.local.md` (Drive-synced or local `MEMORY.md`) | Never commit `MEMORY.md` |
+| **Memory** | Path and line cap in `Agents/Settings/CONFIG.md` | Never commit `MEMORY.md` or `CONFIG.md` |
 | **Your remotes/paths** | `Agents/Setup/hub-setup.local.md` | Gitignored; seeded by bootstrap |
 | **Cursor integration** (optional) | **Hub git root** `.cursor/` (not under `Agents/`) | `.cursor/` committed; User Rules are account-local |
 | **Hub git hooks** | **Hub git root** `.githooks/` (`core.hooksPath`) | Hub repo only |
@@ -62,7 +62,7 @@ Already a clone: `cd` to the hub root, `git pull`, then `setup.sh` / `setup.cmd`
 ### After bootstrap (not automated)
 
 - Point app repos at hub [`Agents/AGENTS.md`](../AGENTS.md) with a relative path from the app (this layout: `../Agents/AGENTS.md` or `../../Agents/AGENTS.md`). See [README.md](../../README.md#point-app-repos-at-the-hub).
-- Set **MEMORY.md path** in [hub-setup.local.md](./hub-setup.local.md) (cloud or local). See [memory.md](../Memory/memory.md) and [README — Persistent memory](../../README.md#persistent-memory).
+- Set **MEMORY.md path**, **Memory max lines**, and **Test default** in [CONFIG.md](../Settings/CONFIG.md). Setup writes that file. See [memory.md](../Memory/memory.md) and [README — Persistent memory](../../README.md#persistent-memory). Change the test default later by prompting `CHANGE CODE SETTINGS`.
 - **Cursor:** paste [cursor-user-rules.md](./cursor-user-rules.md) **only if** default git User Rules tell the parent to run `git`. Then reload Cursor.
 
 ---
@@ -129,7 +129,7 @@ Expect `"permission":"deny"` with no marker, `"allow"` after a git-coordinator s
 |---------|--------|
 | `git pull` wants to add app folders | Work folder is the hub root; sparse `.gitignore` should ignore sibling apps. |
 | App can’t find `AGENTS.md` | Pointer must be the relative path from the **app root** to this clone’s `Agents/AGENTS.md`. |
-| Memory path unset / placeholder | Edit **MEMORY.md path** in `Agents/Setup/hub-setup.local.md`. Cloud-synced or local file; never commit it. |
+| Memory path unset / placeholder | Edit **MEMORY.md path** in `Agents/Settings/CONFIG.md`. Cloud-synced or local file; never commit it. |
 | Cloned into `<work>/agent-hub/` | For the work-folder-as-root layout: move or reclone so the **work folder** is the hub root. Or keep the standalone clone and fix app pointers. |
 | Non-Cursor IDE | Skip Cursor User Rules; hub still works via the `AGENTS.md` pointer. |
 | Cursor missing `git-coordinator` in the **hub** | `install-cursor-integration.sh --force`; reload IDE. |

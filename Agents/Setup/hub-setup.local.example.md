@@ -18,6 +18,8 @@ Edit the fields below. Same headings and keys as `hub-setup.local.md`.
 
 ## Persistent memory
 
+Agent-facing path and line cap live in `Agents/Settings/CONFIG.md`. Setup keeps this bullet in sync.
+
 - **MEMORY.md path:** `/absolute/path/to/MEMORY.md`
 
 ## Accounts & defaults

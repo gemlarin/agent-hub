@@ -381,7 +381,7 @@ fi
 
 echo ""
 echo "Next (not automated):"
-echo "  - Persistent memory: set MEMORY.md path in Agents/Setup/hub-setup.local.md (cloud or local) — Agents/Memory/memory.md"
+echo "  - Settings: Agents/Settings/CONFIG.md (test default, MEMORY.md path, memory max lines). Change the test default by prompting CHANGE CODE SETTINGS."
 if $NO_LINK; then
   echo "  - App repos: pointer AGENTS.md at the app root → ../Agents/AGENTS.md or ../../Agents/AGENTS.md"
 fi

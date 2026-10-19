@@ -14,7 +14,7 @@ On-demand rules for **token-efficient orchestration**. Subagent caps: [subagents
 
 ## Memory
 
-- Resolve the path from `Setup/hub-setup.local.md`, then read that `MEMORY.md` **once** at session start ([memory.md](../../Memory/memory.md)). Keep the file **lean** (target ≤80 lines) so that read stays cheap.
+- Resolve **MEMORY.md path** and **Memory max lines** from `Settings/CONFIG.md`, then read that `MEMORY.md` **once** at session start ([memory.md](../../Memory/memory.md)). Pass both values on a memory write. The steward prunes to the configured line cap.
 - **Do not** re-read unless the user says memory changed on another device or after Memory Steward writes.
 - **Do not** paste the full file into chat; use short paraphrases.
 - **Auto-write** viable durable facts mid-session in the **background** (`mem-save` + `memory_path`). Do not block this chat on Drive I/O. Print `Durable memory saved to MEMORY file` when SUCCESS arrives. Show [option ids](../../Skills/memory-management/options.md) only on explicit save or session wrap-up ([memory.md](../../Memory/memory.md#auto-save-vs-option-menu)).

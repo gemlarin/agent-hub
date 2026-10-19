@@ -8,7 +8,9 @@ Shared file: [`memory.md`](./memory.md).
 
 Who reads `MEMORY.md`, who writes it, and how the main agent passes a slice to other specialists.
 
-The file path is in gitignored [`../Setup/hub-setup.local.md`](../Setup/hub-setup.local.md). Write steps are in [`../Skills/memory-management/`](../Skills/memory-management/). When to call Memory Steward is in [`../Subagents/subagents.md`](../Subagents/subagents.md).
+The file path and line cap are in gitignored [`../Settings/CONFIG.md`](../Settings/CONFIG.md). Change either one from `HELP` → Memory Information ([help-getter](../Skills/help-getter/README.md)). Do not hardcode the path or the cap in this folder.
+
+Write steps are in [`../Skills/memory-management/`](../Skills/memory-management/). When to call Memory Steward is in [`../Subagents/subagents.md`](../Subagents/subagents.md). How the shared file is laid out: [`../Settings/README.md`](../Settings/README.md).
 
 ## Contribute
 

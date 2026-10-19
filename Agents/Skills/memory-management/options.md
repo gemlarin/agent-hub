@@ -21,4 +21,4 @@ After **any** successful write (auto or user-chosen), the parent prints exactly:
 
 `Durable memory saved to MEMORY file`
 
-Keep `MEMORY.md` lean (target ≤80 lines). Memory Steward writes. Never commit `MEMORY.md`. Never dump the full file into chat. Capture rules: [`SKILL.md`](./SKILL.md).
+Keep `MEMORY.md` within **Memory max lines** in `Agents/Settings/CONFIG.md`. Memory Steward writes. Never commit `MEMORY.md`. Never dump the full file into chat. Capture rules: [`SKILL.md`](./SKILL.md).

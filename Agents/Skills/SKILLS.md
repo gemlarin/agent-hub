@@ -37,4 +37,10 @@ When a task matches a skill's description, load and follow its instructions. Aft
 - **Orchestration:** [Code Sweeper](../Subagents/code-sweeper/code-sweeper.md) in [`subagents.md`](../Subagents/subagents.md)
 - **When to use:** Loaded by **Code Sweeper** when the user asks for a code sweep (or names that subagent) or a `tasks.md` sweep item is due. Parent must not run a multi-topic sweep itself. Not Code Reviewer (git diffs).
 
+### 6. `help-getter` (`./help-getter/`)
+
+- **Skill file:** [`./help-getter/SKILL.md`](./help-getter/SKILL.md)
+- **User options:** [`options.md`](./help-getter/options.md) (`Display Configuration`, `List Agents`, `List Skills`, `Memory Information`, `Cancel`)
+- **When to use:** The prompt is `HELP` by itself, or the user invokes `/help`. The main agent runs it. Not a subagent.
+
 ---

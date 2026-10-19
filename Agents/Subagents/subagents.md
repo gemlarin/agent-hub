@@ -97,13 +97,13 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 
 ### Memory Steward (`./memory-steward/memory-steward.md`)
 
-**Role:** **Write only** to the `MEMORY.md` path in gitignored `Setup/hub-setup.local.md` (see [Memory rules](../Memory/memory.md)) using the [memory-management](../Skills/memory-management/SKILL.md) skill. Returns a **Memory Report**. Keeps the file **lean** (target ≤80 lines). Session context comes from the **main agent’s** session-start read—do not use this subagent to load memory at session start.
+**Role:** **Write only** to the `MEMORY.md` path in gitignored `Settings/CONFIG.md` (see [Memory rules](../Memory/memory.md)) using the [memory-management](../Skills/memory-management/SKILL.md) skill. Returns a **Memory Report**. Prunes the file to **Memory max lines**. Session context comes from the **main agent’s** session-start read—do not use this subagent to load memory at session start.
 
 - **When to Trigger:**
   - **Viable fact (auto):** Parent judged a standing preference, durable decision, workaround, blocker, or lasting goal is worth storing. Invoke immediately with `option: mem-save` — **do not** show the option menu.
   - **Session ending / explicit save:** User input means they are done, or they said “remember” / “update memory” / “save session”. **Show** [memory option ids](../Skills/memory-management/options.md) first; invoke only after they pick (not on `mem-skip`).
 - **Do not trigger** to bootstrap the session or to let another specialist read memory.
-- **Invocation Parameters:** `mode: write`, **option** id (`mem-save` on autosave), **memory_path** (absolute, from this session’s hub-setup resolve), **memory delta** (bullets; empty on `mem-prune`), optional one-paragraph session summary (not stored as-is). Parent must not ask the steward to change non-memory files. Launch **in the background**. Do not poll.
+- **Invocation Parameters:** `mode: write`, **option** id (`mem-save` on autosave), **memory_path** (absolute, from this session’s `CONFIG.md` resolve), **memory_max_lines** (from that same file), **memory delta** (bullets; empty on `mem-prune`), optional one-paragraph session summary (not stored as-is). Parent must not ask the steward to change non-memory files. Launch **in the background**. Do not poll.
 - **Handling Results:** Trust the Memory Report; do not re-read `MEMORY.md` unless the user says the file changed on another device or you need the new bullets for later `related_memory`. After SUCCESS with a real change, print exactly: `Durable memory saved to MEMORY file`
 
 ---
@@ -147,6 +147,6 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 - **Trigger matrix:** When a section above matches, delegate—do not do that work in the parent.
 - **Durable memory:** Specialists other than Memory Steward **do not** read `MEMORY.md`. Parent passes a task-relevant `related_memory` slice only ([memory.md](../Memory/memory.md#passing-memory-to-subagents)).
 - **Read-Only default:** Research Scout, Code Reviewer, Code Sweeper, and Web Researcher do not edit the codebase. Reviewer uses coordinator diff text or `read_file`—not `git`. Sweeper greps named paths only.
-- **Write exceptions:** Memory Steward → configured `MEMORY.md` only. Git Coordinator → `git`/`gh`; file edits only per [git-merge](../Skills/git-merge/SKILL.md) after user approves a merge plan. Job Finder → Desktop result files only (never the hub repo). Hub Installer → `hub-setup.local.md`, a `MEMORY.md` outside the clone, and pointer `AGENTS.md` files in app folders the user named. It runs `setup.sh` only (no direct `git`/`gh`).
+- **Write exceptions:** Memory Steward → configured `MEMORY.md` only. Git Coordinator → `git`/`gh`; file edits only per [git-merge](../Skills/git-merge/SKILL.md) after user approves a merge plan. Job Finder → Desktop result files only (never the hub repo). Hub Installer → `hub-setup.local.md`, `Settings/CONFIG.md`, a `MEMORY.md` outside the clone, and pointer `AGENTS.md` files in app folders the user named. It runs `setup.sh` only (no direct `git`/`gh`).
 - **No Raw Log Dumping:** Never attempt to re-read raw logs, multi-hundred-line source code, or uncompressed search outputs that a subagent has already processed.
 - **Report cap:** Same **≤80 lines** default for every specialist (see Execution & Synthesis).

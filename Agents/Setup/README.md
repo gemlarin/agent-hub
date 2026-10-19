@@ -6,11 +6,14 @@ Install, sync, and optional **Cursor** integration. Hub overview: [../../README.
 |---------------|---------|
 | [hub-setup.md](./hub-setup.md) | Layout, bootstrap, Cursor regen, troubleshooting |
 | [scripts/](./scripts/) | First-run and sync scripts — [how to contribute](./scripts/README.md) |
-| [hub-setup.local.example.md](./hub-setup.local.example.md) | Template → `hub-setup.local.md` (gitignored; remotes, paths, **MEMORY.md path**) |
+| [hub-setup.local.example.md](./hub-setup.local.example.md) | Template → `hub-setup.local.md` (gitignored; git remote, hub folder, GitHub username) |
+| [../Settings/README.md](../Settings/README.md) | Global `CONFIG.md`. Setup writes the test default, memory path, and memory line cap here. |
 | [cursor-user-rules.md](./cursor-user-rules.md) | Paste into Cursor **User Rules** only if default git User Rules tell the parent to run git |
 | [cursor-agents.json](./cursor-agents.json) | Manifest for generating `.cursor/agents/` from `Agents/Subagents/` |
 
 **Quick command (hub root):** `./Agents/Setup/scripts/setup.sh` (Windows: `Agents\Setup\scripts\setup.cmd`). That detects the OS, asks the remaining questions, and runs bootstrap. In Cursor: say **set up the hub**.
+
+Setup asks where `MEMORY.md` lives, how many lines it may hold, and which checks to run after an update (`UNIT`, `BROWSER`, `BOTH`, or `NONE`). It writes those to `Agents/Settings/CONFIG.md`. Change the test default later by prompting `CHANGE CODE SETTINGS`. View or edit memory settings from `HELP`. See [Settings](../Settings/README.md) and [help-getter](../Skills/help-getter/README.md).
 
 ## Design
 

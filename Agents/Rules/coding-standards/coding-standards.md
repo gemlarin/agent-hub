@@ -8,6 +8,10 @@ Shared rules for any stack. **Vue greenfield** (layout, Tailwind, Vue 3, new-app
 
 **New apps:** Pointer `AGENTS.md` at the project root → relative path to this clone’s `Agents/AGENTS.md`. Do not symlink this file as `AGENTS.md`. See [README.md](../../../README.md#point-app-repos-at-the-hub).
 
+## Tests after an update
+
+Read **Test default** in [`Agents/Settings/CONFIG.md`](../../Settings/CONFIG.md). After a code or UI update, run that default: `UNIT`, `BROWSER`, `BOTH`, or `NONE`. A request that asks for a unit test or a browser test overrides the default for that request only. The user changes the stored default by prompting `CHANGE CODE SETTINGS`.
+
 ## Spec-driven tasks
 
 Light spec workflow for **new tasks** (features, refactors with a clear goal, interview drills, etc.). Skip for tiny one-liners the user already specified fully.

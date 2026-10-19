@@ -6,15 +6,16 @@ Put it in **cloud storage** (Google Drive, iCloud, Dropbox, …) so machines sha
 
 ## Configure the path
 
-The Memory Steward and the main agent read the absolute path from gitignored [`Setup/hub-setup.local.md`](../Setup/hub-setup.local.md):
+The Memory Steward and the main agent read the path and the line cap from gitignored [`Settings/CONFIG.md`](../Settings/CONFIG.md):
 
 ```markdown
-## Persistent memory
+## Memory
 
 - **MEMORY.md path:** `/absolute/path/to/MEMORY.md`
+- **Memory max lines:** `80`
 ```
 
-Bootstrap seeds that file from [`Setup/hub-setup.local.example.md`](../Setup/hub-setup.local.example.md). Edit the path on each machine. If the field is missing or still the placeholder, stop and ask the user to set it.
+Setup writes that file from [`Settings/CONFIG.example.md`](../Settings/CONFIG.example.md). If the path is missing or still the placeholder, stop and ask the user to set it (`HELP` → Memory Information, or setup). If `CONFIG.md` has no path yet, `Setup/hub-setup.local.md` may still have **MEMORY.md path** from an older install. Prefer `CONFIG.md` when both are set.
 
 Typical locations:
 
@@ -30,7 +31,7 @@ Typical locations:
 
 | Actor | Responsibility |
 |--------|----------------|
-| **Main agent** | **Only** loader of session context. Read `hub-setup.local.md` for the path, then read that `MEMORY.md` **once** at **session start**. Apply context; do not re-read unless the user says the file changed or after Memory Steward writes. |
+| **Main agent** | **Only** loader of session context. Read `Settings/CONFIG.md` for the path and **Memory max lines**, then read that `MEMORY.md` **once** at **session start**. Apply context; do not re-read unless the user says the file changed or after Memory Steward writes. |
 | **Memory Steward** | **Write only** to that same path. May read the file internally to merge, dedupe, and prune—never to bootstrap the parent or another specialist. |
 | **Every other subagent** | **Do not** read `MEMORY.md` or `hub-setup.local.md` for memory. Use only `related_memory` bullets the parent put in the task prompt (may be empty). |
 
@@ -40,7 +41,7 @@ Do **not** invoke Memory Steward with `mode: read` to load session context (avoi
 
 `MEMORY.md` is loaded by every new main-agent session. Keep it short so it does not burn tokens.
 
-- **Target:** ≤80 lines. **Hard cap:** 120 lines (~40 one-line bullets).
+- **Cap:** **Memory max lines** in `Settings/CONFIG.md`. Memory Steward always uses that number. If a write would pass it, prune lowest-value entries first until the file fits.
 - One fact per bullet. No paragraphs, logs, diffs, or file dumps.
 - Overwrite or drop stale bullets; do not append duplicates.
 - Drop resolved blockers, finished one-off goals, and superseded preferences on every write.
@@ -50,7 +51,7 @@ Do **not** invoke Memory Steward with `mode: read` to load session context (avoi
 
 ### Viable fact (during the session)
 
-As soon as the parent judges a fact meets the skill’s capture rules (standing preference, durable decision, hard-won workaround, open blocker, lasting goal)—and it is not already in memory—**auto-write**. Invoke Memory Steward **in the background** with `mode: write`, `option: mem-save`, **`memory_path`**, and the delta. Do **not** show option ids. Do **not** wait in the foreground (Drive `MEMORY.md` can stall this chat). Batch several facts from the same turn into one write.
+As soon as the parent judges a fact meets the skill’s capture rules (standing preference, durable decision, hard-won workaround, open blocker, lasting goal)—and it is not already in memory—**auto-write**. Invoke Memory Steward **in the background** with `mode: write`, `option: mem-save`, **`memory_path`**, **`memory_max_lines`**, and the delta. Do **not** show option ids. Do **not** wait in the foreground (Drive `MEMORY.md` can stall this chat). Batch several facts from the same turn into one write.
 
 When the Memory Report arrives with a real change, print exactly:
 
@@ -79,9 +80,9 @@ Main agent should follow the same capture/discard boundaries when deciding *what
 
 ## Main agent responsibilities
 
-1. **Session start:** Resolve the path from `hub-setup.local.md`, then read that `MEMORY.md` before planning work.
+1. **Session start:** Resolve the path and **Memory max lines** from `Settings/CONFIG.md`, then read that `MEMORY.md` before planning work.
 2. **During work:** Use memory as context; do not paste the full file into chat.
-3. **Mid-session:** Auto-write viable durable facts in the **background** (`mem-save` + `memory_path`); print `Durable memory saved to MEMORY file` when the report arrives.
+3. **Mid-session:** Auto-write viable durable facts in the **background** (`mem-save` + `memory_path` + `memory_max_lines`); print `Durable memory saved to MEMORY file` when the report arrives.
 4. **Persistence:** Delegate **all writes** to Memory Steward (`mode: write`); never edit `MEMORY.md` during feature work.
 5. **Subagents:** Pass **`related_memory`** — only the bullets that apply to **this** task. Never the full file. Never tell a specialist to open `MEMORY.md`.
 6. **Menu:** Show option ids only on “remember” / “save session” / wrap-up. After a successful write, print the same save line.

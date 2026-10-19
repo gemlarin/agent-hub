@@ -22,6 +22,9 @@
 # Per-machine hub remotes & accounts (template: Agents/Setup/hub-setup.local.example.md)
 /Agents/Setup/hub-setup.local.md
 
+# Per-machine agent settings (template: Agents/Settings/CONFIG.example.md)
+/Agents/Settings/CONFIG.md
+
 # Personal job-board list (template: Agents/Skills/job-search/boards.local.example.md)
 /Agents/Skills/job-search/boards.local.md
 
