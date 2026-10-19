@@ -88,7 +88,7 @@ When the user says **`git add`**, or **`git commit`** while the index is empty:
 
 1. Read-only snapshot. Return **`Git Report: AWAIT_ADD`**.
 2. List each modified and untracked file with a one-line summary of what changed.
-3. Ask them to approve all or name the files to add. Options: **`git add all`**, or reply with the paths.
+3. Ask them to approve all or name the files to add. Options: **`git add all`**, or reply with the paths. A sentence that describes the work ("commit those changes", "commit the pointer updates") is not approval. Stage only after **`git add all`** or explicit paths.
 4. **`git add all`:** stage that set, excluding secrets.
 5. **Named paths:** stage only those.
 6. If this add was started by **`git commit`**, go on to the message choice. If it was started by **`git push`**, stage the chosen files, then the message choice, then commit and push. If they only said **`git add`**, stop after staging and report what is staged. Do not commit.
