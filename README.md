@@ -182,15 +182,34 @@ Never commit `MEMORY.md`. Prefer a path **outside** this clone. Keep the file **
 
 ## Layout
 
-| Path                                     | Purpose                                                                                                                                                    |
-| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`Agents/AGENTS.md`](./Agents/AGENTS.md) | Entry point for agents (on-demand module table)                                                                                                            |
-| [`Agents/`](./Agents/)                   | Subagents, **[Rules/](./Agents/Rules/)**, memory, **[Setup/](./Agents/Setup/)**, **[Skills/](./Agents/Skills/)** — [how to contribute](./Agents/README.md) |
-| [`.cursor/`](./.cursor/)                 | Cursor agents, rules, hooks — **hub workspace root only** — [how to contribute](./.cursor/README.md)                                                       |
-| [`.githooks/`](./.githooks/)             | Hub-repo git hooks (post-merge regen); not inherited by apps — [how to contribute](./.githooks/README.md)                                                  |
-| App folders                              | Separate git repos. Siblings of `Agents/` when the work folder is the hub root; otherwise next to the `agent-hub/` clone                                   |
+```text
+Agents/
+├── AGENTS.md              Load table. Agents start here.
+├── Memory/                Who reads and writes MEMORY.md. No local override file.
+├── Rules/<name>/          One shared standard, a contribute README, user-config.example.md
+├── Skills/<name>/         One procedure, a contribute README, user-config.example.md
+├── Subagents/
+│   ├── subagents.md       When the parent must hand work to a specialist
+│   └── <name>/            That specialist's spec, README, and user-config.example.md
+└── Setup/                 Installer. hub-setup.local.md stays on this machine.
+.cursor/                   Cursor Task types, rules, and hooks. This clone only.
+.githooks/                 Hub git hooks. App repos do not use them.
+```
 
-**Memory:** path in gitignored `Agents/Setup/hub-setup.local.md` — [`Agents/Memory/memory.md`](./Agents/Memory/memory.md).
+App folders sit beside `Agents/` when this work folder is the hub root. If the clone is `agent-hub/` inside the work folder, apps sit beside that clone.
+
+| Path | Purpose |
+| --- | --- |
+| [`Agents/AGENTS.md`](./Agents/AGENTS.md) | Entry point. Opens the other files only when a row applies. |
+| [`Agents/Memory/`](./Agents/Memory/README.md) | Session contract for `MEMORY.md`. The path itself is in gitignored [`Agents/Setup/hub-setup.local.md`](./Agents/Setup/hub-setup.local.md). |
+| [`Agents/Rules/`](./Agents/Rules/README.md) | Coding, Vue, tone, and context standards. Each rule is its own folder. |
+| [`Agents/Skills/`](./Agents/Skills/README.md) | Procedures specialists load (`git-merge`, `job-search`, `code-sweep`, and the others). |
+| [`Agents/Subagents/`](./Agents/Subagents/README.md) | One folder per specialist, plus [`subagents.md`](./Agents/Subagents/subagents.md). [How a specialist loads a skill](./Agents/Subagents/README.md#attach-a-skill-to-a-specialist). |
+| [`Agents/Setup/`](./Agents/Setup/README.md) | `setup.sh` / `setup.cmd`, Cursor sync, and the local config template. |
+| [`.cursor/`](./.cursor/README.md) | Generated Cursor agents and the git-delegation rule. Hub workspace root only. |
+| [`.githooks/`](./.githooks/README.md) | Hub-repo git hooks. Not inherited by apps. |
+
+Copy `user-config.example.md` to `user-config.md` in a Rules, Skills, or Subagents folder to extend that file on this machine. `user-config.md` is gitignored. `Agents/Memory/` has no override file. [How to contribute](./Agents/README.md).
 
 ---
 
