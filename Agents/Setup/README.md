@@ -23,6 +23,10 @@ This folder is **machine and Cursor wiring**, not agent policy. Policy stays in 
 - **`hub-setup.local.example.md`** — same field skeleton as gitignored `hub-setup.local.md` (placeholders only).
 - **`cursor-agents.json`** — maps spec filenames → Cursor Task names.
 
+## Still to do
+
+- [x] Replace the Cursor User Rules already pasted on this account with [cursor-user-rules.md](./cursor-user-rules.md). The parent does not open `subagents.md` or `git-coordinator.md`. The Task prompt tells the specialist to read its own spec and `user-config.md`.
+
 ## Contribute
 
 1. Keep the example’s **headings and keys** in lockstep with `hub-setup.local.md` (placeholders, not real paths or emails).

@@ -2,22 +2,24 @@
 
 **Canonical specs** for hub specialists. Cursor Task types in [`.cursor/agents/`](../../.cursor/agents/) are **generated** from these files — do not treat the generated copies as source.
 
-Orchestration (when the **parent agent** must delegate): [`./subagents.md`](./subagents.md).
+The parent does not open a specialist spec or [`subagents.md`](./subagents.md) to delegate. The Task prompt tells the specialist to read its own spec and `user-config.md`. [`subagents.md`](./subagents.md) is the contributor trigger matrix.
 
 ## Using the agents (users)
 
+[Discover what Agent-hub can do for you.](https://gemlarin.github.io/blog/load-the-ai-rule-not-the-library)
+
 You talk to the **main agent** in chat. It should spawn a specialist only when the trigger matches. You can also name the specialist yourself.
 
-| Specialist | Cursor type | Say something like | Do **not** expect it for |
-|------------|-------------|--------------------|---------------------------|
-| **Git Coordinator** | `git-coordinator` | “Commit and push”, “open a PR” (in **this** hub repo) | Coding, job search |
-| **Memory Steward** | `memory-steward` | Mid-session autosave, “remember this”, wrap-up options | Reading memory at session start (the main agent does that); other specialists must not open `MEMORY.md` |
-| **Research Scout** | `research-scout` | “Dig through the docs/codebase for …” then pick a [follow-up](../Skills/research/options.md) | A quick web fact (use Web Researcher) |
-| **Code Reviewer** | `code-reviewer` | “Review this change”, “security pass on the diff” | Writing the feature; topic code sweep |
-| **Code Sweeper** | `code-sweeper` | “Code sweep”, “sweep a11y/types” | Git-diff review (use Code Reviewer); writing the feature |
-| **Web Researcher** | `web-researcher` | “Look up the current API for …” | Job boards (use Job Finder) |
-| **Job Finder** | `job-finder` | “Help me find jobs”, “search Indeed”, “use Job Finder” | Coding, git, docs, or a random web lookup |
-| **Hub Installer** | `hub-installer` | “Set up the hub”, “run setup” | Everyday coding, commits, job search |
+| Specialist          | Cursor type       | Say something like                                                                           | Do **not** expect it for                                                                                |
+| ------------------- | ----------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| **Git Coordinator** | `git-coordinator` | “Commit and push”, “open a PR” (in **this** hub repo)                                        | Coding, job search                                                                                      |
+| **Memory Steward**  | `memory-steward`  | Mid-session autosave, “remember this”, wrap-up options                                       | Reading memory at session start (the main agent does that); other specialists must not open `MEMORY.md` |
+| **Research Scout**  | `research-scout`  | “Dig through the docs/codebase for …” then pick a [follow-up](../Skills/research/options.md) | A quick web fact (use Web Researcher)                                                                   |
+| **Code Reviewer**   | `code-reviewer`   | “Review this change”, “security pass on the diff”                                            | Writing the feature; topic code sweep                                                                   |
+| **Code Sweeper**    | `code-sweeper`    | “Code sweep”, “sweep a11y/types”                                                             | Git-diff review (use Code Reviewer); writing the feature                                                |
+| **Web Researcher**  | `web-researcher`  | “Look up the current API for …”                                                              | Job boards (use Job Finder)                                                                             |
+| **Job Finder**      | `job-finder`      | “Help me find jobs”, “search Indeed”, “use Job Finder”                                       | Coding, git, docs, or a random web lookup                                                               |
+| **Hub Installer**   | `hub-installer`   | “Set up the hub”, “run setup”                                                                | Everyday coding, commits, job search                                                                    |
 
 **Job Finder only** runs if you ask for a job search or name it. The main agent must not start a job hunt on its own.
 
@@ -66,16 +68,16 @@ Example: `cite` + `out-md`. The main agent re-invokes Research Scout for the tas
 
 Each specialist is its own folder: the spec, a contribute README, and a gitignored `user-config.md`. The spec has YAML frontmatter (`name`, `description`, `tools`) plus the body the specialist follows. [`subagents.md`](./subagents.md) is the trigger matrix. It stays in this folder.
 
-| Spec | Cursor `name` in [`../Setup/cursor-agents.json`](../Setup/cursor-agents.json) |
-|------|----------------|
-| [`git-coordinator.md`](./git-coordinator/git-coordinator.md) | `git-coordinator` |
-| [`memory-steward.md`](./memory-steward/memory-steward.md) | `memory-steward` |
-| [`code-reviewer.md`](./code-reviewer/code-reviewer.md) | `code-reviewer` |
-| [`web-researcher.md`](./web-researcher/web-researcher.md) | `web-researcher` |
-| [`research-scout.md`](./research-scout/research-scout.md) | `research-scout` |
-| [`code-sweeper.md`](./code-sweeper/code-sweeper.md) | `code-sweeper` |
-| [`job-finder.md`](./job-finder/job-finder.md) | `job-finder` |
-| [`hub-installer.md`](./hub-installer/hub-installer.md) | `hub-installer` |
+| Spec                                                         | Cursor `name` in [`../Setup/cursor-agents.json`](../Setup/cursor-agents.json) |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| [`git-coordinator.md`](./git-coordinator/git-coordinator.md) | `git-coordinator`                                                             |
+| [`memory-steward.md`](./memory-steward/memory-steward.md)    | `memory-steward`                                                              |
+| [`code-reviewer.md`](./code-reviewer/code-reviewer.md)       | `code-reviewer`                                                               |
+| [`web-researcher.md`](./web-researcher/web-researcher.md)    | `web-researcher`                                                              |
+| [`research-scout.md`](./research-scout/research-scout.md)    | `research-scout`                                                              |
+| [`code-sweeper.md`](./code-sweeper/code-sweeper.md)          | `code-sweeper`                                                                |
+| [`job-finder.md`](./job-finder/job-finder.md)                | `job-finder`                                                                  |
+| [`hub-installer.md`](./hub-installer/hub-installer.md)       | `hub-installer`                                                               |
 
 Writable (`readonly: false`): Git Coordinator, Memory Steward, Job Finder (Desktop files only), Hub Installer (setup files and app pointers you named). The others are read-only (including Code Sweeper).
 
@@ -91,13 +93,13 @@ When `user-config.md` exists, read it **after** the spec. **Additions** extend t
 
 A skill is the procedure. The specialist is who runs it. The parent does not run that procedure itself.
 
-| Specialist | Skill |
-|------------|--------|
+| Specialist      | Skill                                                                               |
+| --------------- | ----------------------------------------------------------------------------------- |
 | Git Coordinator | [`git-merge`](../Skills/git-merge/SKILL.md) for merge, rebase, and cherry-pick only |
-| Memory Steward | [`memory-management`](../Skills/memory-management/SKILL.md) |
-| Research Scout | [`research`](../Skills/research/SKILL.md) |
-| Code Sweeper | [`code-sweep`](../Skills/code-sweep/SKILL.md) |
-| Job Finder | [`job-search`](../Skills/job-search/SKILL.md) |
+| Memory Steward  | [`memory-management`](../Skills/memory-management/SKILL.md)                         |
+| Research Scout  | [`research`](../Skills/research/SKILL.md)                                           |
+| Code Sweeper    | [`code-sweep`](../Skills/code-sweep/SKILL.md)                                       |
+| Job Finder      | [`job-search`](../Skills/job-search/SKILL.md)                                       |
 
 Code Reviewer, Web Researcher, and Hub Installer have no skill. Their steps stay in the spec.
 
@@ -134,6 +136,7 @@ Two local files stay separate. `Subagents/<name>/user-config.md` extends the spe
    ```
 
    (`sync-cursor-agents.sh` / `sync_cursor_agents.py` is enough if you only need `.cursor/agents/`.)
+
 4. Commit **spec + generated** `.cursor/agents/` together.
 5. Do not put hub policy that belongs in `AGENTS.md` or a skill into a subagent body unless that specialist must follow it.
 6. Do not commit `user-config.md`. Gitignore is already `Agents/Subagents/**/user-config.md`.

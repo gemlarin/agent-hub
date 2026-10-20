@@ -30,7 +30,7 @@ You are the **parent agent**.
 - **Agent-hub git root** (folder with hub `Agents/AGENTS.md` / `.cursor/hooks/`): do **not** run `git` or `gh`. Delegate to **git-coordinator** (`subagent_type: git-coordinator`). Pass **`repo_path`**. Relay `Yes` / `No` / `Preview`, add-before-commit **Yes** / **No**, **Custom** / **Agent generated**, and merge-menu ids as one interactive choice each. **Resume** the same coordinator agent id for those relays (do not spawn a new Task unless the last run aborted). Trust the **Git Report**; do not re-run those commands.
 - Git commands start with **`git`**. If the user says `add`, `commit`, `push`, or another git verb without `git`, offer **Yes** / **No**. **Yes** runs Git Coordinator for `git <keyword>`. **No** stops. Tell them to start with `git` next time. Do not run until they pick **Yes**.
 - **Any other git repo** (sibling app, unrelated clone, no hub hooks): you **may** run `git`/`gh` in the parent shell. Do not treat User Rules as a global git ban. The same push and merge choices apply. Do not stage unstaged files until they pick **Yes** or name the paths. Optional: use git-coordinator with `repo_path`.
-- Hub details: `Agents/AGENTS.md`, `Agents/Subagents/subagents.md`, `Agents/Subagents/git-coordinator/git-coordinator.md`.
+- Do not open `subagents.md` or `git-coordinator.md` in the parent. The Task prompt tells git-coordinator to read `Agents/Subagents/git-coordinator/git-coordinator.md` and `user-config.md` in that folder.
 
 ## When the user asks to commit
 

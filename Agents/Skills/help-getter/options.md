@@ -1,15 +1,24 @@
 # Help menu
 
-Show this list when help-getter is active. Offer it as an interactive choice when the host supports one ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Otherwise number it. The user replies with the item name or its number.
+Show this list when help-getter is active. Call the host question control first ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Number it only if that control is absent or the call fails. The user replies with the item name or its number.
 
 | Item | Result |
 |------|--------|
+| Agent behaviors | A second choice: **Reload agents**, **Recache agents**, then **Cancel** |
 | Change code settings | A second choice: **Change code test settings**, then **Cancel** |
 | Display configuration | `CONFIG.md` in a code block |
 | List agents | Installed agents, what they do, when they run |
 | List skills | Installed skills, which agent uses each, manual phrase, slash command |
 | Memory information | Memory path, data-line count, max lines, then **Set up a new memory file**, **Update the memory line limit**, and **Cancel** |
 | Cancel | Exit. Tell the user: You have exited the help context. |
+
+**Agent behaviors** choices, in this order. **Cancel** is last:
+
+| Item | Result |
+|------|--------|
+| Reload agents | Re-read the load table and any hub behavior file already opened this session. Do not walk the whole `Agents/` tree. Do not open a specialist spec this session has not already opened. Tell the user those files were read again. Then show the main menu. |
+| Recache agents | Same read as **Reload agents**. Then show the main menu. |
+| Cancel | Show the main menu again. Do not exit help. |
 
 **Change code settings** choices, in this order:
 

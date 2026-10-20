@@ -1,6 +1,6 @@
 # Research follow-up options
 
-Parent **shows this list** after a Research Brief (or when the user asks what they can do with the findings). Offer it as an interactive choice when the host supports one ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Otherwise number it. User replies with the **id**, the **prompt**, or the number. Parent re-invokes Research Scout with `task: <id>` and the prior brief (do not dump raw sources again unless the task is `deepen` or `verify`).
+Parent **shows this list** after a Research Brief (or when the user asks what they can do with the findings). Call the host question control first ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Number it only if that control is absent or the call fails. User replies with the **id**, the **prompt**, or the number. Parent re-invokes Research Scout with `task: <id>` and the prior brief (do not dump raw sources again unless the task is `deepen` or `verify`).
 
 | Id | Say this | Result |
 |----|----------|--------|

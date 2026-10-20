@@ -1,6 +1,6 @@
 # Git merge options
 
-The parent offers one interactive choice when the host supports one ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Otherwise number the list. A typed id still counts. **No default.** Do not resolve, commit, or abort until they pick.
+The parent calls the host question control first ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Number the list only if that control is absent or the call fails. A typed id still counts. **No default.** Do not resolve, commit, or abort until they pick.
 
 List every conflicted path before the first conflict menu. Git Coordinator runs git. The parent only relays the id.
 

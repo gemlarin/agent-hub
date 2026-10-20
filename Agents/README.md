@@ -2,21 +2,21 @@
 
 This folder is what **any** agent follows. Cursor extras (`.cursor/`, `.githooks/`) live at the **clone root**, not here. Hub overview for humans: [`../README.md`](../README.md).
 
-Agents enter through **[`AGENTS.md`](./AGENTS.md)** (on-demand table). They do not need this README.
+Agents enter through **[`AGENTS.md`](./AGENTS.md)** once per session, once more after a compaction summary that drops the table, and again when the user says **reload agents** or **recache agents** (on-demand table). They do not need this README.
 
 ## Design
 
-| File / folder                | Role                                                                                                                                |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [`AGENTS.md`](./AGENTS.md)   | Load table + non-negotiables                                                                                                        |
-| [`Subagents/`](./Subagents/) | When to delegate ([`subagents.md`](./Subagents/subagents.md)). Each specialist has its own folder and a gitignored `user-config.md` |
-| [`Skills/`](./Skills/)       | Procedural skills. Each skill folder has a gitignored `user-config.md` that extends `SKILL.md`                                      |
-| [`Setup/`](./Setup/)         | Bootstrap, Cursor install, local config template                                                                                    |
-| [`Memory/`](./Memory/)       | Persistent `MEMORY.md` path and read/write split. No local override file                                                            |
-| [`Settings/`](./Settings/)   | Gitignored `CONFIG.md`: test default, memory path, memory line cap                                                                  |
-| [`Rules/`](./Rules/)         | Standards, including interactive inputs. Each rule has its own folder, a contribute README, and a gitignored `user-config.md`       |
+| File / folder                | Role                                                                                                                            |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| [`AGENTS.md`](./AGENTS.md)   | Load table + non-negotiables                                                                                                    |
+| [`Subagents/`](./Subagents/) | Specialists. The parent does not open the spec. The Task prompt tells the specialist to read its own file and `user-config.md`. |
+| [`Skills/`](./Skills/)       | Procedural skills. Each skill folder has a gitignored `user-config.md` that extends `SKILL.md`                                  |
+| [`Setup/`](./Setup/)         | Bootstrap, Cursor install, local config template                                                                                |
+| [`Memory/`](./Memory/)       | Persistent `MEMORY.md` path and read/write split. No local override file                                                        |
+| [`Settings/`](./Settings/)   | Gitignored `CONFIG.md`: test default, memory path, memory line cap                                                              |
+| [`Rules/`](./Rules/)         | Standards, including interactive inputs. Each rule has its own folder, a contribute README, and a gitignored `user-config.md`   |
 
-Policy is **markdown in git**. App repos get a **pointer** to `AGENTS.md`, not a copy. Skills and subagent bodies stay out of `AGENTS.md` so the parent loads them only when the table says so.
+Policy is **markdown in git**. App repos get a **pointer** to `AGENTS.md`, not a copy. Skills and subagent bodies stay out of `AGENTS.md`. The parent does not open a specialist spec. The Task prompt tells the specialist to read its own spec and `user-config.md`.
 
 ## Contribute
 

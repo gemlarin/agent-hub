@@ -11,7 +11,7 @@ When delegating a task, provide the subagent with a complete, self-contained pro
 1. State the exact subagent from the matrix (e.g. Git Coordinator, Memory Steward, Research Scout).
 2. Pass explicit parameters (target file paths, scope, or expected output shape).
 3. Specify the expected return format (e.g., "Return a Research Brief, ≤80 lines unless detail requested").
-4. Pass **`related_memory`** only if durable memory applies to **this** task (prefer ≤8 bullets). Never the full `MEMORY.md`. Never tell the specialist to read that file (Memory Steward may read it only to apply a write).
+4. Order the prompt: specialist name, spec path, `user-config.md` path, parameters, then **`related_memory`**, then the user request. Pass **`related_memory`** only if durable memory applies to **this** task (prefer ≤8 bullets). Never the full `MEMORY.md`. Never tell the specialist to read that file (Memory Steward may read it only to apply a write).
 5. Set **background vs foreground** from the table below (or the user’s “run that in the background” / `/multitask`). Do not wait or poll a background specialist; relay its report when it arrives.
 
 ### Background vs foreground
@@ -48,7 +48,7 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 - **`git commit`:** If nothing is staged, start **`git add`** first, in this repo and in sibling repos. Wait for **Git add all** or named paths. A sentence that describes the work is not that approval. If something is staged, offer **Custom** and **Agent generated** as one interactive choice. The message text stays typed.
 - **`git push`:** If any file is unstaged, offer **Yes** / **No** as one interactive choice: add those files before the commit? **Yes** stages them, then the message choice, then the commit. **No** leaves them unstaged. Named paths stay typed. Then check the upstream. A non-fast-forward push offers **Yes** / **No** to manage the merge. **No** stops. **Yes** uses the git-merge skill. Do not force-push.
 - **Parent only:** Confirm **`repo_path`** with the user if unclear; relay choices and (if **Agent generated** or auto-push **Yes**) a drafted commit message; surface the **Git Report**—do not re-run git or duplicate its output. On a merge report, list every conflicted file, then offer the active menu in [git-merge options](../Skills/git-merge/options.md).
-- **Coordinator spec** (params, commit/merge flows, safety, report statuses): load the subagent file when delegating—not duplicated here.
+- **Coordinator spec** (params, commit/merge flows, safety, report statuses): the parent does not open `git-coordinator.md`. The Task prompt tells Git Coordinator to read it and `user-config.md`.
 
 ---
 

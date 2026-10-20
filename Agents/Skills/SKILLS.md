@@ -15,7 +15,7 @@ When a task matches a skill's description, load and follow its instructions. Aft
 
 - **Skill file:** [`./git-merge/SKILL.md`](./git-merge/SKILL.md)
 - **User options:** [`options.md`](./git-merge/options.md) (manage the merge, conflict menu, merge tool, unsure hunk, auto-fix)
-- **Orchestration:** [Git Coordinator](../Subagents/git-coordinator/git-coordinator.md) in [`subagents.md`](../Subagents/subagents.md)
+- **Orchestration:** Git Coordinator loads this skill. The parent does not open the coordinator spec or `subagents.md`.
 - **When to use:** Merge, pull-with-merge, rebase, cherry-pick, or a non-fast-forward push. Coordinator must load this skill before resolving or aborting. The conflicted files are listed first.
 
 ### 3. `job-search` (`./job-search/`)
@@ -34,13 +34,13 @@ When a task matches a skill's description, load and follow its instructions. Aft
 
 - **Skill file:** [`./code-sweep/SKILL.md`](./code-sweep/SKILL.md)
 - **User options:** [`options.md`](./code-sweep/options.md) (`aria`, `live`, `a11y`, `bugs`, `typos`, `smell`, `types`, `async`, `secrets`, `ci`, `dod`)
-- **Orchestration:** [Code Sweeper](../Subagents/code-sweeper/code-sweeper.md) in [`subagents.md`](../Subagents/subagents.md)
+- **Orchestration:** Code Sweeper loads this skill. The parent does not open the sweeper spec or `subagents.md`.
 - **When to use:** Loaded by **Code Sweeper** when the user asks for a code sweep (or names that subagent) or a `tasks.md` sweep item is due. Parent must not run a multi-topic sweep itself. Not Code Reviewer (git diffs).
 
 ### 6. `help-getter` (`./help-getter/`)
 
 - **Skill file:** [`./help-getter/SKILL.md`](./help-getter/SKILL.md)
-- **User options:** [`options.md`](./help-getter/options.md) (`Change code settings`, `Display configuration`, `List agents`, `List skills`, `Memory information`, `Cancel`)
+- **User options:** [`options.md`](./help-getter/options.md) (`Agent behaviors`, `Change code settings`, `Display configuration`, `List agents`, `List skills`, `Memory information`, `Cancel`)
 - **When to use:** The prompt is `HELP` by itself, or the user invokes `/help`. The main agent runs it. Not a subagent.
 
 ---

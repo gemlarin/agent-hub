@@ -22,6 +22,7 @@ or invoke `/help`.
 
 | Item | What you get |
 |------|----------------|
+| Agent behaviors | A second choice. **Reload agents** and **Recache agents** re-read the load table and any hub behavior file already opened this session. **Cancel** returns to this list. |
 | Change code settings | A second choice. **Change code test settings** stores a new **Test default**. **Cancel** returns to this list. |
 | Display configuration | `Agents/Settings/CONFIG.md` in a code block. If that file is missing, the example file is shown instead. |
 | List agents | Each installed agent, a one-line synopsis, and when it runs on its own. |
@@ -30,6 +31,16 @@ or invoke `/help`.
 | Cancel | Leaves help. The agent says: You have exited the help context. |
 
 The other items stay alphabetical. **Cancel** is last. After every item except **Cancel**, the menu is shown again.
+
+## Agent behaviors
+
+| Item | What you get |
+|------|----------------|
+| Reload agents | Re-reads the load table and any hub behavior file already opened this session. Does not walk the whole `Agents/` tree. |
+| Recache agents | The same read as **Reload agents**. |
+| Cancel | The main help list again. Help stays open. |
+
+Typing `reload agents` or `recache agents` in a normal prompt does that same read and does not open this menu.
 
 ## Change code settings
 

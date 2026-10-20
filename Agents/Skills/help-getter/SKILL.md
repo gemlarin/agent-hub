@@ -12,25 +12,38 @@ Read `Agents/Settings/CONFIG.md` when a menu item needs it. Do not dump `MEMORY.
 
 ## Menu
 
-Offer this list as one interactive choice ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Keep the items in alphabetical order, then **Cancel** last. If the host has no interactive input, number the list in that same order. Wait either way:
+Offer this list as one host question control ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Keep the items in alphabetical order, then **Cancel** last. Call that control before any numbered list. Number only if the control is absent or the call fails. Wait either way:
 
-1. Change code settings
-2. Display configuration
-3. List agents
-4. List skills
-5. Memory information
-6. Cancel
+1. Agent behaviors
+2. Change code settings
+3. Display configuration
+4. List agents
+5. List skills
+6. Memory information
+7. Cancel
+
+## Agent behaviors
+
+Offer **Reload agents**, **Recache agents**, and **Cancel** as one host question control. **Cancel** is last. Call that control before any numbered list. Number only if the control is absent or the call fails. Wait either way.
+
+**Reload agents** and **Recache agents** do the same thing. Re-read the load table (`Agents/AGENTS.md`, or the file the app pointer names) and any hub behavior file already opened this session. Do not walk the whole `Agents/` tree. Do not open a specialist spec this session has not already opened. Tell the user those files were read again. Then show the main help menu.
+
+Typing `reload agents` or `recache agents` outside this menu does that same read. It does not open help.
+
+### Cancel
+
+Show the main help menu again. Do not exit help.
 
 ## Change code settings
 
-Offer this list as one interactive choice. If the host has no interactive input, number the list. Wait either way:
+Offer this list as one host question control. Call that control before any numbered list. Number only if the control is absent or the call fails. Wait either way:
 
 1. Change code test settings
 2. Cancel
 
 ### Change code test settings
 
-Offer **Unit**, **Browser**, **Both**, **None** as one interactive choice. Write the matching token `UNIT`, `BROWSER`, `BOTH`, or `NONE` to **Test default** in `Agents/Settings/CONFIG.md`. If that file is missing, copy `Agents/Settings/CONFIG.example.md` to `Agents/Settings/CONFIG.md`, then write the value. Confirm the new value. Do not run tests. Then show the main help menu again.
+Offer **Unit**, **Browser**, **Both**, **None** as one host question control. Write the matching token `UNIT`, `BROWSER`, `BOTH`, or `NONE` to **Test default** in `Agents/Settings/CONFIG.md`. If that file is missing, copy `Agents/Settings/CONFIG.example.md` to `Agents/Settings/CONFIG.md`, then write the value. Confirm the new value. Do not run tests. Then show the main help menu again.
 
 ### Cancel
 
@@ -44,7 +57,7 @@ Then show the menu again.
 
 ## List agents
 
-Read `Agents/Subagents/README.md` (Using the agents) and the role lines in `Agents/Subagents/subagents.md`. List every installed specialist:
+Read `Agents/Subagents/README.md` (Using the agents). Do not open `subagents.md` or a specialist spec. List every installed specialist:
 
 - Name
 - Synopsis of what it does
@@ -103,7 +116,7 @@ Then show the menu again.
 
 `ERROR: Unset memory file path`
 
-Ask whether to set up durable memory as an interactive choice. Options: **Yes** · **No**.
+Ask whether to set up durable memory with the host question control. Options: **Yes** · **No**.
 
 - **Yes:** Ask where the file should live (detected cloud file, `~/Documents/MEMORY.md`, or an absolute path outside the hub). Write **MEMORY.md path** in `Agents/Settings/CONFIG.md` and in `Agents/Setup/hub-setup.local.md`. Create the `MEMORY.md` stub if it is missing. Then continue with the counts below.
 - **No:** Show the help menu again.
@@ -114,7 +127,7 @@ Ask whether to set up durable memory as an interactive choice. Options: **Yes** 
 - How many lines in that file have data (a line has data when it is not blank)
 - **Memory max lines** from `CONFIG.md`
 
-5. Offer this list as one interactive choice. **Cancel** is last:
+5. Offer this list as one host question control. **Cancel** is last:
 
 1. Set up a new memory file
 2. Update the memory line limit

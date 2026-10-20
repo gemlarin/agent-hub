@@ -1,6 +1,6 @@
 # Job search output options
 
-After Job Finder returns ranked matches, the parent **offers delivery** as an interactive choice when the host supports one ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Otherwise number the list. User replies with an **id**, the prompt, or the number. Default if they skip: **`out-chat`**.
+After Job Finder returns ranked matches, the parent **offers delivery** by calling the host question control first ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Number the list only if that control is absent or the call fails. User replies with an **id**, the prompt, or the number. Default if they skip: **`out-chat`**.
 
 | Id | Say this | Result |
 |----|----------|--------|

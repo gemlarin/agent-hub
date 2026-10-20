@@ -1,6 +1,6 @@
 # Code sweep topic options
 
-Parent **shows this list** when the user asks for a code sweep, a `tasks.md` sweep item is due, or a one-time wrap-up reminder. Offer it as a multi-select interactive choice when the host supports one ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Otherwise number it. User replies with **ids** (one or more) or those numbers. Do **not** run every topic.
+Parent **shows this list** when the user asks for a code sweep, a `tasks.md` sweep item is due, or a one-time wrap-up reminder. Call the host question control first, multi-select ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Number it only if that control is absent or the call fails. User replies with **ids** (one or more) or those numbers. Do **not** run every topic.
 
 | Id | Say this | Looks for |
 |----|----------|-----------|

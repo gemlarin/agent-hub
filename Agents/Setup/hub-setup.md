@@ -53,7 +53,7 @@ cd /d %WORK%
 Agents\Setup\scripts\setup.cmd
 ```
 
-Work folder already has apps (`git clone` refuses a non-empty directory): `cd` there, `git init`, `git remote add origin <url>`, `git fetch origin`, `git checkout -t origin/main`, then `setup.sh`. Full variants, including a nested `agent-hub/` folder: [README — Quick start](../../README.md#quick-start).
+Work folder already has apps (`git clone` refuses a non-empty directory): `cd` there, `git init`, `git remote add origin <url>`, `git fetch origin`, `git checkout -t origin/main`, then `setup.sh`. Full variants, including a nested `agent-hub/` folder: [README — Download](../../README.md#1-download).
 
 Already a clone: `cd` to the hub root, `git pull`, then `setup.sh` / `setup.cmd` **once per machine**.
 

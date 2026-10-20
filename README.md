@@ -2,6 +2,8 @@
 
 Shared **agent hub**: rules, subagents, and skills for the apps on your machine. Any AI app that can read [`Agents/AGENTS.md`](./Agents/AGENTS.md) can use it. **Cursor is optional.**
 
+[Discover what Agent-hub can do for you.](https://gemlarin.github.io/blog/load-the-ai-rule-not-the-library)
+
 This file is for people. Agents read [`Agents/AGENTS.md`](./Agents/AGENTS.md). Extra setup detail: [`Agents/Setup/hub-setup.md`](./Agents/Setup/hub-setup.md).
 
 ---
@@ -116,9 +118,9 @@ At each **app repo root**, add `AGENTS.md` whose link is the relative path from 
 
 Agent rules for this repo are defined at the **agent hub**, not in this file.
 
-**Read and follow:** [`../agent-hub/Agents/AGENTS.md`](../agent-hub/Agents/AGENTS.md).
+**Read once per session:** [`../agent-hub/Agents/AGENTS.md`](../agent-hub/Agents/AGENTS.md).
 
-That hub is the source of truth for agent rules. Follow its load table. Open a linked file only when that row matches the task.
+That hub is the source of truth for agent rules. Follow its load table. Open a linked file only when that row matches the task. Do not open that file again this session unless it was edited. If a compaction or conversation summary replaced earlier turns and the load-table rows are not in that summary, open it once more, then stop. This applies in Cursor and Claude. If the user says `reload agents` or `recache agents`, re-read that file and any hub behavior file already opened this session, then stop again.
 ```
 
 **App is a sibling of `Agents/`** (work folder is the hub root, app at `work/Portfolio/`):
@@ -128,9 +130,9 @@ That hub is the source of truth for agent rules. Follow its load table. Open a l
 
 Agent rules for this repo are defined at the **agent hub**, not in this file.
 
-**Read and follow:** [`../Agents/AGENTS.md`](../Agents/AGENTS.md).
+**Read once per session:** [`../Agents/AGENTS.md`](../Agents/AGENTS.md).
 
-That hub is the source of truth for agent rules. Follow its load table. Open a linked file only when that row matches the task.
+That hub is the source of truth for agent rules. Follow its load table. Open a linked file only when that row matches the task. Do not open that file again this session unless it was edited. If a compaction or conversation summary replaced earlier turns and the load-table rows are not in that summary, open it once more, then stop. This applies in Cursor and Claude. If the user says `reload agents` or `recache agents`, re-read that file and any hub behavior file already opened this session, then stop again.
 ```
 
 **App is one extra level down** (`work/Vue/Cairn/`):
@@ -140,12 +142,12 @@ That hub is the source of truth for agent rules. Follow its load table. Open a l
 
 Agent rules for this repo are defined at the **agent hub**, not in this file.
 
-**Read and follow:** [`../../Agents/AGENTS.md`](../../Agents/AGENTS.md).
+**Read once per session:** [`../../Agents/AGENTS.md`](../../Agents/AGENTS.md).
 
-That hub is the source of truth for agent rules. Follow its load table. Open a linked file only when that row matches the task.
+That hub is the source of truth for agent rules. Follow its load table. Open a linked file only when that row matches the task. Do not open that file again this session unless it was edited. If a compaction or conversation summary replaced earlier turns and the load-table rows are not in that summary, open it once more, then stop. This applies in Cursor and Claude. If the user says `reload agents` or `recache agents`, re-read that file and any hub behavior file already opened this session, then stop again.
 ```
 
-When your AI app has an **app** open, that pointer is how it loads hub **policy**. When it has this hub clone open, it should read `Agents/AGENTS.md` directly (there is no hub `AGENTS.md` at the clone root). Cursor is one app that can do this. Any other AI app that reads `AGENTS.md` can do the same.
+When your AI app has an **app** open, that pointer is how it loads hub **policy**. When it has this hub clone open, it should read `Agents/AGENTS.md` once per session, once more if a compaction summary drops the table, and again when the user says **reload agents** or **recache agents** (there is no hub `AGENTS.md` at the clone root). Cursor is one app that can do this. Any other AI app that reads `AGENTS.md` can do the same.
 
 ### What the pointer loads
 
@@ -205,12 +207,13 @@ After a code or UI update, the agent runs **Test default**. Ask for a unit test 
 
 Send a prompt that is only `HELP`, or invoke `/help`. When the app can show a clickable choice, the menu is that control. Otherwise it is a numbered list. The items are:
 
-1. **Change code settings** — **Change code test settings** writes **Test default**. **Cancel** returns to this list.
-2. **Display configuration** — `CONFIG.md` in a code block
-3. **List agents** — each agent, what it does, and when it runs on its own
-4. **List skills** — each skill, which agent uses it, and how to call it
-5. **Memory information** — memory path, lines with data, the line cap, and a new file location
-6. **Cancel** — leaves help. The agent says you have exited the help context.
+1. **Agent behaviors** — **Reload agents** and **Recache agents** re-read the load table and any hub behavior file already opened this session. **Cancel** returns to this list.
+2. **Change code settings** — **Change code test settings** writes **Test default**. **Cancel** returns to this list.
+3. **Display configuration** — `CONFIG.md` in a code block
+4. **List agents** — each agent, what it does, and when it runs on its own
+5. **List skills** — each skill, which agent uses it, and how to call it
+6. **Memory information** — memory path, lines with data, the line cap, and a new file location
+7. **Cancel** — leaves help. The agent says you have exited the help context.
 
 Menu details: [`Agents/Skills/help-getter/README.md`](./Agents/Skills/help-getter/README.md).
 
@@ -269,6 +272,53 @@ After editing `Agents/Subagents/`:
 ```
 
 Windows: `Agents\Setup\scripts\setup.cmd` already ran sync on first install; regen with Git Bash (`./Agents/Setup/scripts/install-cursor-integration.sh --force`) or `py -3 Agents/Setup/scripts/sync_cursor_agents.py`.
+
+---
+
+## Next steps
+
+Say **Browser** to start this work. The shell is a prompt browser in front of Cursor and Claude. Agent-hub stays the behavior document. The shell owns the screen, the API calls, and the CSS.
+
+Anticipated features:
+
+- One thread picks Cursor or Claude. Local Cursor uses the SDK against a project folder. Claude uses the Messages API stream.
+- The model returns blocks (`prose`, `choice`, `status`, `report`, `code`), not an HTML page.
+- `Agents/Browser/theme.json` maps tones to CSS. The shell writes those variables onto the document.
+- Text streams into one live document. A static HTML snapshot is written when the response finishes.
+- **Reload agents** and **Recache agents** re-read the load table without a new chat.
+- An extension page is the first Claude demo. A Tauri app is the first demo that runs Cursor against a local repo. Both share the Vue catalog.
+
+<select id="next-browser" size="7" aria-label="Browser work still to do">
+  <option>Define the block catalog and theme.json</option>
+  <option>Stream prose into one document and snapshot HTML when the run finishes</option>
+  <option>Draw choice buttons in the shell and send the picked id back</option>
+  <option>Chrome and Firefox extension for the Claude stream</option>
+  <option>Tauri app for the local Cursor SDK</option>
+  <option>Share one Vue catalog between the extension and the Tauri app</option>
+  <option>Emit a UI block only when the reply has a real choice</option>
+</select>
+
+- [ ] Define the block catalog and `theme.json`
+- [ ] Stream prose into one document and snapshot HTML when the run finishes
+- [ ] Draw choice buttons in the shell and send the picked id back
+- [ ] Chrome and Firefox extension for the Claude stream
+- [ ] Tauri app for the local Cursor SDK
+- [ ] Share one Vue catalog between the extension and the Tauri app
+- [ ] Emit a UI block only when the reply has a real choice (about 80–200 output tokens saved on prose replies)
+
+### Token optimizations
+
+Finished: the load table is read once per session, the parent does not open specialist specs, the updated Cursor User Rules are pasted, the always-on rules are stubs, and the stable prefix stays free of memory, `user-config.md`, and the user message.
+
+Still to do:
+
+| Measure | Tokens removed | When |
+| --- | ---: | --- |
+| Emit a UI block only for a real choice. | 80–200 output | Prose replies |
+
+<select id="token-optimizations-open" size="1" aria-label="Token optimizations still to do">
+  <option>Emit a UI block only for a real choice</option>
+</select>
 
 ---
 
