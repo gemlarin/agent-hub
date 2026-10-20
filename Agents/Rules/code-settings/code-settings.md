@@ -13,11 +13,11 @@ After a code or UI update, run the **Test default**:
 - `UNIT` — run that project’s unit tests
 - `BROWSER` — verify the visible change in the browser
 - `BOTH` — unit tests and browser verification
-- `NONE` — skip both and call the change done
+- `NONE` — skip both and call the change done. Do not run unit tests. Do not open the browser.
 
 If `CONFIG.md` is missing, or **Test default** is not one of those four, skip tests and say the test default is unset.
 
-One-shot override: if that same prompt asks for a unit test or a browser test, run the requested check for this update only. Do not change `CONFIG.md`.
+A standing instruction to verify UI in the browser does not override `NONE`. One-shot override: if that same prompt asks for a unit test or a browser test, run the requested check for this update only. Do not change `CONFIG.md`.
 
 The stored default changes from `HELP` or `/help`, then **Change code settings**, then **Change code test settings**. Offer **Unit**, **Browser**, **Both**, and **None**. Write the matching token. Follow `Agents/Skills/help-getter/SKILL.md`. Do not ask the user to type `CHANGE CODE SETTINGS`.
 
