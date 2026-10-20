@@ -1,6 +1,14 @@
 # Research follow-up options
 
-Parent **shows this list** after a Research Brief (or when the user asks what they can do with the findings). Call the host question control first ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Number it only if that control is absent or the call fails. User replies with the **id**, the **prompt**, or the number. Parent re-invokes Research Scout with `task: <id>` and the prior brief (do not dump raw sources again unless the task is `deepen` or `verify`).
+When a brief or a follow-up task finishes, the parent uses this order. Call the host question control first. The choices are in this file. Do not open the interactive-inputs catalog. Number only if that control is absent or the call fails.
+
+1. Offer `out-chat`, `out-md`, `out-xml`, `out-raw`. One choice. Wait. Do not show follow-up ids in that question. Skip it only when this run already named an output id.
+2. Deliver that output.
+3. Offer **Yes** and **No**: follow-up work on these results? Wait.
+4. **No:** stop.
+5. **Yes:** offer one follow-up id from the table below. Do not offer `brief`. Wait.
+6. Say the steps for that id, then re-invoke Research Scout with `task: <id>` and the prior result. Do not dump raw sources again unless the task is `deepen`, `verify`, `versions`, or `timeline`.
+7. When that task finishes, go back to step 1.
 
 | Id | Say this | Result |
 |----|----------|--------|
@@ -17,11 +25,25 @@ Parent **shows this list** after a Research Brief (or when the user asks what th
 | `timeline` | “How did this change over time?” | Chronology of API/docs/behavior |
 | `expand` | “Full detail — don’t cap at 80 lines” | Long-form brief; still sourced |
 
-Pick **one** task per invocation unless the user names two that compose (`cite` after `compare` is fine as a second turn).
+Pick **one** task per invocation. A later turn can run another id (`cite` after `compare`).
+
+Before the re-invoke, say these steps for the chosen id, then do them:
+
+- `compare` — Name the two options. Build the criterion table from the brief. Recommend one only if the sources support it.
+- `cite` — One card per source: title, location, date, what it established.
+- `verify` — Each claim, supported or unsupported, with source and confidence.
+- `versions` — Version matrix. Mark unknowns as `?`.
+- `extract` — Names, signatures, and short snippets copied from the sources.
+- `actions` — Numbered steps for this repo, checked against local files. Do not refactor.
+- `explain` — One problem, one recommendation, three plain-language bullets.
+- `gaps` — Unknowns, why they matter, and the next source.
+- `deepen` — Name the slice, search that slice only, return a mini-brief.
+- `timeline` — Dated events, oldest to newest. Skip undated guesses.
+- `expand` — Same sections as the brief, without the 80-line cap.
 
 ## Output options
 
-After **any** task (including the first `brief`), the parent **offers delivery** the same way (interactive choice, or a numbered list). User replies with an **id**, the prompt, or the number. Default if they skip: **`out-chat`**.
+Offer these when the run completes, before any follow-up question. One choice. A typed id or the phrase in **Say this** still counts. If the host control fails and they do not answer, use **`out-chat`**.
 
 | Id | Say this | Result |
 |----|----------|--------|

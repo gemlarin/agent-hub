@@ -18,6 +18,10 @@ Do not commit `CONFIG.md`. It holds a local path.
 
 - **Test default:** `NONE`
 
+## Hub edits
+
+- **Enable edit:** `false`
+
 ## Memory
 
 - **MEMORY.md path:** `/absolute/path/to/MEMORY.md`
@@ -27,6 +31,7 @@ Do not commit `CONFIG.md`. It holds a local path.
 | Field | Allowed values | What it does |
 |-------|----------------|--------------|
 | **Test default** | `UNIT`, `BROWSER`, `BOTH`, `NONE` | What runs after a code or UI update. `UNIT` runs that project’s unit tests. `BROWSER` checks the visible change in the browser. `BOTH` runs both. `NONE` skips both and calls the change done. |
+| **Enable edit** | `true`, `false` | Hub file edits. `false`, missing, or any other value blocks every create, edit, and delete in this hub. |
 | **MEMORY.md path** | Absolute path outside this clone | The one durable `MEMORY.md`. Cloud storage or a local file. |
 | **Memory max lines** | Positive integer | Line cap for that file. Memory Steward prunes less important bullets when a write would pass it. |
 
@@ -36,6 +41,7 @@ Setup asks for the test default and the line cap. The suggested line cap is 80.
 
 - **Test default:** prompt `HELP` or `/help`, then choose **Change code settings**, then **Change code test settings**. The agent asks for **Unit**, **Browser**, **Both**, or **None**, writes the matching token to **Test default**, and confirms it. That choice does not run tests. **Cancel** on that list returns to the help menu.
 - **One update only:** ask for a unit test or a browser test in the same change request. That overrides **Test default** for that request and leaves `CONFIG.md` unchanged.
+- **Enable edit:** prompt `HELP` or `/help`, then choose **Enable edit**. **Enable** writes `true`. **Disable** writes `false`. **Cancel** returns to the help menu and does not change the flag. A hub edit while the flag is not `true` asks **Yes** / **No** first. **No** stops. **Yes** writes `true`, then makes that edit.
 - **Memory path or line cap:** prompt `HELP` or `/help`, then choose **Memory information**. A new file path moves the existing `MEMORY.md` when one is already there. See [help-getter](../Skills/help-getter/README.md).
 - **See every value:** `HELP` → **Display configuration**. The agent shows `CONFIG.md` in a code block.
 

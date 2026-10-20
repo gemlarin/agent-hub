@@ -194,6 +194,7 @@ Never commit `MEMORY.md` or `CONFIG.md`. Prefer a memory path **outside** this c
 | Field | Change it by |
 |-------|----------------|
 | **Test default** (`UNIT`, `BROWSER`, `BOTH`, `NONE`) | `HELP` → Change code settings → Change code test settings |
+| **Enable edit** (`true`, `false`) | `HELP` → Enable edit |
 | **MEMORY.md path** | `HELP` → Memory information |
 | **Memory max lines** | `HELP` → Memory information |
 
@@ -210,10 +211,11 @@ Send a prompt that is only `HELP`, or invoke `/help`. When the app can show a cl
 1. **Agent behaviors** — **Reload agents** and **Recache agents** re-read the load table and any hub behavior file already opened this session. **Cancel** returns to this list.
 2. **Change code settings** — **Change code test settings** writes **Test default**. **Cancel** returns to this list.
 3. **Display configuration** — `CONFIG.md` in a code block
-4. **List agents** — each agent, what it does, and when it runs on its own
-5. **List skills** — each skill, which agent uses it, and how to call it
-6. **Memory information** — memory path, lines with data, the line cap, and a new file location
-7. **Cancel** — leaves help. The agent says you have exited the help context.
+4. **Enable edit** — **Enable** or **Disable** writes **Enable edit**. **Cancel** returns to this list.
+5. **List agents** — each agent, what it does, and when it runs on its own
+6. **List skills** — each skill, which agent uses it, and how to call it
+7. **Memory information** — memory path, lines with data, the line cap, and a new file location
+8. **Cancel** — leaves help. The agent says you have exited the help context.
 
 Menu details: [`Agents/Skills/help-getter/README.md`](./Agents/Skills/help-getter/README.md).
 

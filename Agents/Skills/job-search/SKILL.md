@@ -56,7 +56,7 @@ Score each opening 0–100 using the parsed resume:
 
 Sort **descending**. Return the top **N** (their result count). Include a one-line **why** on each.
 
-## 4. Present, then offer export
+## 4. Present, then output, then follow-up
 
 Each result **must** include:
 
@@ -69,23 +69,20 @@ Each result **must** include:
 - Source board
 - Match score
 
-Show a ranked list in chat, then offer **output ids** from [`options.md`](./options.md) (same as research):
+Return that ranked list in the Job Report. Do not list output ids inside the report. The **parent** then follows [`options.md`](./options.md):
 
-| Id | Delivery |
-|----|----------|
-| `out-chat` | Chat only (default) |
-| `out-md` | Markdown on Desktop |
-| `out-xml` | XML on Desktop — [`output.md`](./output.md) |
-| `out-raw` | Plain text on Desktop |
+1. Offer `out-chat`, `out-md`, `out-xml`, `out-raw` unless this run already named an output id. Wait.
+2. Deliver that output. **Job Finder** writes Desktop files from the matches already returned (not the parent, not the hub repo). Do not search the boards again for a save.
+   - macOS: `~/Desktop/`
+   - Windows: `%USERPROFILE%\Desktop\`
+   - Filename: `job-matches-YYYY-MM-DD.<ext>` (append `-2` if it exists). Confirm the path after writing.
+3. Offer **Yes** and **No**: follow-up work on these results? Wait.
+4. **No:** stop.
+5. **Yes:** offer one follow-up id from [`options.md`](./options.md). Wait.
+6. Say the steps for that id, then do them.
+7. When that follow-up finishes, go back to step 1.
 
-**Job Finder** writes Desktop files (not the parent, not the hub repo):
-
-- macOS: `~/Desktop/`
-- Windows: `%USERPROFILE%\Desktop\`
-
-Filename: `job-matches-YYYY-MM-DD.<ext>` (append `-2` if it exists). Confirm the path after writing.
-
-If `output` is already set, skip the prompt. If they skip, use **`out-chat`**.
+If the host control fails and they do not answer the output question, use **`out-chat`**.
 
 ## 5. Privacy
 

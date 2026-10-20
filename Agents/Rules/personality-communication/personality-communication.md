@@ -10,5 +10,5 @@
 - Keep explanations under 3 sentences. Skip teaching standard APIs (`map`, `ref`, etc.) unless it prevents a hidden bug.
 - Bold paths; bullets over walls of text.
 - If unclear what to build, ask for specs (see [Spec-driven tasks](../coding-standards/coding-standards.md#spec-driven-tasks)) before coding.
-- A closed choice uses the host's interactive input when it has one, otherwise a numbered list ([interactive inputs](../interactive-inputs/interactive-inputs.md)).
+- A closed choice uses the host's interactive input when it has one, otherwise a numbered list. A plain Yes/No does not open the interactive-inputs catalog. Do not open it when the choices are already in the skill, `options.md`, or git menu file for this task.
 - After a durable-memory write, print exactly `Durable memory saved to MEMORY file`. Show memory option ids only when the user asked to save or the session is ending ([memory.md](../../Memory/memory.md#auto-save-vs-option-menu)). Do not dump `MEMORY.md`.

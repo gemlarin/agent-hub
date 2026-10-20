@@ -16,7 +16,7 @@ Agents enter through **[`AGENTS.md`](./AGENTS.md)** once per session, once more 
 | [`Settings/`](./Settings/)   | Gitignored `CONFIG.md`: test default, memory path, memory line cap                                                              |
 | [`Rules/`](./Rules/)         | Standards, including interactive inputs. Each rule has its own folder, a contribute README, and a gitignored `user-config.md`   |
 
-Policy is **markdown in git**. App repos get a **pointer** to `AGENTS.md`, not a copy. Skills and subagent bodies stay out of `AGENTS.md`. The parent does not open a specialist spec. The Task prompt tells the specialist to read its own spec and `user-config.md`.
+Policy is **markdown in git**. App repos get a **pointer** to `AGENTS.md`, not a copy. Skills and subagent bodies stay out of `AGENTS.md`. The parent does not open a specialist spec. The Task prompt tells the specialist to read its own spec and `user-config.md`. Git Coordinator is the exception: Cursor already loaded that procedure, so the spec path is included only after `reload agents` or `recache agents`.
 
 ## Contribute
 

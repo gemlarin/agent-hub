@@ -13,7 +13,7 @@ Do not invent APIs or quotes. Stay **read-only** in the repo. Default **≤80 li
 
 ## First pass
 
-If `task` is missing, run **`brief`** (existing Research Brief shape in the scout spec). Then stop. The **parent** offers **follow-up tasks** and **output options** from [`options.md`](./options.md).
+If `task` is missing, run **`brief`** (existing Research Brief shape in the scout spec). Then stop. The **parent** offers **output** first, and follow-up work only after that output is delivered. Catalog: [`options.md`](./options.md).
 
 ## Later passes
 
@@ -46,6 +46,12 @@ If `task` is missing, run **`brief`** (existing Research Brief shape in the scou
 
 ## Parent
 
-- After a brief (and after later tasks), list **follow-up ids** and **output ids** unless the user already picked both.
-- Re-invoke Research Scout with `task`, optional `output`, `topic`, and the previous brief text. Do not re-run the whole search for `cite` / `explain` / `extract` / `gaps` / `actions`.
-- If `output` is `out-md` / `out-xml` / `out-raw`, write `research-<task>-YYYY-MM-DD.<ext>` to the Desktop and do not commit it.
+After a brief or a later task finishes, do these steps in order. Call the host question control first. Do not combine the steps into one question.
+
+1. Offer `out-chat`, `out-md`, `out-xml`, `out-raw` unless this run already named an output id. Wait.
+2. Deliver that output. For `out-md` / `out-xml` / `out-raw`, write `research-<task>-YYYY-MM-DD.<ext>` to the Desktop and do not commit it. Confirm the path.
+3. Offer **Yes** and **No**: follow-up work on these results? Wait.
+4. **No:** stop.
+5. **Yes:** offer one follow-up id from [`options.md`](./options.md). Do not offer `brief`. Wait.
+6. Say the steps for that id, in order, then re-invoke Research Scout with `task` and the previous result. Do not re-run the whole search for `cite` / `explain` / `extract` / `gaps` / `actions`.
+7. When that task finishes, go back to step 1.

@@ -33,7 +33,7 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 - Do not attempt to re-read raw logs or files that a subagent already processed. Trust the returned report.
 - Verify the subagent's summary against project goals before taking direct action.
 - **Report size:** Subagents return **≤80 lines** by default (summaries, capped lists, truncated diffs/snippets). Expand only when the user or parent asks for detail.
-- **Parent relay:** Prefer the report summary in chat; pass full reports only when the user needs them. Closed choices (Yes/No/Preview, add-before-commit Yes/No, Yes/No when a git verb omits `git`, **Custom** / **Agent generated**, git-merge menus, sweep topics, memory ids, research follow-ups, output ids) use [interactive inputs](../Rules/interactive-inputs/interactive-inputs.md).
+- **Parent relay:** Prefer the report summary in chat; pass full reports only when the user needs them. Closed choices (Yes/No/Preview, add-before-commit Yes/No, Yes/No when a git verb omits `git`, **Custom** / **Agent generated**, git-merge menus, **Topics to run** / **Run all**, sweep topics, memory ids, output ids, follow-up Yes/No, research follow-ups, job follow-ups) use the host question control. Do not open the interactive-inputs catalog for a plain Yes/No, or when those choices are already in the skill, `options.md`, or git menu file for this task.
 - **Runtime:** Follow [context discipline](../Rules/context-discipline/context-discipline.md) (no duplicate git/memory reads, narrow file scope).
 
 ### Git Coordinator (`./git-coordinator/git-coordinator.md`)
@@ -48,7 +48,7 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
 - **`git commit`:** If nothing is staged, start **`git add`** first, in this repo and in sibling repos. Wait for **Git add all** or named paths. A sentence that describes the work is not that approval. If something is staged, offer **Custom** and **Agent generated** as one interactive choice. The message text stays typed.
 - **`git push`:** If any file is unstaged, offer **Yes** / **No** as one interactive choice: add those files before the commit? **Yes** stages them, then the message choice, then the commit. **No** leaves them unstaged. Named paths stay typed. Then check the upstream. A non-fast-forward push offers **Yes** / **No** to manage the merge. **No** stops. **Yes** uses the git-merge skill. Do not force-push.
 - **Parent only:** Confirm **`repo_path`** with the user if unclear; relay choices and (if **Agent generated** or auto-push **Yes**) a drafted commit message; surface the **Git Report**—do not re-run git or duplicate its output. On a merge report, list every conflicted file, then offer the active menu in [git-merge options](../Skills/git-merge/options.md).
-- **Coordinator spec** (params, commit/merge flows, safety, report statuses): the parent does not open `git-coordinator.md`. The Task prompt tells Git Coordinator to read it and `user-config.md`.
+- **Coordinator spec** (params, commit/merge flows, safety, report statuses): the parent does not open `git-coordinator.md`. Cursor already loads that procedure. The Task prompt does not tell Git Coordinator to read it again. It tells Git Coordinator to read `user-config.md` when that file exists. After `reload agents` or `recache agents`, the next git Task tells Git Coordinator to read the spec once.
 
 ---
 
@@ -61,7 +61,7 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
   - **Version Compatibility:** Verifying breaking changes, version dependencies, or upgrade guides (e.g., checking `package.json` or `pyproject.toml` compatibility).
   - **Deep Discovery:** Searching through long historical design docs, architectural specs, or large log files.
 - **Invocation Parameters:** Research objective, target dirs/URLs, version constraints, optional `task` from [research options](../Skills/research/options.md) (`brief` if omitted), optional `related_memory` (task-relevant bullets only). Scout loads the [research skill](../Skills/research/SKILL.md). Do not tell Scout to read `MEMORY.md`.
-- **Handling Results:** Trust the brief. Then **offer follow-up tasks and output formats** ([`Skills/research/options.md`](../Skills/research/options.md)) unless the user already picked. Re-invoke with `task` / `output` + prior brief. Parent writes Desktop files for `out-md` / `out-xml` / `out-raw`. Do not re-read sources except for `deepen` / `verify` / `versions` / `timeline`.
+- **Handling Results:** Trust the brief. Then offer an **output** id ([`Skills/research/options.md`](../Skills/research/options.md)) unless this run already named one. Deliver it. Then offer follow-up **Yes** / **No**. **Yes** offers one follow-up id; say that id's steps, then re-invoke with `task` and the prior result. Parent writes Desktop files for `out-md` / `out-xml` / `out-raw`. Do not re-read sources except for `deepen` / `verify` / `versions` / `timeline`.
 
 ---
 
@@ -90,7 +90,7 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
   - A `tasks.md` **Code sweep** item is due.
   - The one-time wrap-up reminder in [coding-standards.md](../Rules/coding-standards/coding-standards.md#code-sweep) (offer the topic menu first).
 - **Do not trigger** for git-diff / security review (Code Reviewer), job search, or implementing the feature.
-- **Invocation Parameters:** `scope` (app root / paths), `topics` from [code-sweep options](../Skills/code-sweep/options.md), optional `related_memory`. If topics are missing, **show the option ids** and wait — do not sweep all topics. Do not run the skill in the parent. Do not tell Code Sweeper to read `MEMORY.md`.
+- **Invocation Parameters:** `scope` (app root / paths), `topics` from [code-sweep options](../Skills/code-sweep/options.md), optional `related_memory`. Before invoking, offer **Topics to run** or **Run all**. **Topics to run** waits for the ids they pick. **Run all** passes every id. Do not invoke with topics missing. Do not run the skill in the parent. Do not tell Code Sweeper to read `MEMORY.md`.
 - **Handling Results:** Trust the Sweep Report. Relay findings by topic. **Ask before** applying suggested fixes (Change Control). Do not re-read the swept files unless verifying one finding.
 
 ---
@@ -117,7 +117,7 @@ If they say **“in the background”**, **“don’t wait”**, or **`/multitas
   - The user names Job Finder or a job board in that context (a default board, or one they added in `boards.local.md`).
 - **Do not trigger** for coding, git, memory, code review, or general documentation/web lookup. Use Web Researcher / Research Scout for those.
 - **Invocation Parameters:** Pass resume path/attachment and any filters already collected, plus optional `related_memory` (search prefs only). Job Finder returns `NEED_INPUT` for the rest; parent asks the user and re-invokes. Do not run the job-search skill in the parent. Do not tell Job Finder to read `MEMORY.md`. Launch **in the background** (see [Background vs foreground](#background-vs-foreground)).
-- **Handling Results:** Trust the Job Report. Relay ranked matches and **output ids** (`out-chat`, `out-md`, `out-xml`, `out-raw`) unless already chosen. Re-invoke with `output` to save; do not re-run board searches.
+- **Handling Results:** Trust the Job Report. Offer an **output** id (`out-chat`, `out-md`, `out-xml`, `out-raw`) unless this run already named one. Deliver it. A file save reuses the matches already returned. Then offer follow-up **Yes** / **No**. **Yes** offers `refine`, `compare`, `employers`, or `widen` and walks those steps. Do not re-run board searches just to save.
 
 ---
 

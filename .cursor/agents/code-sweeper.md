@@ -25,7 +25,7 @@ Load and follow [`Agents/Skills/code-sweep/SKILL.md`](../../Agents/Skills/code-s
 
 ## Protocol
 
-1. If `scope` or `topics` is missing, return **`Sweep Report: NEED_INPUT`** with the option table. Do not sweep. Do not default to all topics.
+1. If `scope` or `topics` is missing, return **`Sweep Report: NEED_INPUT`**. Do not sweep. Do not decide **Run all** yourself. Every id is allowed only when the parent passes them after the user picked **Run all**.
 2. Follow the skill for **only** those topics. Grep/narrow reads. Optional `npm run typecheck` / `build` in `scope` when `ci` or `dod` is selected — never `git`/`gh`.
 3. Return a **Sweep Report** (default **≤80 lines**). Do not edit files. Do not apply fixes.
 

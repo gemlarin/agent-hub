@@ -2,6 +2,8 @@
 
 **Cursor only.** Skip this file if you do not use Cursor, or if your User Rules do **not** tell the parent to run `git`/`gh` (clone already ships `.cursor/rules/git-delegation.mdc`). Paste the blocks below **only when** Cursor’s default `<committing-changes-with-git>` / `<creating-pull-requests>` rules would make the parent run git in this hub.
 
+When a hub rule change updates the blocks below, remind the Cursor user to replace their User Rules from this file: [cursor-user-rules.md](./cursor-user-rules.md).
+
 **User Rules** are account-level (not in this repo). **Where to edit (macOS):**
 
 1. **⌘⇧J** → **Rules** tab → **User Rules** → add or edit text, or  
@@ -30,7 +32,7 @@ You are the **parent agent**.
 - **Agent-hub git root** (folder with hub `Agents/AGENTS.md` / `.cursor/hooks/`): do **not** run `git` or `gh`. Delegate to **git-coordinator** (`subagent_type: git-coordinator`). Pass **`repo_path`**. Relay `Yes` / `No` / `Preview`, add-before-commit **Yes** / **No**, **Custom** / **Agent generated**, and merge-menu ids as one interactive choice each. **Resume** the same coordinator agent id for those relays (do not spawn a new Task unless the last run aborted). Trust the **Git Report**; do not re-run those commands.
 - Git commands start with **`git`**. If the user says `add`, `commit`, `push`, or another git verb without `git`, offer **Yes** / **No**. **Yes** runs Git Coordinator for `git <keyword>`. **No** stops. Tell them to start with `git` next time. Do not run until they pick **Yes**.
 - **Any other git repo** (sibling app, unrelated clone, no hub hooks): you **may** run `git`/`gh` in the parent shell. Do not treat User Rules as a global git ban. The same push and merge choices apply. Do not stage unstaged files until they pick **Yes** or name the paths. Optional: use git-coordinator with `repo_path`.
-- Do not open `subagents.md` or `git-coordinator.md` in the parent. The Task prompt tells git-coordinator to read `Agents/Subagents/git-coordinator/git-coordinator.md` and `user-config.md` in that folder.
+- Do not open `subagents.md` or `git-coordinator.md` in the parent. Cursor already loads the Git Coordinator procedure. The Task prompt does not tell git-coordinator to read that file again. It tells git-coordinator to read `user-config.md` in that folder when the file exists. After `reload agents` or `recache agents`, the next git Task tells git-coordinator to read `Agents/Subagents/git-coordinator/git-coordinator.md` once.
 
 ## When the user asks to commit
 

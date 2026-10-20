@@ -14,7 +14,7 @@ Stay **read-only**. Do not edit files, run `git`/`gh`, or write `MEMORY.md`. Def
 ## 1. Inputs (stop until complete)
 
 - **`scope`:** app root and/or file paths. If missing, `NEED_INPUT` — do not guess the whole workspace.
-- **`topics`:** one or more ids from [`options.md`](./options.md). If missing, `NEED_INPUT` with that table. Never default to all topics.
+- **`topics`:** ids from [`options.md`](./options.md). **Run all** means every id. **Topics to run** means only the ids they then pick. If neither choice has been made, `NEED_INPUT`. Do not treat a bare sweep request as every topic.
 - **`related_memory`:** optional bullets from the parent. Do not read `MEMORY.md`.
 
 Skip any topic the user did not name.
@@ -45,8 +45,10 @@ List **Suggested fixes** as bullets. **Do not apply them.** Parent asks the user
 
 ## 4. Parent
 
-1. Show [`options.md`](./options.md) (do not run every topic).
-2. Confirm **`scope`** if more than one app could apply.
-3. Invoke Code Sweeper with `topics` + `scope` + optional `related_memory`.
-4. Trust the Sweep Report; do not re-read those files unless verifying one finding.
-5. Ask before implementing suggested fixes.
+1. Offer **Topics to run** and **Run all** as one host question control. Wait.
+2. **Topics to run:** show the topic table as a multi-select. Wait. Those ids are `topics`.
+3. **Run all:** `topics` is every id in [`options.md`](./options.md).
+4. Confirm **`scope`** if more than one app could apply.
+5. Invoke Code Sweeper with `topics` + `scope` + optional `related_memory`.
+6. Trust the Sweep Report; do not re-read those files unless verifying one finding.
+7. Ask before implementing suggested fixes.

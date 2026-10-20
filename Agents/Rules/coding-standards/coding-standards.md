@@ -10,7 +10,7 @@ Shared rules for any stack. **Vue greenfield** (layout, Tailwind, Vue 3, new-app
 
 ## Tests after an update
 
-Read **Test default** in [`Agents/Settings/CONFIG.md`](../../Settings/CONFIG.md). After a code or UI update, run that default: `UNIT`, `BROWSER`, `BOTH`, or `NONE`. A request that asks for a unit test or a browser test overrides the default for that request only. The user changes the stored default from `HELP` → **Change code settings** → **Change code test settings**. Offer **Unit**, **Browser**, **Both**, and **None** as an interactive choice. Write the matching token. ([interactive inputs](../interactive-inputs/interactive-inputs.md)).
+Read **Test default** in [`Agents/Settings/CONFIG.md`](../../Settings/CONFIG.md). After a code or UI update, run that default: `UNIT`, `BROWSER`, `BOTH`, or `NONE`. A request that asks for a unit test or a browser test overrides the default for that request only. The user changes the stored default from `HELP` → **Change code settings** → **Change code test settings**. Offer **Unit**, **Browser**, **Both**, and **None** as an interactive choice. Write the matching token. Those choices are in this sentence. Do not open the interactive-inputs catalog.
 
 ## Spec-driven tasks
 
@@ -19,7 +19,7 @@ Light spec workflow for **new tasks** (features, refactors with a clear goal, in
 1. **Ask for specs** before coding: goal, in/out of scope, acceptance checks, constraints (stack, a11y, time box).
 2. Write **`tasks.md`** at the **project root** (create/overwrite for that task — don’t scatter task lists).
 3. Use a checkbox task list. Check items off as each is done.
-4. **Always** include a **Code sweep** line that points at the topic ids (do not auto-run every topic).
+4. **Always** include a **Code sweep** line that points at **Topics to run** or **Run all** (do not start until they pick).
 5. Keep it short — outcomes, not a novel.
 
 **`tasks.md` shape:**
@@ -38,20 +38,20 @@ Light spec workflow for **new tasks** (features, refactors with a clear goal, in
 
 - [ ] …
 - [ ] …
-- [ ] Code sweep (offer topic ids — [code-sweep options](../../Skills/code-sweep/options.md); Code Sweeper runs them)
+- [ ] Code sweep (offer Topics to run or Run all — [code-sweep options](../../Skills/code-sweep/options.md); Code Sweeper runs them)
 ```
 
 ---
 
 ## Code sweep
 
-When the user asks for a **code sweep** (or a `tasks.md` sweep item is due): **do not** run every topic at once, and **do not** sweep in the parent.
+When the user asks for a **code sweep** (or a `tasks.md` sweep item is due): ask **Topics to run** or **Run all** before starting, and **do not** sweep in the parent.
 
-1. Offer topic **ids** from [`Skills/code-sweep/options.md`](../../Skills/code-sweep/options.md). Confirm **scope** (which app/paths) if unclear.
-2. Wait for the user to name ids.
+1. Offer **Topics to run** and **Run all** from [`Skills/code-sweep/options.md`](../../Skills/code-sweep/options.md). Confirm **scope** (which app/paths) if unclear.
+2. **Topics to run:** wait for the ids they pick. **Run all:** every id in that file.
 3. Delegate to **Code Sweeper**. The Task prompt tells it to read `Agents/Subagents/code-sweeper/code-sweeper.md` and `user-config.md` in that folder. Pass `topics` and `scope`. Do not open that spec in the parent. Trust the **Sweep Report**. Ask before applying suggested fixes (Change Control).
 
-**Reminders:** If the user is deep in a build and hasn’t swept in a while (e.g. feature roughly done, about to call a task complete, or several sessions without a sweep), **once** gently remind: offer the topic ids. Don’t nag every turn.
+**Reminders:** If the user is deep in a build and hasn’t swept in a while (e.g. feature roughly done, about to call a task complete, or several sessions without a sweep), **once** gently remind: offer **Topics to run** or **Run all**. Don’t nag every turn.
 
 ---
 
@@ -84,7 +84,7 @@ When the user asks for a **code sweep** (or a `tasks.md` sweep item is due): **d
 1. No TS **errors** — `npm run typecheck` if present, else `npm run build`.
 2. `npm run build` succeeds when relevant.
 3. UI: prefer real controls over clickable `div`s; keyboard and focus behave sensibly (Vue specifics → [coding-standards-vue.md](../coding-standards-vue/coding-standards-vue.md#definition-of-done-vue-ui)).
-4. When a **`tasks.md`** exists for the work: checklist items done (or explicitly deferred); **code sweep** offered via topic ids ([`Skills/code-sweep/options.md`](../../Skills/code-sweep/options.md)) before calling the task complete.
+4. When a **`tasks.md`** exists for the work: checklist items done (or explicitly deferred); **code sweep** offered as **Topics to run** or **Run all** ([`Skills/code-sweep/options.md`](../../Skills/code-sweep/options.md)) before calling the task complete.
 
 **Commands:** `npm run dev` · `npm run typecheck` · `npm run build` · `npm run preview`
 

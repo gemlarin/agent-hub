@@ -30,6 +30,9 @@ With this workspace open, `HELP` or `/help` opens the hub help menu. **Change co
 - **Rules / hooks:** edit the files here; keep hook commands as `.cursor/hooks/...` (they run from the project root). Smoke-test:
 
   ```bash
+  # macOS and Linux — the hook Cursor launches
+  sh Agents/Setup/scripts/test-git-delegation-hook.sh
+  # Windows fallback (git-delegation-hook.py)
   python3 Agents/Setup/scripts/test-git-delegation-hook.py
   ```
 

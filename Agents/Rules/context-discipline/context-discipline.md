@@ -26,11 +26,11 @@ The host can cache the opening of a prompt when that opening is the same on the 
 
 - Do not write session facts, memory bullets, or `user-config.md` into `AGENTS.md` or the always-on stubs.
 - Read `user-config.md` after the shared file.
-- A Task prompt is ordered: specialist name, spec path, `user-config.md` path, parameters, then `related_memory`, then the user request.
+- A Task prompt is ordered: specialist name, spec path, `user-config.md` path, parameters, then `related_memory`, then the user request. Git Coordinator omits the spec path unless the user has called `reload agents` or `recache agents` since the last git Task.
 
 ## Subagents & skills
 
-- Parent does not open `Subagents/subagents.md` or a specialist spec, including when a User Rule lists those paths. The Task prompt names that path and tells the specialist to read it, then `user-config.md` in that folder.
+- Parent does not open `Subagents/subagents.md` or a specialist spec, including when a User Rule lists those paths. The Task prompt names that path and tells the specialist to read it, then `user-config.md` in that folder. Git Coordinator is the exception: Cursor already loaded that procedure, so the spec path is included only after `reload agents` or `recache agents`.
 - Trust specialist reports (≤80 lines default); **do not** re-open sources the subagent already summarized unless verifying a specific claim.
 - Long I/O specialists (Job Finder, Research Scout, Code Sweeper, Web Researcher, Memory Steward) run in the **background**. Git Coordinator, Hub Installer, and a review that gates a commit stay in the **foreground**. Do not poll a background specialist; relay the report when it arrives.
 - Load **skill** files only when the trigger matrix says so (`git-merge`, `memory-management`, etc.). After `SKILL.md`, read `user-config.md` in that folder when it exists. Additions extend the skill. Overrides replace the matching part on this machine only.

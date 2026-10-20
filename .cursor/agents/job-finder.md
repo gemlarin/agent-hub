@@ -29,14 +29,14 @@ Pass whatever the user already gave. Typical fields:
 - `work_mode`: in-office | hybrid | remote
 - `city` / `state` (in-office)
 - `include_local_employers`: yes/no (in-office extra)
-- `output`: `out-chat` | `out-md` | `out-xml` | `out-raw` (same ids as research; default `out-chat`)
+- `output`: omit on the first search. After the user picks: `out-chat` | `out-md` | `out-xml` | `out-raw`
 - `related_memory`: optional bullets from the parent (prefs/constraints for this search only). Do not read `MEMORY.md`.
 
 ## Protocol
 
 1. If required skill inputs are missing, return **`Job Report: NEED_INPUT`** listing only the missing fields. Do not search. Do not guess a resume.
 2. When inputs are complete, follow the skill: parse resume, search rows marked `yes` in the active board file (public pages only), rank best → worst, never invent openings.
-3. Return a **Job Report** (default **≤80 lines**; if the user wants the full list in chat, include it and note the cap was waived). If `output` is missing, list export ids (`out-chat`, `out-md`, `out-xml`, `out-raw`) in the report and wait. Write Desktop files for `out-md` / `out-xml` / `out-raw` only.
+3. Return a **Job Report** (default **≤80 lines**; if the user wants the full list in chat, include it and note the cap was waived). If `output` is missing, set **Saved** to none and stop. Do not list export ids. The parent asks for the output id. If the parent re-invokes with `output` and the matches already returned, write the Desktop file from those matches and do not search again. Write Desktop files for `out-md` / `out-xml` / `out-raw` only.
 
 **Forbidden:** editing the hub repo, committing resumes or result files, writing resume text to `MEMORY.md`, reading `MEMORY.md` (use `related_memory` only), logging into job boards.
 

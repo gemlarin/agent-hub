@@ -1,6 +1,13 @@
 # Code sweep topic options
 
-Parent **shows this list** when the user asks for a code sweep, a `tasks.md` sweep item is due, or a one-time wrap-up reminder. Call the host question control first, multi-select ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Number it only if that control is absent or the call fails. User replies with **ids** (one or more) or those numbers. Do **not** run every topic.
+When a code sweep is requested, a `tasks.md` sweep item is due, or a one-time wrap-up reminder fires, the parent asks **before** any sweep starts. Call the host question control first. The choices are in this file. Do not open the interactive-inputs catalog. Number only if that control is absent or the call fails.
+
+First choice, one answer: **Topics to run** or **Run all**.
+
+- **Topics to run:** then show the table below as a multi-select. Wait. Run only the ids they pick.
+- **Run all:** run every id in the table. Do not ask them to pick ids again.
+
+A typed id, **Topics to run**, or **Run all** still counts. Do not start the sweep before this choice.
 
 | Id | Say this | Looks for |
 |----|----------|-----------|
@@ -16,4 +23,4 @@ Parent **shows this list** when the user asks for a code sweep, a `tasks.md` swe
 | `ci` | “Ci / scripts” | typecheck/test/build scripts still make sense |
 | `dod` | “Definition of done” | typecheck/build; native controls over clickable `div`s |
 
-Pick **only** the topics they named. Vue SFCs: also apply [`coding-standards-vue.md`](../../Rules/coding-standards-vue/coding-standards-vue.md) DoD when `a11y` or `dod` is on. Catalog owner: [`SKILL.md`](./SKILL.md).
+**Topics to run** uses only the ids they named. **Run all** uses every id. Vue SFCs: also apply [`coding-standards-vue.md`](../../Rules/coding-standards-vue/coding-standards-vue.md) DoD when `a11y` or `dod` is on. Catalog owner: [`SKILL.md`](./SKILL.md).

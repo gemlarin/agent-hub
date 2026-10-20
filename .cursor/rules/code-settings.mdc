@@ -5,7 +5,9 @@ alwaysApply: true
 
 # Code settings
 
-Read `Agents/Settings/CONFIG.md` for **Test default**, **MEMORY.md path**, and **Memory max lines**.
+Read `Agents/Settings/CONFIG.md` for **Test default**, **Enable edit**, **MEMORY.md path**, and **Memory max lines**.
+
+Do not create, edit, or delete a file in this hub unless **Enable edit** is `true`. Missing or any other value means disabled. Read that field immediately before a hub edit. If editing is disabled, ask **Yes** / **No** to enable it. **No** stops and does not edit. **Yes** sets **Enable edit** to `true`, then makes the requested edit. Help → **Enable edit** may set the flag. This applies to every agent, in Cursor and Claude.
 
 After a code or UI update, follow **Test default**. Read `Agents/Rules/code-settings/code-settings.md` for the token meanings and the one-shot override. Do not open that file on any other prompt.
 

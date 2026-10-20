@@ -6,7 +6,7 @@
 
 ## Design
 
-**Job Finder** loads this skill when the user asks for a job search. It collects resume + filters first, searches public pages only (no logins), ranks by resume fit, then offers the same export ids as research: `out-chat`, `out-md`, `out-xml`, `out-raw`.
+**Job Finder** loads this skill when the user asks for a job search. It collects resume + filters first, searches public pages only (no logins), and ranks by resume fit. The parent then asks for an output id (`out-chat`, `out-md`, `out-xml`, `out-raw`), delivers it, and only then asks whether to run a follow-up (`refine`, `compare`, `employers`, `widen`).
 
 The parent must not run this skill unless Job Finder is unavailable. Do not commit resumes or result files to the hub.
 

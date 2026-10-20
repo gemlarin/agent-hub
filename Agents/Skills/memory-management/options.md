@@ -1,6 +1,6 @@
 # Memory write options
 
-Show this list **only** when (1) the user asked to remember / save / update memory, or (2) the session looks finished. Call the host question control first ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Number it only if that control is absent or the call fails. During the session, do **not** show these ids — auto-write viable facts with `mem-save` (see [`SKILL.md`](./SKILL.md) §5).
+Show this list **only** when (1) the user asked to remember / save / update memory, or (2) the session looks finished. Call the host question control first. The choices are in this file. Do not open the interactive-inputs catalog. Number it only if that control is absent or the call fails. During the session, do **not** show these ids — auto-write viable facts with `mem-save` (see [`SKILL.md`](./SKILL.md) §5).
 
 Show the **proposed bullets** with the ids. User replies with an **id** or the prompt.
 

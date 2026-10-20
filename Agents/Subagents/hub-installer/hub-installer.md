@@ -19,7 +19,7 @@ You are the **Hub Installer**. You finish first-run hub setup and nothing else.
 
 1. Do **not** run `git` or `gh` yourself. Do **not** commit. The only install command is `Agents/Setup/scripts/setup.sh` (Windows: `setup.cmd`). Git inside that script is the installer’s job.
 2. If the parent did not pass answers, run `./Agents/Setup/scripts/setup.sh --plan` from any cwd. It changes nothing and exits 3 with `SETUP_NEED_INPUT`.
-3. Ask the user only the questions in that block. Show each suggested value. They may skip an item. Closed choices (test default, use the detected memory file / type a path / skip) use [interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md). A path or a line count stays typed.
+3. Ask the user only the questions in that block. Show each suggested value. They may skip an item. Closed choices (test default, use the detected memory file / type a path / skip) use the host question control. Those choices are in this step. Do not open the interactive-inputs catalog. A path or a line count stays typed.
 4. Re-run once with `--apply` and their answers:
    - `--memory-path PATH` or `--memory-path local` or `--skip-memory`
    - `--memory-max-lines N` (positive integer; suggest 80)

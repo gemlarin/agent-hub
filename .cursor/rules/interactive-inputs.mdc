@@ -13,4 +13,4 @@ Free text stays typed: a path, a line count, a commit message, a custom merge pl
 
 An option label capitalizes the first letter of the first word. Every other letter is lowercase. **Cancel**, **Exit**, and **Return to previous menu** are last. **Abort merge** is just before that last item when the menu has one.
 
-When offering a closed choice, read `Agents/Rules/interactive-inputs/interactive-inputs.md` for the menu catalog, then stop. Do not open that file on any other prompt.
+A plain **Yes** / **No** does not open `Agents/Rules/interactive-inputs/interactive-inputs.md`. Do not open that catalog when the choices are already in the skill, `options.md`, or git menu file for this task. Open it only for a hub menu whose options are not already in a file this prompt opened, then stop. Do not open that file on any other prompt.

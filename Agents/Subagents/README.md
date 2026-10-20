@@ -2,7 +2,7 @@
 
 **Canonical specs** for hub specialists. Cursor Task types in [`.cursor/agents/`](../../.cursor/agents/) are **generated** from these files — do not treat the generated copies as source.
 
-The parent does not open a specialist spec or [`subagents.md`](./subagents.md) to delegate. The Task prompt tells the specialist to read its own spec and `user-config.md`. [`subagents.md`](./subagents.md) is the contributor trigger matrix.
+The parent does not open a specialist spec or [`subagents.md`](./subagents.md) to delegate. The Task prompt tells the specialist to read its own spec and `user-config.md`. Git Coordinator is the exception: Cursor already loaded that procedure, so the spec path is included only after `reload agents` or `recache agents`. [`subagents.md`](./subagents.md) is the contributor trigger matrix.
 
 ## Using the agents (users)
 
@@ -37,7 +37,7 @@ Say **“run that in the background”** if you want this chat free. Job Finder,
 
 Stop or a new interrupting message can abort a running specialist — that is not the same as a failed search.
 
-Skills (step-by-step procedures) are separate: [how to activate a skill](../Skills/README.md#activate-a-skill-independently-users). Job Finder **loads** [`../Skills/job-search/`](../Skills/job-search/) and offers export ids [`out-chat` / `out-md` / `out-xml` / `out-raw`](../Skills/job-search/options.md). Research Scout **loads** [`../Skills/research/`](../Skills/research/) and, after a brief, the parent should offer [research options](../Skills/research/options.md) (`compare`, `cite`, `verify`, `versions`, `extract`, `actions`, `explain`, `gaps`, `deepen`, `timeline`, `expand`) plus the same export ids. Git Coordinator **loads** [`../Skills/git-merge/`](../Skills/git-merge/) and, on conflicts, the parent lists every conflicted file, then offers the active menu in [git-merge options](../Skills/git-merge/options.md). Memory Steward **loads** [`../Skills/memory-management/`](../Skills/memory-management/) and, before a write, the parent should offer [memory option ids](../Skills/memory-management/options.md). Code Sweeper **loads** [`../Skills/code-sweep/`](../Skills/code-sweep/) after you pick [topic ids](../Skills/code-sweep/options.md).
+Skills (step-by-step procedures) are separate: [how to activate a skill](../Skills/README.md#activate-a-skill-independently-users). Job Finder **loads** [`../Skills/job-search/`](../Skills/job-search/). After matches, pick an output id, then decide on a follow-up. Research Scout **loads** [`../Skills/research/`](../Skills/research/). After a brief, pick an output id, then decide on a follow-up. Git Coordinator **loads** [`../Skills/git-merge/`](../Skills/git-merge/) and, on conflicts, the parent lists every conflicted file, then offers the active menu in [git-merge options](../Skills/git-merge/options.md). Memory Steward **loads** [`../Skills/memory-management/`](../Skills/memory-management/) and, before a write, the parent should offer [memory option ids](../Skills/memory-management/options.md). Code Sweeper **loads** [`../Skills/code-sweep/`](../Skills/code-sweep/) after you pick **Topics to run** or **Run all**.
 
 ## Git merge choices (users)
 
@@ -49,20 +49,21 @@ Mid-session, the main agent **auto-saves** viable facts in the background and pr
 
 ## Code sweep topics (users)
 
-When you want a sweep, pick ids from [`../Skills/code-sweep/options.md`](../Skills/code-sweep/options.md): `aria`, `live`, `a11y`, `bugs`, `typos`, `smell`, `types`, `async`, `secrets`, `ci`, `dod`. Name the app or paths. The specialist reports only; it does not edit until you ask.
+When you want a sweep, pick **Topics to run** or **Run all** from [`../Skills/code-sweep/options.md`](../Skills/code-sweep/options.md). **Topics to run** then asks which of `aria`, `live`, `a11y`, `bugs`, `typos`, `smell`, `types`, `async`, `secrets`, `ci`, and `dod`. **Run all** uses every id. Name the app or paths. The specialist reports only; it does not edit until you ask.
 
 ## Job Finder export (users)
 
-After matches, pick the same output ids as research: `out-chat`, `out-md`, `out-xml`, `out-raw` — [`../Skills/job-search/options.md`](../Skills/job-search/options.md).
+After matches, pick `out-chat`, `out-md`, `out-xml`, or `out-raw`. After that file or chat delivery, pick **Yes** or **No** for follow-up work. **Yes** offers `refine`, `compare`, `employers`, or `widen` — [`../Skills/job-search/options.md`](../Skills/job-search/options.md).
 
 ## Research follow-ups (users)
 
-After Research Scout returns a brief, pick a **follow-up** and/or an **output** from [`../Skills/research/options.md`](../Skills/research/options.md).
+After Research Scout returns a brief, pick an **output** first, then decide on follow-up work — [`../Skills/research/options.md`](../Skills/research/options.md).
 
-- Tasks: `compare`, `cite`, `verify`, `versions`, `extract`, `actions`, `explain`, `gaps`, `deepen`, `timeline`, `expand`
-- Output: `out-chat` (default), `out-md`, `out-xml`, `out-raw` (Desktop file; not committed)
+- Output: `out-chat`, `out-md`, `out-xml`, `out-raw` (Desktop file; not committed)
+- After that delivery, **Yes** or **No**
+- **Yes** tasks: `compare`, `cite`, `verify`, `versions`, `extract`, `actions`, `explain`, `gaps`, `deepen`, `timeline`, `expand`
 
-Example: `cite` + `out-md`. The main agent re-invokes Research Scout for the task and writes the file if you asked to save.
+The main agent says the steps for the task you pick, re-invokes Research Scout, and writes the file when you asked to save.
 
 ## Design
 

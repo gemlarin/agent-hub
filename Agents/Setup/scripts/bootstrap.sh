@@ -192,43 +192,14 @@ if [[ "$base" == "agent-hub" ]]; then
 fi
 
 # Git/Cygwin: /c/Users/... → C:/Users/... for humans. Leave POSIX paths on macOS/Linux.
-host_path() {
-  local p="$1"
-  if command -v cygpath >/dev/null 2>&1; then
-    cygpath -m "$p"
-    return
-  fi
-  if [[ "$p" =~ ^/cygdrive/([a-zA-Z])/(.*)$ ]]; then
-    printf '%s:/%s\n' "$(printf '%s' "${BASH_REMATCH[1]}" | tr '[:lower:]' '[:upper:]')" "${BASH_REMATCH[2]}"
-    return
-  fi
-  if [[ "$p" =~ ^/([a-zA-Z])/(.*)$ ]]; then
-    printf '%s:/%s\n' "$(printf '%s' "${BASH_REMATCH[1]}" | tr '[:lower:]' '[:upper:]')" "${BASH_REMATCH[2]}"
-    return
-  fi
-  printf '%s\n' "$p"
-}
+# shellcheck source=host-path.sh
+. "$SCRIPTS/host-path.sh"
 
 HOST_ROOT="$(host_path "$ROOT")"
 echo "Hub root: $HOST_ROOT"
 
 sed_escape() {
   printf '%s' "$1" | sed -e 's/[\\|&]/\\&/g'
-}
-
-detect_memory_path() {
-  local f
-  for f in "$HOME/Library/CloudStorage"/GoogleDrive-*/My\ Drive/Documents/MEMORY.md; do
-    if [[ -f "$f" ]]; then
-      printf '%s\n' "$f"
-      return 0
-    fi
-  done
-  if [[ -f "$HOME/Google Drive/My Drive/Documents/MEMORY.md" ]]; then
-    printf '%s\n' "$HOME/Google Drive/My Drive/Documents/MEMORY.md"
-    return 0
-  fi
-  return 1
 }
 
 origin=""

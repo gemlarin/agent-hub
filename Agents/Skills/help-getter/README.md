@@ -6,7 +6,7 @@ Help menu for agent-hub. The main agent runs it. It is not a subagent.
 
 ## Open it
 
-The menu is a clickable choice when the app supports one, and a numbered list otherwise. See [interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md).
+The menu is a clickable choice when the app supports one, and a numbered list otherwise. The choices are in [SKILL.md](./SKILL.md). Do not open the interactive-inputs catalog.
 
 Send a prompt that is only:
 
@@ -25,6 +25,7 @@ or invoke `/help`.
 | Agent behaviors | A second choice. **Reload agents** and **Recache agents** re-read the load table and any hub behavior file already opened this session. **Cancel** returns to this list. |
 | Change code settings | A second choice. **Change code test settings** stores a new **Test default**. **Cancel** returns to this list. |
 | Display configuration | `Agents/Settings/CONFIG.md` in a code block. If that file is missing, the example file is shown instead. |
+| Enable edit | A second choice. **Enable** sets **Enable edit** to `true`. **Disable** sets it to `false`. **Cancel** returns to this list and does not change the flag. |
 | List agents | Each installed agent, a one-line synopsis, and when it runs on its own. |
 | List skills | Each installed skill, which agent uses it, the phrase to type, and the `/` command. |
 | Memory information | Memory path, how many lines in that file have data, and **Memory max lines**. Can point the file at a new path or change the line cap. |

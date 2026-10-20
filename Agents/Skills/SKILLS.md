@@ -22,25 +22,25 @@ When a task matches a skill's description, load and follow its instructions. Aft
 
 - **Skill file:** [`./job-search/SKILL.md`](./job-search/SKILL.md)
 - **Boards / output:** [`boards.md`](./job-search/boards.md) or gitignored `boards.local.md` ([example](./job-search/boards.local.example.md)), [`options.md`](./job-search/options.md), [`output.md`](./job-search/output.md)
-- **When to use:** Loaded by **Job Finder** when the user asks for a job search (or names that subagent). Parent must not run this skill itself. Do not invent postings.
+- **When to use:** Loaded by **Job Finder** when the user asks for a job search (or names that subagent). After matches, the parent asks for an output id, delivers it, then asks whether to run a follow-up. Parent must not run this skill itself. Do not invent postings.
 
 ### 4. `research` (`./research/`)
 
 - **Skill file:** [`./research/SKILL.md`](./research/SKILL.md)
-- **User options:** [`options.md`](./research/options.md) (tasks + `out-chat` / `out-md` / `out-xml` / `out-raw`)
-- **When to use:** Loaded by **Research Scout**. First pass is a brief; then the parent offers follow-up ids (`compare`, `cite`, `verify`, …). Not for job search or a one-line web lookup.
+- **User options:** [`options.md`](./research/options.md) (output ids, then follow-up tasks)
+- **When to use:** Loaded by **Research Scout**. First pass is a brief. The parent asks for an output id, delivers it, then asks whether to run a follow-up (`compare`, `cite`, `verify`, …). Not for job search or a one-line web lookup.
 
 ### 5. `code-sweep` (`./code-sweep/`)
 
 - **Skill file:** [`./code-sweep/SKILL.md`](./code-sweep/SKILL.md)
-- **User options:** [`options.md`](./code-sweep/options.md) (`aria`, `live`, `a11y`, `bugs`, `typos`, `smell`, `types`, `async`, `secrets`, `ci`, `dod`)
+- **User options:** [`options.md`](./code-sweep/options.md) (**Topics to run** or **Run all**, then `aria`, `live`, `a11y`, `bugs`, `typos`, `smell`, `types`, `async`, `secrets`, `ci`, `dod`)
 - **Orchestration:** Code Sweeper loads this skill. The parent does not open the sweeper spec or `subagents.md`.
 - **When to use:** Loaded by **Code Sweeper** when the user asks for a code sweep (or names that subagent) or a `tasks.md` sweep item is due. Parent must not run a multi-topic sweep itself. Not Code Reviewer (git diffs).
 
 ### 6. `help-getter` (`./help-getter/`)
 
 - **Skill file:** [`./help-getter/SKILL.md`](./help-getter/SKILL.md)
-- **User options:** [`options.md`](./help-getter/options.md) (`Agent behaviors`, `Change code settings`, `Display configuration`, `List agents`, `List skills`, `Memory information`, `Cancel`)
+- **User options:** [`options.md`](./help-getter/options.md) (`Agent behaviors`, `Change code settings`, `Display configuration`, `Enable edit`, `List agents`, `List skills`, `Memory information`, `Cancel`)
 - **When to use:** The prompt is `HELP` by itself, or the user invokes `/help`. The main agent runs it. Not a subagent.
 
 ---

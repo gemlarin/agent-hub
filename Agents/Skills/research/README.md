@@ -6,7 +6,7 @@
 
 ## Design
 
-**Research Scout** loads this skill. First invocation produces a Research Brief (`task: brief`). The parent then **offers follow-up tasks and output formats** (`out-chat`, `out-md`, `out-xml`, `out-raw`). Desktop saves are written by the parent, not the scout.
+**Research Scout** loads this skill. First invocation produces a Research Brief (`task: brief`). The parent then asks for an output id (`out-chat`, `out-md`, `out-xml`, `out-raw`), delivers it, and only then asks whether to run a follow-up. Desktop saves are written by the parent, not the scout.
 
 Scout stays read-only in the repo. This is not Web Researcher (one-shot lookup) and not Job Finder.
 

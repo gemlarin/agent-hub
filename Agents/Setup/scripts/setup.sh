@@ -103,22 +103,8 @@ if [[ ! -f "$ROOT/Agents/AGENTS.md" || ! -d "$ROOT/Agents/Setup" ]]; then
   exit 1
 fi
 
-host_path() {
-  local p="$1"
-  if command -v cygpath >/dev/null 2>&1; then
-    cygpath -m "$p"
-    return
-  fi
-  if [[ "$p" =~ ^/cygdrive/([a-zA-Z])/(.*)$ ]]; then
-    printf '%s:/%s\n' "$(printf '%s' "${BASH_REMATCH[1]}" | tr '[:lower:]' '[:upper:]')" "${BASH_REMATCH[2]}"
-    return
-  fi
-  if [[ "$p" =~ ^/([a-zA-Z])/(.*)$ ]] && [[ "$(uname -s)" != Darwin ]] && [[ "$(uname -s)" != Linux ]]; then
-    printf '%s:/%s\n' "$(printf '%s' "${BASH_REMATCH[1]}" | tr '[:lower:]' '[:upper:]')" "${BASH_REMATCH[2]}"
-    return
-  fi
-  printf '%s\n' "$p"
-}
+# shellcheck source=host-path.sh
+. "$SCRIPTS/host-path.sh"
 
 detect_os() {
   local u
@@ -143,25 +129,6 @@ detect_os() {
       OS_LABEL="Unknown ($u)"
       ;;
   esac
-}
-
-detect_memory_path() {
-  local f
-  for f in "$HOME/Library/CloudStorage"/GoogleDrive-*/My\ Drive/Documents/MEMORY.md; do
-    if [[ -f "$f" ]]; then
-      printf '%s\n' "$f"
-      return 0
-    fi
-  done
-  if [[ -f "$HOME/Google Drive/My Drive/Documents/MEMORY.md" ]]; then
-    printf '%s\n' "$HOME/Google Drive/My Drive/Documents/MEMORY.md"
-    return 0
-  fi
-  if [[ -f "$HOME/Documents/MEMORY.md" ]]; then
-    printf '%s\n' "$HOME/Documents/MEMORY.md"
-    return 0
-  fi
-  return 1
 }
 
 field_value() {
@@ -470,6 +437,20 @@ if [[ ! -f "$CONFIG" ]]; then
 fi
 set_bullet "$CONFIG" "Test default" "$TEST_DEFAULT"
 set_bullet "$CONFIG" "Memory max lines" "$MEMORY_MAX_LINES"
+if ! grep -q '^- \*\*Enable edit:\*\*' "$CONFIG"; then
+  tmp="$(mktemp)"
+  awk '
+    /^## Memory/ && !done {
+      print "## Hub edits"
+      print ""
+      print "- **Enable edit:** `false`"
+      print ""
+      done = 1
+    }
+    { print }
+  ' "$CONFIG" >"$tmp"
+  mv "$tmp" "$CONFIG"
+fi
 if [[ -n "$MEMORY_PATH" ]]; then
   set_bullet "$CONFIG" "MEMORY.md path" "$MEMORY_PATH"
 fi

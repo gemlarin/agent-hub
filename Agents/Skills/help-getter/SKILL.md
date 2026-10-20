@@ -12,21 +12,22 @@ Read `Agents/Settings/CONFIG.md` when a menu item needs it. Do not dump `MEMORY.
 
 ## Menu
 
-Offer this list as one host question control ([interactive inputs](../../Rules/interactive-inputs/interactive-inputs.md)). Keep the items in alphabetical order, then **Cancel** last. Call that control before any numbered list. Number only if the control is absent or the call fails. Wait either way:
+Offer this list as one host question control. The choices are in this file. Do not open the interactive-inputs catalog. Keep the items in alphabetical order, then **Cancel** last. Call that control before any numbered list. Number only if the control is absent or the call fails. Wait either way:
 
 1. Agent behaviors
 2. Change code settings
 3. Display configuration
-4. List agents
-5. List skills
-6. Memory information
-7. Cancel
+4. Enable edit
+5. List agents
+6. List skills
+7. Memory information
+8. Cancel
 
 ## Agent behaviors
 
 Offer **Reload agents**, **Recache agents**, and **Cancel** as one host question control. **Cancel** is last. Call that control before any numbered list. Number only if the control is absent or the call fails. Wait either way.
 
-**Reload agents** and **Recache agents** do the same thing. Re-read the load table (`Agents/AGENTS.md`, or the file the app pointer names) and any hub behavior file already opened this session. Do not walk the whole `Agents/` tree. Do not open a specialist spec this session has not already opened. Tell the user those files were read again. Then show the main help menu.
+**Reload agents** and **Recache agents** do the same thing. Re-read the load table (`Agents/AGENTS.md`, or the file the app pointer names) and any hub behavior file already opened this session. Do not walk the whole `Agents/` tree. Do not open a specialist spec this session has not already opened. The next git Task tells Git Coordinator to read `Agents/Subagents/git-coordinator/git-coordinator.md` once. Later git Tasks skip that read until the next reload or recache. Tell the user those files were read again. Then show the main help menu.
 
 Typing `reload agents` or `recache agents` outside this menu does that same read. It does not open help.
 
@@ -48,6 +49,24 @@ Offer **Unit**, **Browser**, **Both**, **None** as one host question control. Wr
 ### Cancel
 
 Show the main help menu again. Do not exit help.
+
+## Enable edit
+
+Read **Enable edit** from `Agents/Settings/CONFIG.md`. Missing, empty, or any value other than `true` means editing is disabled. Offer **Enable**, **Disable**, and **Cancel** as one host question control. **Cancel** is last. Call that control before any numbered list. Number only if the control is absent or the call fails. Wait either way.
+
+This menu may write the flag while editing is disabled.
+
+### Enable
+
+Write `true` to **Enable edit** in `Agents/Settings/CONFIG.md`. If that file is missing, copy `Agents/Settings/CONFIG.example.md` to `Agents/Settings/CONFIG.md`, then write `true`. If the bullet is missing, add it under `## Hub edits`. Confirm that hub editing is enabled. Then show the main help menu again.
+
+### Disable
+
+Write `false` to **Enable edit**. If the file or the bullet is missing, create them the same way, then write `false`. Confirm that hub editing is disabled. Then show the main help menu again.
+
+### Cancel
+
+Show the main help menu again. Do not exit help. Do not change the flag.
 
 ## Display configuration
 

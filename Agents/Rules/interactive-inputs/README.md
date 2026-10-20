@@ -2,7 +2,7 @@
 
 How a closed choice is shown: the host's clickable control when it has one, otherwise a numbered list.
 
-Shared file: [`interactive-inputs.md`](./interactive-inputs.md).
+Shared file: [`interactive-inputs.md`](./interactive-inputs.md). Open it only for a hub menu whose options are not already in the skill, `options.md`, or git menu file for this task. A plain Yes/No does not open it.
 
 ## What lives here
 
