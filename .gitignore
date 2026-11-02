@@ -18,6 +18,12 @@
 
 # Safety net: never commit a hub-root MEMORY.md (path is in hub-setup.local.md)
 /MEMORY.md
+/Agents/Memory/Proposals/
+/Agents/Memory/Audit/
+/Agents/Memory/**/credentials.json
+/Agents/Memory/**/tokens.env
+/Agents/Memory/**/store.json
+**/__pycache__/
 
 # Per-machine hub remotes & accounts (template: Agents/Setup/hub-setup.local.example.md)
 /Agents/Setup/hub-setup.local.md

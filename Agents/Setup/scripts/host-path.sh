@@ -17,6 +17,26 @@ host_path() {
   printf '%s\n' "$p"
 }
 
+default_local_memory_path() {
+  local p
+  case "$(uname -s 2>/dev/null || echo unknown)" in
+    Darwin)
+      p="$HOME/Library/Application Support/agent-memory/MEMORY.md"
+      ;;
+    Linux)
+      p="${XDG_DATA_HOME:-$HOME/.local/share}/agent-memory/MEMORY.md"
+      ;;
+    *)
+      if [[ -n "${LOCALAPPDATA:-}" ]]; then
+        p="$LOCALAPPDATA/agent-memory/MEMORY.md"
+      else
+        p="$HOME/AppData/Local/agent-memory/MEMORY.md"
+      fi
+      ;;
+  esac
+  host_path "$p"
+}
+
 detect_memory_path() {
   local f
   for f in "$HOME/Library/CloudStorage"/GoogleDrive-*/My\ Drive/Documents/MEMORY.md; do

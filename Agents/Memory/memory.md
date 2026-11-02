@@ -1,12 +1,10 @@
 # Memory & Persistent Context
 
-Cross-session continuity uses **one** `MEMORY.md` file. It is private—never commit it to agent-hub or app repos.
-
-Put it in **cloud storage** (Google Drive, iCloud, Dropbox, …) so machines share it, or keep a **local-only** file on this computer.
+Cross-session continuity uses a **structured store** behind the memory controller. `MEMORY.md` is a rendered view. Never commit the store, tokens, or `CONFIG.md`.
 
 ## Configure the path
 
-The Memory Steward and the main agent read the path and the line cap from gitignored [`Settings/CONFIG.md`](../Settings/CONFIG.md):
+The controller and installer read the path and the line cap from gitignored [`Settings/CONFIG.md`](../Settings/CONFIG.md):
 
 ```markdown
 ## Memory
@@ -15,43 +13,37 @@ The Memory Steward and the main agent read the path and the line cap from gitign
 - **Memory max lines:** `80`
 ```
 
-Setup writes that file from [`Settings/CONFIG.example.md`](../Settings/CONFIG.example.md). If the path is missing or still the placeholder, stop and ask the user to set it (`HELP` → Memory information, or setup). If `CONFIG.md` has no path yet, `Setup/hub-setup.local.md` may still have **MEMORY.md path** from an older install. Prefer `CONFIG.md` when both are set.
+The memory **root** is the directory that contains that file. Run [`installer/install_memory.py`](./installer/install_memory.py) after the path is set. It writes permissions, credentials, `store.json`, `Proposals/`, and `Audit/`.
 
-Typical locations:
+## Who may do what
 
-| Kind | Example |
-|------|---------|
-| Google Drive for Desktop (Mac) | `~/Library/CloudStorage/GoogleDrive-<account>/My Drive/Documents/MEMORY.md` |
-| Google Drive for Desktop (Windows) | `~/Google Drive/My Drive/Documents/MEMORY.md` |
-| Local only | `~/Documents/MEMORY.md` |
+Permissions are in `credentials.json` (token hashes). The CLI loads the matching token from the OS secret store. Agents set `MEMORY_AGENT_ID` only. They do not read Keychain, Credential Manager, or a token file.
 
-**Do not** commit `MEMORY.md`. Hub gitignore already drops a hub-root `/MEMORY.md`. Prefer a path **outside** the clone (cloud sync folder or `~/Documents`).
+| Actor | Through the controller |
+| --- | --- |
+| **Main agent** | `read` at session start. `propose` for autosave. Never open the files with the Read/Write tools. |
+| **Memory Steward** | `approve` / `commit` / `forget`. Never write `MEMORY.md` or `store.json` itself. |
+| **Every other subagent** | `propose` and `read` through the controller. Do not open the files. |
 
-## Who reads vs writes
+```bash
+export MEMORY_AGENT_ID=main_agent
+python3 Agents/Memory/memory_ctl.py read
+python3 Agents/Memory/memory_ctl.py propose --type preference --scope global --content "One-line fact."
+```
 
-| Actor | Responsibility |
-|--------|----------------|
-| **Main agent** | **Only** loader of session context. Read `Settings/CONFIG.md` for the path and **Memory max lines**, then read that `MEMORY.md` **once** at **session start**. Apply context; do not re-read unless the user says the file changed or after Memory Steward writes. |
-| **Memory Steward** | **Write only** to that same path. May read the file internally to merge, dedupe, and prune—never to bootstrap the parent or another specialist. |
-| **Every other subagent** | **Do not** read `MEMORY.md` or `hub-setup.local.md` for memory. Use only `related_memory` bullets the parent put in the task prompt (may be empty). |
-
-Do **not** invoke Memory Steward with `mode: read` to load session context (avoids double-read with the main agent).
+Steward then `pending` and `approve <id>`.
 
 ## Keep it lean
 
-`MEMORY.md` is loaded by every new main-agent session. Keep it short so it does not burn tokens.
-
-- **Cap:** **Memory max lines** in `Settings/CONFIG.md`. Memory Steward always uses that number. If a write would pass it, prune lowest-value entries first until the file fits.
-- One fact per bullet. No paragraphs, logs, diffs, or file dumps.
-- Overwrite or drop stale bullets; do not append duplicates.
-- Drop resolved blockers, finished one-off goals, and superseded preferences on every write.
-- If a write would exceed the hard cap, prune lowest-value entries first (resolved blockers, then old project detail; keep current prefs and active goals).
+- **Cap:** **Memory max lines** in `CONFIG.md`. The controller prunes on commit.
+- One fact per entry. No paragraphs, logs, diffs, or file dumps.
+- Types: `fact`, `preference`, `decision`, `technical_context`, `blocker`.
 
 ## Auto-save vs option menu
 
 ### Viable fact (during the session)
 
-As soon as the parent judges a fact meets the skill’s capture rules (standing preference, durable decision, hard-won workaround, open blocker, lasting goal)—and it is not already in memory—**auto-write**. Invoke Memory Steward **in the background** with `mode: write`, `option: mem-save`, **`memory_path`**, **`memory_max_lines`**, and the delta. Do **not** show option ids. Do **not** wait in the foreground (Drive `MEMORY.md` can stall this chat). Batch several facts from the same turn into one write.
+Parent proposes via the controller (`main_agent` token), then invokes Memory Steward to approve. Do **not** show option ids. Do **not** `Write` the memory file.
 
 When the Memory Report arrives with a real change, print exactly:
 
@@ -59,38 +51,14 @@ When the Memory Report arrives with a real change, print exactly:
 
 ### Option menu (only these times)
 
-Show the proposed bullets and the ids in [`Skills/memory-management/options.md`](../Skills/memory-management/options.md) **only** when:
+Show the proposed bullets and the ids in [`Skills/memory-management/options.md`](../Skills/memory-management/options.md) **only** when the user asked to save or the session is ending.
 
-1. **Explicit save:** the user asked to remember / save / update memory.
-2. **Session ending:** user input means they are done (e.g. “that’s all”, “we’re done”, “wrap up”, “thanks, I’m out”, “later”, “good night”, “stop for now”).
-
-Do not write the wrap-up or explicit-save delta until they pick (or confirm). Skipping the session-end menu = `mem-skip`. After a successful user-chosen write, print the same `Durable memory saved to MEMORY file` line.
-
-Never dump the full `MEMORY.md` into chat.
-
-## Skill (content rules for writes)
-
-When **writing** memory, the steward loads:
-
-[`Skills/memory-management/SKILL.md`](../Skills/memory-management/SKILL.md)
-
-Write ids the parent offers: [`Skills/memory-management/options.md`](../Skills/memory-management/options.md).
-
-Main agent should follow the same capture/discard boundaries when deciding *what* to propose.
+Never dump the full store into chat.
 
 ## Main agent responsibilities
 
-1. **Session start:** Resolve the path and **Memory max lines** from `Settings/CONFIG.md`, then read that `MEMORY.md` before planning work.
-2. **During work:** Use memory as context; do not paste the full file into chat.
-3. **Mid-session:** Auto-write viable durable facts in the **background** (`mem-save` + `memory_path` + `memory_max_lines`); print `Durable memory saved to MEMORY file` when the report arrives.
-4. **Persistence:** Delegate **all writes** to Memory Steward (`mode: write`); never edit `MEMORY.md` during feature work.
-5. **Subagents:** Pass **`related_memory`** — only the bullets that apply to **this** task. Never the full file. Never tell a specialist to open `MEMORY.md`.
-6. **Menu:** Show option ids only on “remember” / “save session” / wrap-up. After a successful write, print the same save line.
-
-## Passing memory to subagents
-
-When invoking any specialist, include at most a short `related_memory` list (prefer ≤8 bullets) copied from session memory **if and only if** it affects that task (prefs for how to code/commit, the active project for this repo, a relevant workaround or blocker). Omit the field when nothing applies.
-
-## What belongs in `MEMORY.md`
-
-Follow the skill: preferences, project goals, durable solutions, open blockers—not secrets, PII, or ephemeral logs.
+1. **Session start:** Resolve the path from `CONFIG.md`, then `memory_ctl.py read` once.
+2. **During work:** Use that snapshot. Do not paste the file into chat.
+3. **Mid-session:** Propose durable facts; steward approves.
+4. **Subagents:** Pass **`related_memory`** only.
+5. **Menu:** Option ids only on save / wrap-up.

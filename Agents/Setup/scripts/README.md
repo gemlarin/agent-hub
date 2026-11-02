@@ -6,7 +6,7 @@ Run from the **hub git root** (the folder that contains `Agents/AGENTS.md`). `bo
 
 | Script | Role |
 |--------|------|
-| [`setup.sh`](./setup.sh) / [`setup.cmd`](./setup.cmd) | Guided first run: detect OS, ask memory path, memory line cap, test default, GitHub, and app pointers, then call bootstrap. `--plan` prints questions and changes nothing |
+| [`setup.sh`](./setup.sh) / [`setup.cmd`](./setup.cmd) | Guided first run: detect OS, ask memory path, whether to install the memory controller, memory line cap, test default, GitHub, and app pointers, then call bootstrap. `--plan` prints questions and changes nothing |
 | [`sync-cursor-skills.sh`](./sync-cursor-skills.sh) | Symlink `Agents/Skills/` into `.cursor/skills/` so Cursor `/` can launch them (`/help` → help-getter) |
 | [`bootstrap.sh`](./bootstrap.sh) / [`bootstrap.cmd`](./bootstrap.cmd) | Seed `hub-setup.local.md`, optional Cursor sync, local `core.hooksPath`, and (in a terminal) ask to link current project directories |
 | [`install-cursor-integration.sh`](./install-cursor-integration.sh) | Detect Cursor, sync `.cursor/agents/`, chmod hooks (`--force` to run without Cursor) |

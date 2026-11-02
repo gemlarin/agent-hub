@@ -6,14 +6,14 @@ Show the **proposed bullets** with the ids. User replies with an **id** or the p
 
 | Id | Say this | Result |
 |----|----------|--------|
-| `mem-save` | “Remember this” / “save it” | Write the proposed delta (sanitize, dedupe, prune) |
-| `mem-skip` | “Don’t save” | No write |
-| `mem-prefs` | “Save as a preference” | `## Preferences` only |
-| `mem-projects` | “Save as a project/goal” | `## Active projects` |
-| `mem-solutions` | “Save as a workaround/convention” | `## Solutions & conventions` |
-| `mem-blockers` | “Save as an open blocker” | `## Blockers` |
-| `mem-forget` | “Forget …” / “remove that” | Delete the matching entry |
-| `mem-prune` | “Just clean it up” | Compact only; no new bullets |
+| `mem-save` | “Remember this” / “save it” | Approve pending proposals |
+| `mem-skip` | “Don’t save” | No controller call |
+| `mem-prefs` | “Save as a preference” | Approve `preference` only |
+| `mem-projects` | “Save as a project/goal” | Approve `decision` only |
+| `mem-solutions` | “Save as a workaround/convention” | Approve `technical_context` only |
+| `mem-blockers` | “Save as an open blocker” | Approve `blocker` only |
+| `mem-forget` | “Forget …” / “remove that” | Controller `forget` |
+| `mem-prune` | “Just clean it up” | No new approve; prune on commit |
 
 Default if they already said “remember” / “save to memory” / “save session” and skip the menu: **`mem-save`**. Skipping the **session-end** menu = **`mem-skip`**.
 
@@ -21,4 +21,4 @@ After **any** successful write (auto or user-chosen), the parent prints exactly:
 
 `Durable memory saved to MEMORY file`
 
-Keep `MEMORY.md` within **Memory max lines** in `Agents/Settings/CONFIG.md`. Memory Steward writes. Never commit `MEMORY.md`. Never dump the full file into chat. Capture rules: [`SKILL.md`](./SKILL.md).
+Keep `MEMORY.md` within **Memory max lines** in `Agents/Settings/CONFIG.md`. The controller writes. Never commit `MEMORY.md`. Never dump the full file into chat. Capture rules: [`SKILL.md`](./SKILL.md).

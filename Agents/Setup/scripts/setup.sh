@@ -16,6 +16,7 @@ SKIP_MEMORY=false
 SKIP_GITHUB=false
 SKIP_APPS=false
 LINK_ALL=false
+MEMORY_CONTROLLER=""
 MEMORY_PATH=""
 MEMORY_MAX_LINES=""
 TEST_DEFAULT=""
@@ -33,8 +34,10 @@ From the hub root (any cwd). Detects macOS, Linux, WSL, or Windows Git Bash.
   (no flags, terminal)  Ask, then install
   --plan                Print what is known and which questions remain; change nothing
   --apply               Install using flags below (for the Hub Installer agent; never prompts)
-  --memory-path PATH    Absolute MEMORY.md path, or "local" for ~/Documents/MEMORY.md
+  --memory-path PATH    Absolute MEMORY.md path, or "local" for this machine's store
   --skip-memory         Leave the memory path for later
+  --install-memory      Run the memory controller installer after setup
+  --skip-memory-install Leave the controller for later (python3 Agents/Memory/installer/install_memory.py)
   --memory-max-lines N  Max lines stored in MEMORY.md before cleanup
   --test-default MODE   UNIT, BROWSER, BOTH, or NONE (checks after an update)
   --github-user NAME    GitHub username for app-repo links in hub-setup.local.md
@@ -56,6 +59,8 @@ while [[ $# -gt 0 ]]; do
     --skip-cursor) SKIP_CURSOR=true ;;
     --no-hooks-path) NO_HOOKS=true ;;
     --skip-memory) SKIP_MEMORY=true ;;
+    --install-memory) MEMORY_CONTROLLER=install ;;
+    --skip-memory-install) MEMORY_CONTROLLER=skip ;;
     --skip-github) SKIP_GITHUB=true ;;
     --skip-apps) SKIP_APPS=true ;;
     --link-all) LINK_ALL=true ;;
@@ -229,10 +234,27 @@ fi
 resolve_memory_token() {
   local raw="$1"
   if [[ "$raw" == "local" ]]; then
-    printf '%s\n' "$(host_path "$HOME/Documents/MEMORY.md")"
+    printf '%s\n' "$(default_local_memory_path)"
     return
   fi
   printf '%s\n' "$(host_path "$raw")"
+}
+
+ask_memory_controller() {
+  echo "Install durable memory on this machine now?"
+  echo "  1) Yes — controller, permissions, and tokens"
+  echo "  2) No — run Agents/Memory/installer/install_memory.py later"
+  printf 'Choice [1]: '
+  read -r mem_ctl || true
+  mem_ctl="${mem_ctl:-1}"
+  case "$mem_ctl" in
+    1 | yes | Yes | YES) MEMORY_CONTROLLER=install ;;
+    2 | no | No | NO) MEMORY_CONTROLLER=skip ;;
+    *)
+      echo "Answer 1 or 2." >&2
+      exit 2
+      ;;
+  esac
 }
 
 if $INTERACTIVE; then
@@ -240,34 +262,44 @@ if $INTERACTIVE; then
   echo "Hub root: $HOST_ROOT"
   echo "Layout: $LAYOUT"
   echo ""
+  echo "Durable memory for this machine (sharing across computers comes later):"
+  echo "  1) Local store (recommended): $(default_local_memory_path)"
   if [[ -n "$DETECTED_MEMORY" ]]; then
-    echo "Found MEMORY.md: $(host_path "$DETECTED_MEMORY")"
+    echo "  2) Use detected file: $(host_path "$DETECTED_MEMORY")"
+  else
+    echo "  2) Use detected file (none found — same as 1)"
   fi
-  echo "Memory file:"
-  echo "  1) Use the detected file, or ~/Documents/MEMORY.md if none was found"
-  echo "  2) Type an absolute path"
-  echo "  3) Skip for now"
+  echo "  3) Type an absolute path"
+  echo "  4) Skip — install memory later"
   printf 'Choice [1]: '
   read -r mem_choice || true
   mem_choice="${mem_choice:-1}"
   case "$mem_choice" in
     1)
+      MEMORY_PATH="$(default_local_memory_path)"
+      ;;
+    2)
       if [[ -n "$DETECTED_MEMORY" ]]; then
         MEMORY_PATH="$(host_path "$DETECTED_MEMORY")"
       else
-        MEMORY_PATH="$(host_path "$HOME/Documents/MEMORY.md")"
+        MEMORY_PATH="$(default_local_memory_path)"
       fi
       ;;
-    2)
+    3)
       printf 'Absolute MEMORY.md path: '
       read -r MEMORY_PATH || true
       ;;
-    3) SKIP_MEMORY=true ;;
+    4) SKIP_MEMORY=true ;;
     *)
-      echo "Answer 1, 2, or 3." >&2
+      echo "Answer 1, 2, 3, or 4." >&2
       exit 2
       ;;
   esac
+  if ! $SKIP_MEMORY; then
+    ask_memory_controller
+  else
+    MEMORY_CONTROLLER=skip
+  fi
 
   if [[ -n "$DETECTED_GITHUB" ]]; then
     printf 'GitHub username for app repos [%s] (- to skip): ' "$DETECTED_GITHUB"
@@ -326,11 +358,12 @@ github_detected=${DETECTED_GITHUB:-}
 cursor=$CURSOR
 
 Ask the user, then re-run with --apply:
-1. MEMORY.md path. Suggested: ${DETECTED_MEMORY:-$HOME/Documents/MEMORY.md} (or local). Flag: --memory-path PATH | --skip-memory
-2. GitHub username for app repos. Suggested: ${DETECTED_GITHUB:-skip}. Flag: --github-user NAME | --skip-github
-3. Test default after an update: UNIT, BROWSER, BOTH, or NONE. Flag: --test-default MODE
-4. Max lines stored in MEMORY.md before cleanup. Suggested: 80. Flag: --memory-max-lines N
-5. Link current project directories? Existing AGENTS.md files are replaced with a pointer to the hub.
+1. MEMORY.md path. Suggested: local ($(default_local_memory_path)). Detected: ${DETECTED_MEMORY:-none}. Flag: --memory-path PATH | --memory-path local | --skip-memory
+2. Install durable memory controller now? Flag: --install-memory | --skip-memory-install
+3. GitHub username for app repos. Suggested: ${DETECTED_GITHUB:-skip}. Flag: --github-user NAME | --skip-github
+4. Test default after an update: UNIT, BROWSER, BOTH, or NONE. Flag: --test-default MODE
+5. Max lines stored in MEMORY.md before cleanup. Suggested: 80. Flag: --memory-max-lines N
+6. Link current project directories? Existing AGENTS.md files are replaced with a pointer to the hub.
 ${PROJECT_LIST:- (none found)}
 Flag: --link-all | --app PATH (repeat) | --skip-apps
 EOF
@@ -340,6 +373,9 @@ fi
 if ! $SKIP_MEMORY && [[ -z "$MEMORY_PATH" && -n "$DETECTED_MEMORY" ]]; then
   MEMORY_PATH="$(host_path "$DETECTED_MEMORY")"
 fi
+if $SKIP_MEMORY; then
+  MEMORY_CONTROLLER=skip
+fi
 if ! $SKIP_GITHUB && [[ -z "$GITHUB_USER" && -n "$DETECTED_GITHUB" ]]; then
   GITHUB_USER="$DETECTED_GITHUB"
 fi
@@ -347,6 +383,9 @@ fi
 missing=()
 if ! $SKIP_MEMORY && [[ -z "$MEMORY_PATH" ]]; then
   missing+=("memory")
+fi
+if ! $SKIP_MEMORY && [[ -z "$MEMORY_CONTROLLER" ]]; then
+  missing+=("memory-install")
 fi
 if ! $SKIP_GITHUB && [[ -z "$GITHUB_USER" ]]; then
   missing+=("github-user")
@@ -362,7 +401,7 @@ if ! $INTERACTIVE && ! $SKIP_APPS && ! $LINK_ALL && [[ ${#APPS[@]} -eq 0 ]]; the
 fi
 if [[ ${#missing[@]} -gt 0 ]]; then
   echo "SETUP_NEED_INPUT missing: ${missing[*]}" >&2
-  echo "Pass --memory-path or --skip-memory, --github-user or --skip-github, --test-default, --memory-max-lines, and --link-all or --app or --skip-apps." >&2
+  echo "Pass --memory-path or --skip-memory, --install-memory or --skip-memory-install, --github-user or --skip-github, --test-default, --memory-max-lines, and --link-all or --app or --skip-apps." >&2
   exit 3
 fi
 
@@ -453,6 +492,39 @@ if ! grep -q '^- \*\*Enable edit:\*\*' "$CONFIG"; then
 fi
 if [[ -n "$MEMORY_PATH" ]]; then
   set_bullet "$CONFIG" "MEMORY.md path" "$MEMORY_PATH"
+fi
+
+run_memory_controller_install() {
+  local src="" args
+  # shellcheck source=find-python.sh
+  . "$SCRIPTS/find-python.sh"
+  if ! find_python; then
+    echo "Python 3.8+ not found. Run Agents/Memory/installer/install_memory.py later."
+    echo "memory_controller=skipped-no-python"
+    return 0
+  fi
+  args=("$ROOT/Agents/Memory/installer/install_memory.py")
+  if [[ -n "${DETECTED_MEMORY:-}" && -f "$DETECTED_MEMORY" ]]; then
+    if [[ "$(host_path "$MEMORY_PATH")" != "$(host_path "$DETECTED_MEMORY")" ]]; then
+      src="$DETECTED_MEMORY"
+      args+=(--source "$src")
+    fi
+  fi
+  if [ "$PY" = py ]; then
+    py -3 "${args[@]}"
+  else
+    "$PY" "${args[@]}"
+  fi
+  echo "memory_controller=installed"
+}
+
+if [[ -n "$MEMORY_PATH" && "$MEMORY_CONTROLLER" == install ]]; then
+  run_memory_controller_install
+elif [[ -n "$MEMORY_PATH" ]]; then
+  echo "memory_controller=skipped"
+  echo "Later: python3 Agents/Memory/installer/install_memory.py"
+else
+  echo "memory_controller=skipped"
 fi
 
 echo ""

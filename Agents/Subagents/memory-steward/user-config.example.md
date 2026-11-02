@@ -6,7 +6,7 @@ Read it after [`memory-steward.md`](./memory-steward.md). Additions extend the s
 
 ## Additions
 
-- (extra steps for your machine)
+- Set `MEMORY_AGENT_ID=memory_steward`. Do not paste tokens into chat or into this file. The CLI loads them from the OS secret store.
 
 ## Overrides
 

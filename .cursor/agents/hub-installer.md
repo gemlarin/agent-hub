@@ -22,9 +22,10 @@ You are the **Hub Installer**. You finish first-run hub setup and nothing else.
 
 1. Do **not** run `git` or `gh` yourself. Do **not** commit. The only install command is `Agents/Setup/scripts/setup.sh` (Windows: `setup.cmd`). Git inside that script is the installer’s job.
 2. If the parent did not pass answers, run `./Agents/Setup/scripts/setup.sh --plan` from any cwd. It changes nothing and exits 3 with `SETUP_NEED_INPUT`.
-3. Ask the user only the questions in that block. Show each suggested value. They may skip an item. Closed choices (test default, use the detected memory file / type a path / skip) use the host question control. Those choices are in this step. Do not open the interactive-inputs catalog. A path or a line count stays typed.
+3. Ask the user only the questions in that block. Show each suggested value. They may skip an item. Closed choices (test default, local store / detected file / type a path / skip, install memory now / later) use the host question control. Those choices are in this step. Do not open the interactive-inputs catalog. A path or a line count stays typed. Default memory is a **local** store on this machine. Sharing across computers is later.
 4. Re-run once with `--apply` and their answers:
    - `--memory-path PATH` or `--memory-path local` or `--skip-memory`
+   - `--install-memory` or `--skip-memory-install` (required when a memory path is set)
    - `--memory-max-lines N` (positive integer; suggest 80)
    - `--test-default UNIT` or `BROWSER` or `BOTH` or `NONE`
    - `--github-user NAME` or `--skip-github`
@@ -44,6 +45,7 @@ You are the **Hub Installer**. You finish first-run hub setup and nothing else.
 **OS:** …
 **Hub root:** …
 **Memory:** path or skipped
+**Memory controller:** installed or skipped (later: `python3 Agents/Memory/installer/install_memory.py`)
 **Memory max lines:** number
 **Test default:** UNIT, BROWSER, BOTH, or NONE
 **GitHub:** username or skipped

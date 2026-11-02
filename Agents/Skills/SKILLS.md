@@ -9,7 +9,7 @@ When a task matches a skill's description, load and follow its instructions. Aft
 - **Skill file:** [`./memory-management/SKILL.md`](./memory-management/SKILL.md)
 - **User options:** [`options.md`](./memory-management/options.md) (`mem-save`, `mem-skip`, `mem-prefs`, `mem-projects`, `mem-solutions`, `mem-blockers`, `mem-forget`, `mem-prune`)
 - **Orchestration (paths, triggers, steward):** [`memory.md`](../Memory/memory.md)
-- **When to use:** Memory Steward **writes** (sanitize, dedupe, prune). Main agent **reads** once at session start, **auto-writes** viable facts mid-session, **offers option ids** only on explicit save or wrap-up, and passes a **slice** to other subagents—see `Agents/Memory/memory.md`.
+- **When to use:** Memory Steward **approves** controller-validated proposals. Main agent **reads** once at session start through the controller, **proposes** viable facts mid-session, **offers option ids** only on explicit save or wrap-up, and passes a **slice** to other subagents—see `Agents/Memory/memory.md`.
 
 ### 2. `git-merge` (`./git-merge/`)
 

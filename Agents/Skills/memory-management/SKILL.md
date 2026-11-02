@@ -7,7 +7,7 @@ description: Captures, sanitizes, and maintains a lean MEMORY.md. Auto-write via
 
 **This machine:** After this file, read `user-config.md` in this folder when it exists. Additions extend the skill. Overrides replace the matching part on this machine only. Never commit that file. Copy [user-config.example.md](./user-config.example.md) to create it.
 
-Apply this skill when **writing** the configured `MEMORY.md` (Memory Steward) and when the **parent** decides whether to prompt a save. The **main agent** reads memory at session start without invoking the steward. Path and line cap come from gitignored `Agents/Settings/CONFIG.md` — see [`memory.md`](../../Memory/memory.md). Never commit `MEMORY.md` or `CONFIG.md`.
+Apply this skill when **writing** through the memory controller (Memory Steward) and when the **parent** decides whether to prompt a save. The **main agent** reads memory at session start with `Agents/Memory/memory_ctl.py read`, not the Read tool. Path and line cap come from gitignored `Agents/Settings/CONFIG.md` — see [`memory.md`](../../Agents/Memory/memory.md). Never commit `MEMORY.md`, `store.json`, `tokens.env`, or `CONFIG.md`. Do not dump Keychain or Credential Manager.
 
 User-facing ids: [`options.md`](./options.md). Show that list **only** on an explicit save request or session wrap-up. Mid-session viable facts are **auto-written** (`mem-save`) without the menu. Memory Steward applies the id to the delta.
 
@@ -48,7 +48,7 @@ You are **strictly prohibited** from writing the following types of sensitive in
 - **Size:** **Memory max lines** in `Agents/Settings/CONFIG.md`. One-line bullets only. If a write would exceed that cap, prune (resolved blockers first, then stale project detail; keep current prefs and active goals) until the file fits. Never pass the configured cap.
 - **Deduplication:** Before adding, check if it updates or contradicts an existing entry. Overwrite rather than append.
 - **Portability:** Do not rely on local device states (avoid absolute paths like `/Users/name/Desktop/...` unless marked device-specific).
-- **File Target:** **MEMORY.md path** in `Agents/Settings/CONFIG.md`. Main agent reads at session start; Memory Steward performs writes. Never commit the file.
+- **File Target:** **MEMORY.md path** in `Agents/Settings/CONFIG.md`. Main agent reads at session start through the controller. Memory Steward only approves proposals. Never commit the file.
 - **Option id:** Apply the id from [`options.md`](./options.md):
   - `mem-save` — infer the section from the delta.
   - `mem-prefs` / `mem-projects` / `mem-solutions` / `mem-blockers` — write only that stub heading.
@@ -58,7 +58,7 @@ You are **strictly prohibited** from writing the following types of sensitive in
 
 ### 5. Parent
 
-- **Viable fact (mid-session):** When a new fact matches §1 and is not already stored, **auto-write** in the **background**: invoke Memory Steward with `mode: write`, `option: mem-save`, **`memory_path`**, **`memory_max_lines`**, and the delta. Do **not** show [`options.md`](./options.md). Do not wait in the foreground. When SUCCESS arrives, print exactly: `Durable memory saved to MEMORY file`
+- **Viable fact (mid-session):** When a new fact matches §1 and is not already stored, **propose** it with `MEMORY_AGENT_ID=main_agent` and `memory_ctl.py`. Then invoke Memory Steward in the **background** to approve (`mode: write`, `option: mem-save`). Do **not** pass a token. Do **not** show [`options.md`](./options.md). Do not wait in the foreground. When SUCCESS arrives, print exactly: `Durable memory saved to MEMORY file`
 - **Session ending:** If user input means they are done (wrap-up, “that’s all”, “thanks I’m out”, “later”, “good night”, “stop for now”), **show** the option ids (and any remaining unsaved bullets). Do not auto-write the wrap-up. Skipping the menu = `mem-skip`.
 - **Explicit save:** “Remember this” / “save to memory” / “save session” — show the same menu, or `mem-save` if they already confirmed.
 - After **any** successful steward write (auto or user-chosen), print that same `Durable memory saved to MEMORY file` line when the report arrives. Do not dump the Memory Report or the full file into chat.

@@ -164,26 +164,16 @@ Do **not** move `.cursor/` or `.githooks/` into `Agents/`. Cursor only reads `.c
 
 ## Persistent memory
 
-Agents keep durable notes in **one** `MEMORY.md` file. Use **cloud storage** (Google Drive, iCloud, Dropbox, …) if you want the same file on every machine, or a **local file** if this computer is enough.
+This machine keeps durable notes in a **local** store. Sharing across computers is later. Full flow and security: [`Agents/Memory/README.md`](./Agents/Memory/README.md).
 
-Configure the absolute path and the line cap in gitignored [`Agents/Settings/CONFIG.md`](./Agents/Settings/CONFIG.md) (setup copies the [example](./Agents/Settings/CONFIG.example.md)):
+| | Mac | Windows PC |
+| --- | --- | --- |
+| **Notes file** | `~/Library/Application Support/agent-memory/MEMORY.md` | `%LOCALAPPDATA%\agent-memory\MEMORY.md` |
+| **Tokens** | Keychain (`dev.gemlarin.memory-controller`) | Windows Credential Manager, same service name — not KeePass |
 
-```markdown
-## Memory
+The path is **`MEMORY.md path`** in gitignored [`Agents/Settings/CONFIG.md`](./Agents/Settings/CONFIG.md). `store.json` next to that file is the source of truth; `MEMORY.md` is the rendered view. Never commit either.
 
-- **MEMORY.md path:** `/absolute/path/to/MEMORY.md`
-- **Memory max lines:** `80`
-```
-
-Examples:
-
-| Kind                               | Path                                                                        |
-| ---------------------------------- | --------------------------------------------------------------------------- |
-| Google Drive for Desktop (Mac)     | `~/Library/CloudStorage/GoogleDrive-<account>/My Drive/Documents/MEMORY.md` |
-| Google Drive for Desktop (Windows) | `~/Google Drive/My Drive/Documents/MEMORY.md`                               |
-| Local only                         | `~/Documents/MEMORY.md`                                                     |
-
-Never commit `MEMORY.md` or `CONFIG.md`. Prefer a memory path **outside** this clone. Memory Steward prunes the file to **Memory max lines**. Policy for agents: [`Agents/Memory/memory.md`](./Agents/Memory/memory.md). The main agent reads it once per session and auto-saves viable facts mid-session (you’ll see `Durable memory saved to MEMORY file`). Option ids appear when you ask to save or at wrap-up. Memory Steward writes only that file. Other specialists do not load it. Change the path or the line cap from [Help](#help).
+Setup asks whether to install the memory controller. You can also run `python3 Agents/Memory/installer/install_memory.py`. Agents call the controller; they do not open the files. The main agent reads once per session. You will see `Durable memory saved to MEMORY file` when a write lands. Change the path or the line cap from [Help](#help).
 
 ---
 

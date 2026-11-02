@@ -1,6 +1,6 @@
 # Personality and communication
 
-Shared rule: [`personality-communication.md`](./personality-communication.md). Loaded for tone.
+Shared rule: [`personality-communication.md`](./personality-communication.md). Loaded for tone, and before work with a real downside.
 
 ## Contribute
 

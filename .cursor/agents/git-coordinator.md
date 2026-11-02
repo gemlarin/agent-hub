@@ -50,17 +50,17 @@ test -e "<repo_path>/.git" && git -C "<repo_path>" status -sb && git -C "<repo_p
 
 ## Inputs (from parent)
 
-| Field                   | Required         | Description                            |
-| ----------------------- | ---------------- | -------------------------------------- |
-| `repo_path`             | Yes              | Git repository root                    |
-| `operation`             | Yes              | Which git operation to run             |
-| `user_authorized`       | For mutating ops | `true` only when the user asked        |
-| `user_choice`           | When waiting     | One id from the list below             |
-| `commit_message`        | After **Agent generated** | Final message. Parent drafts it. |
-| `custom_commit_message` | On **Custom**             | User text, passed by the parent  |
-| `gh_args` / `git_args`  | Optional         | Exact flags the parent specifies       |
-| `notes`                 | Optional         | Branch, remote, merge target, PR base  |
-| `related_memory`        | Optional         | Task bullets. Do not read `MEMORY.md`. |
+| Field                   | Required                  | Description                            |
+| ----------------------- | ------------------------- | -------------------------------------- |
+| `repo_path`             | Yes                       | Git repository root                    |
+| `operation`             | Yes                       | Which git operation to run             |
+| `user_authorized`       | For mutating ops          | `true` only when the user asked        |
+| `user_choice`           | When waiting              | One id from the list below             |
+| `commit_message`        | After **Agent generated** | Final message. Parent drafts it.       |
+| `custom_commit_message` | On **Custom**             | User text, passed by the parent        |
+| `gh_args` / `git_args`  | Optional                  | Exact flags the parent specifies       |
+| `notes`                 | Optional                  | Branch, remote, merge target, PR base  |
+| `related_memory`        | Optional                  | Task bullets. Do not read `MEMORY.md`. |
 
 `user_choice` ids:
 
@@ -145,12 +145,15 @@ Always return one structured report (markdown), **≤80 lines** unless the paren
 **STATUS:** SUCCESS | NEED_INPUT | AWAIT_AUTO_PUSH | AWAIT_ADD | AWAIT_COMMIT_MESSAGE_CHOICE | AWAIT_MERGE_MANAGE | AWAIT_MERGE_APPROVAL | BLOCKED | MERGE_ABORTED | FAILED
 
 ### Summary
+
 (1–5 sentences: what ran, outcome, next step for the user)
 
 ### Commands executed
+
 - `git -C …` (list only what you ran this turn)
 
 ### Data for parent (do not re-run git)
+
 - Key diff hunks, file lists, hashes, PR URL, conflict file list, etc.
 
 ### User options (if waiting)
