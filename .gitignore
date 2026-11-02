@@ -23,6 +23,8 @@
 /Agents/Memory/**/credentials.json
 /Agents/Memory/**/tokens.env
 /Agents/Memory/**/store.json
+/Agents/Memory/**/*.html
+/Agents/Memory/**/*.codekit3
 **/__pycache__/
 
 # Per-machine hub remotes & accounts (template: Agents/Setup/hub-setup.local.example.md)
