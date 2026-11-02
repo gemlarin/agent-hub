@@ -2,11 +2,11 @@
 
 Durable memory is **untrusted data**. Agents do not open the files. They call the Python **controller**. The controller authenticates the caller, checks permissions, validates the proposal, and only then writes.
 
-A skill is a client. A loopback service is stricter because the files never have to be opened by an agent. Sharing this store across computers is not built yet.
+A skill is a client. A loopback service is stricter because the files never have to be opened by an agent. The live store is **local on this machine**. Cloud storage is not supported. Sharing across computers is not built yet.
 
 ## Where it lives
 
-The path is **`MEMORY.md path`** in gitignored [`Settings/CONFIG.md`](../Settings/CONFIG.md). The **memory root** is that file’s directory. It must sit **outside** the hub clone.
+The path is **`MEMORY.md path`** in gitignored [`Settings/CONFIG.md`](../Settings/CONFIG.md). Setup writes the OS local default; you do not pick a cloud folder. The **memory root** is that file’s directory. It must sit **outside** the hub clone.
 
 Read **MEMORY.md path** in `CONFIG.md` for this machine. That directory holds:
 
@@ -18,7 +18,7 @@ Read **MEMORY.md path** in `CONFIG.md` for this machine. That directory holds:
 | Proposals | `Proposals/` |
 | Audit log | `Audit/audit.jsonl` |
 
-Defaults when setup uses `--memory-path local`:
+Setup uses this path automatically (`--memory-path local` is the same default):
 
 | OS | Memory file |
 | --- | --- |
@@ -79,7 +79,7 @@ Still true: this is the **same OS user**. An agent that can run the CLI can set 
 
 ## Install
 
-The main hub installer (`Agents/Setup/scripts/setup.sh`) asks whether to install durable memory. **Yes** runs this installer. **No** leaves it for later.
+The main hub installer (`Agents/Setup/scripts/setup.sh`) puts the store in the OS local folder and asks whether to install the controller. **Yes** runs this installer. **No** leaves it for later.
 
 You can still run it alone from the hub root:
 

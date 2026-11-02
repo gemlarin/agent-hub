@@ -56,13 +56,13 @@ When **MEMORY.md path** is empty or still the placeholder, the agent shows:
 
 `ERROR: Unset memory file path`
 
-**Yes** walks through where the file should live, writes the path into `CONFIG.md` and `hub-setup.local.md`, and creates the file if it is missing. **No** returns to the help menu.
+**Yes** writes the OS local store path into `CONFIG.md` and `hub-setup.local.md`, and creates the file if it is missing. It does not use cloud storage. **No** returns to the help menu.
 
 When the path is set, the agent shows the path, how many lines have data, and **Memory max lines**. Then it offers:
 
 | Item | What you get |
 |------|----------------|
-| Set up a new memory file | Asks for a path. An existing memory file is moved there. If none exists, a new `MEMORY.md` is created. If the path cannot be written, the agent says so and offers to help fix it. |
+| Set up a new memory file | Asks for a local absolute path outside the hub. An existing memory file is moved there. If none exists, a new `MEMORY.md` is created. If the path cannot be written, the agent says so and offers to help fix it. Do not use cloud storage. |
 | Update the memory line limit | Asks how many lines and writes **Memory max lines** in `CONFIG.md`. |
 | Cancel | The main help list again. Help stays open. |
 

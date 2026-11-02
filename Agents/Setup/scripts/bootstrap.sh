@@ -230,11 +230,8 @@ if [[ ! -f "$LOCAL" ]]; then
   fi
   sed_script+="s|/absolute/path/to/your-work-folder|$(sed_escape "$HOST_ROOT")|g;"
   sed_script+="s|/path/to/Projects|$(sed_escape "$HOST_ROOT")|g;"
-  memory_path="$(detect_memory_path || true)"
-  if [[ -n "$memory_path" ]]; then
-    memory_path="$(host_path "$memory_path")"
-    sed_script+="s|/absolute/path/to/MEMORY.md|$(sed_escape "$memory_path")|g;"
-  fi
+  memory_path="$(default_local_memory_path)"
+  sed_script+="s|/absolute/path/to/MEMORY.md|$(sed_escape "$memory_path")|g;"
   sed -e "$sed_script" "$LOCAL" >"$tmp" && mv "$tmp" "$LOCAL"
   echo "Wrote $LOCAL (gitignored). Edit if origin, hub path, or MEMORY.md path look wrong."
 else

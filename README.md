@@ -69,9 +69,16 @@ Open the downloaded folder in the AI app you already use. You do not need Cursor
 
 In that AI app, say **set up the hub**.
 
-The installer detects your OS and asks:
+The installer detects your OS. Durable memory is stored **locally on this machine** (not cloud storage). The folder is automatic:
 
-- where to keep `MEMORY.md` (cloud storage or a file on this computer)
+- macOS: `~/Library/Application Support/agent-memory/`
+- Windows: `%LOCALAPPDATA%\agent-memory\`
+- Linux: `~/.local/share/agent-memory/`
+
+It asks:
+
+- whether to install the memory controller now
+- if a memory file is already there, whether to keep it or replace it
 - how many lines that file may hold before cleanup
 - which checks to run after an update: `UNIT`, `BROWSER`, `BOTH`, or `NONE`
 - your GitHub username
@@ -95,7 +102,7 @@ The script asks the same questions and links the projects you pick. Folders you 
 
 To skip the script and do it yourself:
 
-1. Copy [`Agents/Setup/hub-setup.local.example.md`](./Agents/Setup/hub-setup.local.example.md) to `Agents/Setup/hub-setup.local.md`. Copy [`Agents/Settings/CONFIG.example.md`](./Agents/Settings/CONFIG.example.md) to `Agents/Settings/CONFIG.md`. Set the hub path and the [memory path](#persistent-memory).
+1. Copy [`Agents/Setup/hub-setup.local.example.md`](./Agents/Setup/hub-setup.local.example.md) to `Agents/Setup/hub-setup.local.md`. Copy [`Agents/Settings/CONFIG.example.md`](./Agents/Settings/CONFIG.example.md) to `Agents/Settings/CONFIG.md`. Set the hub path. Setup fills the [local memory path](#persistent-memory); do not point it at cloud storage.
 2. Add a pointer `AGENTS.md` in each app. Use the examples in [Point app repos at the hub](#point-app-repos-at-the-hub).
 3. **Cursor only:** if that app's User Rules tell the agent to run git, paste [`Agents/Setup/cursor-user-rules.md`](./Agents/Setup/cursor-user-rules.md), then reload. Skip this step in every other AI app.
 
@@ -164,7 +171,7 @@ Do **not** move `.cursor/` or `.githooks/` into `Agents/`. Cursor only reads `.c
 
 ## Persistent memory
 
-This machine keeps durable notes in a **local** store. Sharing across computers is later. Full flow and security: [`Agents/Memory/README.md`](./Agents/Memory/README.md).
+This machine keeps durable notes in a **local** store. Setup writes that path automatically. Cloud storage is not supported. Sharing across computers is not built yet. Full flow and security: [`Agents/Memory/README.md`](./Agents/Memory/README.md).
 
 | | Mac | Windows PC |
 | --- | --- | --- |
@@ -173,7 +180,7 @@ This machine keeps durable notes in a **local** store. Sharing across computers 
 
 The path is **`MEMORY.md path`** in gitignored [`Agents/Settings/CONFIG.md`](./Agents/Settings/CONFIG.md). `store.json` next to that file is the source of truth; `MEMORY.md` is the rendered view. Never commit either.
 
-Setup asks whether to install the memory controller. You can also run `python3 Agents/Memory/installer/install_memory.py`. Agents call the controller; they do not open the files. The main agent reads once per session. You will see `Durable memory saved to MEMORY file` when a write lands. Change the path or the line cap from [Help](#help).
+Setup asks whether to install the memory controller. A reinstall keeps an existing file unless you choose to replace it. You can also run `python3 Agents/Memory/installer/install_memory.py` (`py -3` on Windows). Agents call the controller; they do not open the files. The main agent reads once per session. You will see `Durable memory saved to MEMORY file` when a write lands. Change the line cap from [Help](#help).
 
 ---
 
@@ -218,7 +225,7 @@ Menu details: [`Agents/Skills/help-getter/README.md`](./Agents/Skills/help-gette
 ```text
 Agents/
 ├── AGENTS.md              Load table. Agents start here.
-├── Memory/                Who reads and writes MEMORY.md. No local override file.
+├── Memory/                Local store + controller. Path is the OS app-data folder.
 ├── Settings/              CONFIG.example.md. CONFIG.md stays on this machine.
 ├── Rules/<name>/          One shared standard, a contribute README, user-config.example.md
 ├── Skills/<name>/         One procedure, a contribute README, user-config.example.md
@@ -235,7 +242,7 @@ App folders sit beside `Agents/` when this work folder is the hub root. If the c
 | Path | Purpose |
 | --- | --- |
 | [`Agents/AGENTS.md`](./Agents/AGENTS.md) | Entry point. Opens the other files only when a row applies. |
-| [`Agents/Memory/`](./Agents/Memory/README.md) | Session contract for `MEMORY.md`. The path and line cap are in gitignored [`Agents/Settings/CONFIG.md`](./Agents/Settings/CONFIG.md). |
+| [`Agents/Memory/`](./Agents/Memory/README.md) | Local store and controller. Setup writes the OS path into gitignored [`Agents/Settings/CONFIG.md`](./Agents/Settings/CONFIG.md). |
 | [`Agents/Settings/`](./Agents/Settings/README.md) | Shared machine config: test default, memory path, memory line cap. |
 | [`Agents/Rules/`](./Agents/Rules/README.md) | Coding, Vue, tone, and context standards. Each rule is its own folder. |
 | [`Agents/Skills/`](./Agents/Skills/README.md) | Procedures specialists load (`git-merge`, `job-search`, `code-sweep`, and the others). |
@@ -250,12 +257,16 @@ Copy `user-config.example.md` to `user-config.md` in a Rules, Skills, or Subagen
 
 ## Highlights
 
-- **Git Coordinator** — [`Agents/Subagents/git-coordinator/git-coordinator.md`](./Agents/Subagents/git-coordinator/git-coordinator.md)
-- **Job Finder** — [`Agents/Subagents/job-finder/job-finder.md`](./Agents/Subagents/job-finder/job-finder.md) (only if you ask for a job search)
-- **Subagents** — [`Agents/Subagents/subagents.md`](./Agents/Subagents/subagents.md) · [using them](./Agents/Subagents/README.md#using-the-agents-users)
-- **Help** — prompt `HELP` or `/help` · [`Agents/Skills/help-getter/README.md`](./Agents/Skills/help-getter/README.md)
-- **Global config** — [`Agents/Settings/README.md`](./Agents/Settings/README.md). Change the test default from `HELP` → **Change code settings**.
-- **Coding standards** — core + optional Vue split
+- **One policy, many apps** — Any AI that can read markdown follows [`Agents/AGENTS.md`](./Agents/AGENTS.md). App repos get a pointer, not a copy. Cursor is optional.
+- **Personality and communication** — Shared tone, risk call-outs, and no rubber-stamping live in [`Agents/Rules/personality-communication/`](./Agents/Rules/personality-communication/README.md). Per-machine `user-config.md` extends or overrides that rule without committing it.
+- **Load on demand** — Agents read a short load table once per session, then open only the file that matches the task. That keeps context small. Type **reload agents** to re-read what this session already opened.
+- **Git Coordinator** — In this hub repo the parent does not run `git` or `gh`. Commits, pushes, and PRs go through [`git-coordinator`](./Agents/Subagents/git-coordinator/git-coordinator.md). Other git roots are not blocked.
+- **Durable local memory** — Notes stay on this computer (OS app-data folder, not cloud storage). The controller writes; agents do not open the store. Viable facts auto-save. [`Agents/Memory/README.md`](./Agents/Memory/README.md).
+- **Global config** — Test default, hub edit lock, and memory line cap live in gitignored [`CONFIG.md`](./Agents/Settings/README.md). Change them from `HELP`.
+- **Help** — Prompt `HELP` or `/help` for config, agents, skills, and memory. [`help-getter`](./Agents/Skills/help-getter/README.md).
+- **Specialists** — Git, memory, research, review, accessibility sweep, web lookup, job search (only if you ask), and hub install. [Using the agents](./Agents/Subagents/README.md#using-the-agents-users).
+- **Coding standards** — Shared core rules plus an optional Vue split. Secrets and PII stay out of git.
+- **Guided setup** — Mac, Windows, and Linux. Say **set up the hub** or run `setup.sh` / `setup.cmd`.
 
 After editing `Agents/Subagents/`:
 
@@ -325,7 +336,7 @@ This repo is **policy + Cursor glue**, not an application. Each folder has a REA
 | [`Agents/Settings/`](./Agents/Settings/README.md)           | Global `CONFIG.md`: test default, memory path, memory line cap                                                                                                                                                                                                                                   |
 | [`Agents/Skills/help-getter/`](./Agents/Skills/help-getter/README.md) | `HELP` and `/help` menu                                                                                                                                                                                                                                                                           |
 | [`Agents/Subagents/`](./Agents/Subagents/README.md)         | Specialist specs ([how to use each agent](./Agents/Subagents/README.md#using-the-agents-users); [attach a skill](./Agents/Subagents/README.md#attach-a-skill-to-a-specialist)). Copy `user-config.example.md` to `user-config.md` in a specialist folder for machine-only overrides (gitignored). |
-| [`Agents/Memory/`](./Agents/Memory/README.md)               | Session contract for `MEMORY.md`. No local override file                                                                                                                                                                                                                                          |
+| [`Agents/Memory/`](./Agents/Memory/README.md)               | Local durable store and controller. Cloud storage is not supported                                                                                                                                                                                                                                |
 | [`Agents/Skills/`](./Agents/Skills/README.md)               | Load-on-demand skills ([how to run one](./Agents/Skills/README.md#activate-a-skill-independently-users)). Copy `user-config.example.md` to `user-config.md` in a skill folder for machine-only overrides (gitignored).                                                                            |
 | [`Agents/Rules/`](./Agents/Rules/README.md)                 | Shared standards. Each rule folder has a contribute README. Copy `user-config.example.md` to `user-config.md` for machine-only overrides (gitignored).                                                                                                                                            |
 | [`Agents/Setup/`](./Agents/Setup/README.md)                 | Bootstrap and Cursor install                                                                                                                                                                                                                                                                      |

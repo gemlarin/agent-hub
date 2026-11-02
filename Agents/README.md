@@ -12,7 +12,7 @@ Agents enter through **[`AGENTS.md`](./AGENTS.md)** once per session, once more 
 | [`Subagents/`](./Subagents/) | Specialists. The parent does not open the spec. The Task prompt tells the specialist to read its own file and `user-config.md`. |
 | [`Skills/`](./Skills/)       | Procedural skills. Each skill folder has a gitignored `user-config.md` that extends `SKILL.md`                                  |
 | [`Setup/`](./Setup/)         | Bootstrap, Cursor install, local config template                                                                                |
-| [`Memory/`](./Memory/)       | Persistent `MEMORY.md` path and read/write split. No local override file                                                        |
+| [`Memory/`](./Memory/)       | Local durable store (`store.json` + rendered `MEMORY.md`). Path is the OS app-data folder. No local override file               |
 | [`Settings/`](./Settings/)   | Gitignored `CONFIG.md`: test default, memory path, memory line cap                                                              |
 | [`Rules/`](./Rules/)         | Standards, including interactive inputs. Each rule has its own folder, a contribute README, and a gitignored `user-config.md`   |
 

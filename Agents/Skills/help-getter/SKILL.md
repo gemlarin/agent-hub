@@ -137,7 +137,7 @@ Then show the menu again.
 
 Ask whether to set up durable memory with the host question control. Options: **Yes** · **No**.
 
-- **Yes:** Ask where the file should live (detected cloud file, `~/Documents/MEMORY.md`, or an absolute path outside the hub). Write **MEMORY.md path** in `Agents/Settings/CONFIG.md` and in `Agents/Setup/hub-setup.local.md`. Create the `MEMORY.md` stub if it is missing. Then continue with the counts below.
+- **Yes:** Write the OS local store path (macOS `~/Library/Application Support/agent-memory/MEMORY.md`, Windows `%LOCALAPPDATA%\agent-memory\MEMORY.md`, Linux `~/.local/share/agent-memory/MEMORY.md`) in `Agents/Settings/CONFIG.md` and in `Agents/Setup/hub-setup.local.md`. Create the `MEMORY.md` stub if it is missing. Do not use cloud storage. Then continue with the counts below.
 - **No:** Show the help menu again.
 
 4. When the path is set, show:
@@ -154,7 +154,7 @@ Ask whether to set up durable memory with the host question control. Options: **
 
 ### Set up a new memory file
 
-Ask for the path where the file should be stored. A directory means `MEMORY.md` inside it. The path must be absolute and outside the hub clone.
+Ask for a **local** absolute path outside the hub clone. A directory means `MEMORY.md` inside it. Do not suggest or use cloud storage.
 
 - If that path cannot be created or written, say so and offer to help fix it. Do not change `CONFIG.md` until the file is in place.
 - If a `MEMORY.md` already exists at the current configured path, move that file to the new path. Do not create a second empty file.

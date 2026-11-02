@@ -1,6 +1,6 @@
 # Agent hub — local overrides (private)
 
-**Not committed to git.** `./Agents/Setup/scripts/bootstrap.sh` copies this file once per machine and fills origin, hub path, and `MEMORY.md path` when it can. To do it by hand:
+**Not committed to git.** `./Agents/Setup/scripts/bootstrap.sh` copies this file once per machine and fills origin, hub path, and the OS local `MEMORY.md path`. To do it by hand:
 
 ```bash
 # From hub root (your work folder):

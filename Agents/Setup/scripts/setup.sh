@@ -36,8 +36,8 @@ From the hub root (any cwd). Detects macOS, Linux, WSL, or Windows Git Bash.
   (no flags, terminal)  Ask, then install
   --plan                Print what is known and which questions remain; change nothing
   --apply               Install using flags below (for the Hub Installer agent; never prompts)
-  --memory-path PATH    Absolute MEMORY.md path, or "local" for this machine's store
-  --skip-memory         Leave the memory path for later
+  --memory-path PATH    Override the OS local store, or "local" for that default
+  --skip-memory         Leave durable memory for later
   --install-memory      Run the memory controller installer after setup
   --skip-memory-install Leave the controller for later (python3 Agents/Memory/installer/install_memory.py)
   --keep-existing       Reinstall: keep the memory file that is already there
@@ -285,44 +285,10 @@ if $INTERACTIVE; then
   echo "Hub root: $HOST_ROOT"
   echo "Layout: $LAYOUT"
   echo ""
-  echo "Durable memory for this machine (sharing across computers comes later):"
-  echo "  1) Local store (recommended): $(default_local_memory_path)"
-  if [[ -n "$DETECTED_MEMORY" ]]; then
-    echo "  2) Use detected file: $(host_path "$DETECTED_MEMORY")"
-  else
-    echo "  2) Use detected file (none found — same as 1)"
-  fi
-  echo "  3) Type an absolute path"
-  echo "  4) Skip — install memory later"
-  printf 'Choice [1]: '
-  read -r mem_choice || true
-  mem_choice="${mem_choice:-1}"
-  case "$mem_choice" in
-    1)
-      MEMORY_PATH="$(default_local_memory_path)"
-      ;;
-    2)
-      if [[ -n "$DETECTED_MEMORY" ]]; then
-        MEMORY_PATH="$(host_path "$DETECTED_MEMORY")"
-      else
-        MEMORY_PATH="$(default_local_memory_path)"
-      fi
-      ;;
-    3)
-      printf 'Absolute MEMORY.md path: '
-      read -r MEMORY_PATH || true
-      ;;
-    4) SKIP_MEMORY=true ;;
-    *)
-      echo "Answer 1, 2, 3, or 4." >&2
-      exit 2
-      ;;
-  esac
-  if ! $SKIP_MEMORY; then
-    ask_memory_controller
-  else
-    MEMORY_CONTROLLER=skip
-  fi
+  MEMORY_PATH="$(default_local_memory_path)"
+  echo "Memory file (local on this machine): $MEMORY_PATH"
+  echo "Cloud storage is not a supported memory location."
+  ask_memory_controller
 
   if [[ -n "$DETECTED_GITHUB" ]]; then
     printf 'GitHub username for app repos [%s] (- to skip): ' "$DETECTED_GITHUB"
@@ -381,7 +347,7 @@ if ! $APPLY; then
       "$PY" "$ROOT/Agents/Memory/installer/install_memory.py" --check-existing >/dev/null 2>&1 || existing_status=$?
     fi
     if [[ "$existing_status" -eq 0 ]]; then
-      MEMORY_EXISTING_HINT="7. A memory file already exists. Flag: --keep-existing (use it) or --replace-memory (destructive; deletes current entries)."
+      MEMORY_EXISTING_HINT="6. A memory file already exists. Flag: --keep-existing (use it) or --replace-memory (destructive; deletes current entries)."
     fi
   fi
   cat <<EOF
@@ -395,12 +361,11 @@ github_detected=${DETECTED_GITHUB:-}
 cursor=$CURSOR
 
 Ask the user, then re-run with --apply:
-1. MEMORY.md path. Suggested: local ($(default_local_memory_path)). Detected: ${DETECTED_MEMORY:-none}. Flag: --memory-path PATH | --memory-path local | --skip-memory
-2. Install durable memory controller now? Flag: --install-memory | --skip-memory-install
-3. GitHub username for app repos. Suggested: ${DETECTED_GITHUB:-skip}. Flag: --github-user NAME | --skip-github
-4. Test default after an update: UNIT, BROWSER, BOTH, or NONE. Flag: --test-default MODE
-5. Max lines stored in MEMORY.md before cleanup. Suggested: 80. Flag: --memory-max-lines N
-6. Link current project directories? Existing AGENTS.md files are replaced with a pointer to the hub.
+1. Install durable memory controller now? Memory file is the OS local store ($(default_local_memory_path)). Flag: --install-memory | --skip-memory-install | --skip-memory
+2. GitHub username for app repos. Suggested: ${DETECTED_GITHUB:-skip}. Flag: --github-user NAME | --skip-github
+3. Test default after an update: UNIT, BROWSER, BOTH, or NONE. Flag: --test-default MODE
+4. Max lines stored in MEMORY.md before cleanup. Suggested: 80. Flag: --memory-max-lines N
+5. Link current project directories? Existing AGENTS.md files are replaced with a pointer to the hub.
 ${PROJECT_LIST:- (none found)}
 Flag: --link-all | --app PATH (repeat) | --skip-apps
 ${MEMORY_EXISTING_HINT}
@@ -408,8 +373,8 @@ EOF
   exit 3
 fi
 
-if ! $SKIP_MEMORY && [[ -z "$MEMORY_PATH" && -n "$DETECTED_MEMORY" ]]; then
-  MEMORY_PATH="$(host_path "$DETECTED_MEMORY")"
+if ! $SKIP_MEMORY && [[ -z "$MEMORY_PATH" ]]; then
+  MEMORY_PATH="$(default_local_memory_path)"
 fi
 if $SKIP_MEMORY; then
   MEMORY_CONTROLLER=skip
@@ -439,7 +404,7 @@ if ! $INTERACTIVE && ! $SKIP_APPS && ! $LINK_ALL && [[ ${#APPS[@]} -eq 0 ]]; the
 fi
 if [[ ${#missing[@]} -gt 0 ]]; then
   echo "SETUP_NEED_INPUT missing: ${missing[*]}" >&2
-  echo "Pass --memory-path or --skip-memory, --install-memory or --skip-memory-install, --github-user or --skip-github, --test-default, --memory-max-lines, and --link-all or --app or --skip-apps." >&2
+  echo "Pass --install-memory or --skip-memory-install or --skip-memory, --github-user or --skip-github, --test-default, --memory-max-lines, and --link-all or --app or --skip-apps." >&2
   exit 3
 fi
 

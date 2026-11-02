@@ -21,4 +21,4 @@ Allowed: `true`, `false`. `false` blocks every create, edit, and delete in this 
 - **MEMORY.md path:** `/absolute/path/to/MEMORY.md`
 - **Memory max lines:** `80`
 
-The directory that contains that file is the memory root. The main hub installer asks whether to install durable memory; decline and run `python3 Agents/Memory/installer/install_memory.py` later. Agents must not open `store.json` or dump the OS secret store.
+The directory that contains that file is the memory root. Setup writes the OS local store path (not cloud storage). The installer asks whether to install durable memory; decline and run `python3 Agents/Memory/installer/install_memory.py` later. Agents must not open `store.json` or dump the OS secret store.

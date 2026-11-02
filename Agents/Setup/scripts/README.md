@@ -6,16 +6,17 @@ Run from the **hub git root** (the folder that contains `Agents/AGENTS.md`). `bo
 
 | Script | Role |
 |--------|------|
-| [`setup.sh`](./setup.sh) / [`setup.cmd`](./setup.cmd) | Guided first run: detect OS, ask memory path, whether to install the memory controller, memory line cap, test default, GitHub, and app pointers, then call bootstrap. `--plan` prints questions and changes nothing |
+| [`setup.sh`](./setup.sh) / [`setup.cmd`](./setup.cmd) | Guided first run: detect OS, use the OS local memory folder, ask whether to install the controller, line cap, test default, GitHub, and app pointers, then call bootstrap. `--plan` prints questions and changes nothing |
 | [`sync-cursor-skills.sh`](./sync-cursor-skills.sh) | Symlink `Agents/Skills/` into `.cursor/skills/` so Cursor `/` can launch them (`/help` → help-getter) |
 | [`bootstrap.sh`](./bootstrap.sh) / [`bootstrap.cmd`](./bootstrap.cmd) | Seed `hub-setup.local.md`, optional Cursor sync, local `core.hooksPath`, and (in a terminal) ask to link current project directories |
 | [`install-cursor-integration.sh`](./install-cursor-integration.sh) | Detect Cursor, sync `.cursor/agents/`, chmod hooks (`--force` to run without Cursor) |
 | [`sync-cursor-agents.sh`](./sync-cursor-agents.sh) | Wrapper → [`sync_cursor_agents.py`](./sync_cursor_agents.py) |
 | [`sync_cursor_agents.py`](./sync_cursor_agents.py) | Generate `.cursor/agents/*.md` from `Agents/Subagents/` + [`../cursor-agents.json`](../cursor-agents.json) |
 | [`detect-cursor-env.sh`](./detect-cursor-env.sh) | Is Cursor installed? |
-| [`find-python.sh`](./find-python.sh) | Shared `python3` / `python` / `py -3` lookup |
+| [`find-python.sh`](./find-python.sh) | Shared `python3` / `python` / `py -3` lookup. Skips a dead PATH stub (SIGKILL) and falls back to `/usr/bin/python3` |
+| [`host-path.sh`](./host-path.sh) | OS local memory path and Windows Git Bash path helpers |
 | [`test-git-delegation-hook.sh`](./test-git-delegation-hook.sh) | Smoke-test the POSIX git-delegation hook (no Python) |
-| [`test-git-delegation-hook.py`](./test-git-delegation-hook.py) | Same checks against the Windows Python fallback |
+| [`test-git-delegation-hook.py`](./test-git-delegation-hook.py) | Same checks against the Windows Python fallback (`git.exe`) |
 
 `setup.cmd` and `bootstrap.cmd` only find Git Bash and exec the matching `.sh`. Windows users without Git Bash cannot run the POSIX installer.
 

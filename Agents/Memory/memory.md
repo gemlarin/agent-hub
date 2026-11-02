@@ -13,7 +13,7 @@ The controller and installer read the path and the line cap from gitignored [`Se
 - **Memory max lines:** `80`
 ```
 
-The memory **root** is the directory that contains that file. Run [`installer/install_memory.py`](./installer/install_memory.py) after the path is set. It writes permissions, credentials, `store.json`, `Proposals/`, and `Audit/`. If a memory file is already there, it asks before replacing it. Keeping that file does not rewrite it. Creating a new one deletes the current entries.
+The memory **root** is the directory that contains that file. Setup writes the OS local path automatically. Cloud storage is not supported. Run [`installer/install_memory.py`](./installer/install_memory.py) after the path is set. It writes permissions, credentials, `store.json`, `Proposals/`, and `Audit/`. If a memory file is already there, it asks before replacing it. Keeping that file does not rewrite it. Creating a new one deletes the current entries.
 
 ## Who may do what
 

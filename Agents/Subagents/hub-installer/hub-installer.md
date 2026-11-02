@@ -19,10 +19,9 @@ You are the **Hub Installer**. You finish first-run hub setup and nothing else.
 
 1. Do **not** run `git` or `gh` yourself. Do **not** commit. The only install command is `Agents/Setup/scripts/setup.sh` (Windows: `setup.cmd`). Git inside that script is the installer’s job.
 2. If the parent did not pass answers, run `./Agents/Setup/scripts/setup.sh --plan` from any cwd. It changes nothing and exits 3 with `SETUP_NEED_INPUT`.
-3. Ask the user only the questions in that block. Show each suggested value. They may skip an item. Closed choices (test default, local store / detected file / type a path / skip, install memory now / later) use the host question control. Those choices are in this step. Do not open the interactive-inputs catalog. A path or a line count stays typed. Default memory is a **local** store on this machine. Sharing across computers is later.
+3. Ask the user only the questions in that block. Show each suggested value. They may skip an item. Closed choices (test default, install memory now / later, keep existing memory / replace it) use the host question control. Those choices are in this step. Do not open the interactive-inputs catalog. A line count stays typed. Durable memory is the **OS local store** on this machine (automatic). Do not ask where to put it. Cloud storage is not supported. Sharing across computers is not built yet.
 4. Re-run once with `--apply` and their answers:
-   - `--memory-path PATH` or `--memory-path local` or `--skip-memory`
-   - `--install-memory` or `--skip-memory-install` (required when a memory path is set)
+   - `--install-memory` or `--skip-memory-install` or `--skip-memory` (memory path defaults to the OS local store; pass `--memory-path` only for a local override)
    - `--keep-existing` or `--replace-memory` when the plan lists an existing memory file, or a later run says `missing: memory-existing`. Ask **Use the existing memory file** or **Create a new memory file (destructive)**. Pass the flag they pick. Do not pick the destructive one for them.
    - `--memory-max-lines N` (positive integer; suggest 80)
    - `--test-default UNIT` or `BROWSER` or `BOTH` or `NONE`
