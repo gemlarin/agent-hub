@@ -10,21 +10,21 @@ The path is **`MEMORY.md path`** in gitignored [`Settings/CONFIG.md`](../Setting
 
 Read **MEMORY.md path** in `CONFIG.md` for this machine. That directory holds:
 
-| Item | File |
-| --- | --- |
-| Rendered notes | `MEMORY.md` |
-| Canonical store | `store.json` |
-| Token hashes | `credentials.json` |
-| Proposals | `Proposals/` |
-| Audit log | `Audit/audit.jsonl` |
+| Item            | File                |
+| --------------- | ------------------- |
+| Rendered notes  | `MEMORY.md`         |
+| Canonical store | `store.json`        |
+| Token hashes    | `credentials.json`  |
+| Proposals       | `Proposals/`        |
+| Audit log       | `Audit/audit.jsonl` |
 
 Setup uses this path automatically (`--memory-path local` is the same default):
 
-| OS | Memory file |
-| --- | --- |
-| macOS | `~/Library/Application Support/agent-memory/MEMORY.md` |
-| Windows | `%LOCALAPPDATA%\agent-memory\MEMORY.md` |
-| Linux | `~/.local/share/agent-memory/MEMORY.md` |
+| OS      | Memory file                                            |
+| ------- | ------------------------------------------------------ |
+| macOS   | `~/Library/Application Support/agent-memory/MEMORY.md` |
+| Windows | `%LOCALAPPDATA%\agent-memory\MEMORY.md`                |
+| Linux   | `~/.local/share/agent-memory/MEMORY.md`                |
 
 `MEMORY.md` is a generated view. `store.json` is the source of truth. Never commit either file.
 
@@ -32,11 +32,11 @@ Setup uses this path automatically (`--memory-path local` is the same default):
 
 Plaintext tokens are **not** in `tokens.env` and **not** in KeePass. The installer puts them in the OS secret store. Agents set `MEMORY_AGENT_ID` only. The CLI loads the secret. Do not paste tokens into chat.
 
-| OS | Store | How to find it (do not copy the secret) |
-| --- | --- | --- |
-| **macOS** | **Keychain** (login keychain) | Keychain Access → search `dev.gemlarin.memory-controller` |
+| OS          | Store                                                | How to find it (do not copy the secret)                                                             |
+| ----------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **macOS**   | **Keychain** (login keychain)                        | Keychain Access → search `dev.gemlarin.memory-controller`                                           |
 | **Windows** | **Credential Manager** (generic Windows credentials) | Control Panel → Credential Manager → Windows Credentials → `dev.gemlarin.memory-controller/<agent>` |
-| Linux | `libsecret` (`secret-tool`) when installed | otherwise set `MEMORY_AGENT_TOKEN` in the process environment |
+| Linux       | `libsecret` (`secret-tool`) when installed           | otherwise set `MEMORY_AGENT_TOKEN` in the process environment                                       |
 
 `credentials.json` holds SHA-256 hashes and permission bits only.
 
@@ -52,12 +52,12 @@ Memory Steward approves  →  controller commits store.json
                          →  appends Audit/audit.jsonl
 ```
 
-| Actor | Through the CLI |
-| --- | --- |
-| Main agent | `read` at session start, `propose` for autosave |
-| Other agents on this machine | `propose` and `read` through the CLI |
-| Memory Steward | `approve` / `reject` / `forget` |
-| Nobody else | open `store.json`, `MEMORY.md`, or the OS secret store |
+| Actor                        | Through the CLI                                        |
+| ---------------------------- | ------------------------------------------------------ |
+| Main agent                   | `read` at session start, `propose` for autosave        |
+| Other agents on this machine | `propose` and `read` through the CLI                   |
+| Memory Steward               | `approve` / `reject` / `forget`                        |
+| Nobody else                  | open `store.json`, `MEMORY.md`, or the OS secret store |
 
 ```bash
 export MEMORY_AGENT_ID=main_agent

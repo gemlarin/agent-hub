@@ -19,11 +19,11 @@ The memory **root** is the directory that contains that file. Setup writes the O
 
 Permissions are in `credentials.json` (token hashes). The CLI loads the matching token from the OS secret store. Agents set `MEMORY_AGENT_ID` only. They do not read Keychain, Credential Manager, or a token file.
 
-| Actor | Through the controller |
-| --- | --- |
-| **Main agent** | `read` at session start. `propose` for autosave. Never open the files with the Read/Write tools. |
-| **Memory Steward** | `approve` / `commit` / `forget`. Never write `MEMORY.md` or `store.json` itself. |
-| **Every other subagent** | `propose` and `read` through the controller. Do not open the files. |
+| Actor                    | Through the controller                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------------------------ |
+| **Main agent**           | `read` at session start. `propose` for autosave. Never open the files with the Read/Write tools. |
+| **Memory Steward**       | `approve` / `commit` / `forget`. Never write `MEMORY.md` or `store.json` itself.                 |
+| **Every other subagent** | `propose` and `read` through the controller. Do not open the files.                              |
 
 ```bash
 export MEMORY_AGENT_ID=main_agent
