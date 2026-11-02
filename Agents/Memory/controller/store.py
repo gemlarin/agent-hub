@@ -54,6 +54,14 @@ class Store:
         with self._guard():
             self._save(data)
 
+    def save_store_only(self, data: dict) -> None:
+        """Write store.json and leave MEMORY.md unchanged."""
+        with self._guard():
+            data = dict(data)
+            data["version"] = 1
+            self._atomic_write(self.store_file, json.dumps(data, indent=2) + "\n")
+            restrict_path(self.store_file)
+
     def _save(self, data: dict) -> None:
         data = dict(data)
         data["version"] = 1

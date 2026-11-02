@@ -57,6 +57,25 @@ def run_hook(payload: dict) -> dict:
     return json.loads(line[-1])
 
 
+def expect_encoded(label: str, payload: dict, encoding: str, permission: str) -> None:
+    print(f"== {label} ==")
+    proc = subprocess.run(
+        [sys.executable, str(HOOK)],
+        input=json.dumps(payload).encode(encoding),
+        capture_output=True,
+        check=False,
+    )
+    if proc.returncode != 0:
+        raise SystemExit(
+            f"hook exited {proc.returncode}\nstdout={proc.stdout!r}\nstderr={proc.stderr!r}"
+        )
+    line = proc.stdout.decode("utf-8", "replace").strip().splitlines()
+    out = json.loads(line[-1]) if line else {}
+    print(json.dumps(out))
+    if out.get("permission") != permission:
+        raise SystemExit(f"FAIL: expected permission={permission}, got {out}")
+
+
 def expect(label: str, payload: dict, permission: str) -> None:
     print(f"== {label} ==")
     out = run_hook(payload)
@@ -186,6 +205,21 @@ def main() -> int:
     expect(
         "allow gh with cwd other repo",
         shell("gh pr list", cwd=str(other)),
+        "allow",
+    )
+    sibling = shell("git status", cwd=str(other))
+    expect_encoded("allow utf-16 sibling cwd", sibling, "utf-16", "allow")
+    expect_encoded("allow utf-8 bom sibling cwd", sibling, "utf-8-sig", "allow")
+    expect_encoded(
+        "activate utf-16 coordinator spawn",
+        {
+            "hook_event_name": "preToolUse",
+            "tool_name": "Task",
+            "tool_use_id": "utf16-coord",
+            "tool_input": {"subagent_type": "git-coordinator"},
+            "workspace_roots": [str(ROOT)],
+        },
+        "utf-16",
         "allow",
     )
     print("OK")

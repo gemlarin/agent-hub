@@ -19,6 +19,8 @@ LINK_ALL=false
 MEMORY_CONTROLLER=""
 MEMORY_PATH=""
 MEMORY_MAX_LINES=""
+KEEP_EXISTING=false
+REPLACE_MEMORY=false
 TEST_DEFAULT=""
 GITHUB_USER=""
 APPS=()
@@ -38,6 +40,8 @@ From the hub root (any cwd). Detects macOS, Linux, WSL, or Windows Git Bash.
   --skip-memory         Leave the memory path for later
   --install-memory      Run the memory controller installer after setup
   --skip-memory-install Leave the controller for later (python3 Agents/Memory/installer/install_memory.py)
+  --keep-existing       Reinstall: keep the memory file that is already there
+  --replace-memory      Reinstall: create a new memory file (deletes current entries)
   --memory-max-lines N  Max lines stored in MEMORY.md before cleanup
   --test-default MODE   UNIT, BROWSER, BOTH, or NONE (checks after an update)
   --github-user NAME    GitHub username for app-repo links in hub-setup.local.md
@@ -61,6 +65,8 @@ while [[ $# -gt 0 ]]; do
     --skip-memory) SKIP_MEMORY=true ;;
     --install-memory) MEMORY_CONTROLLER=install ;;
     --skip-memory-install) MEMORY_CONTROLLER=skip ;;
+    --keep-existing) KEEP_EXISTING=true ;;
+    --replace-memory) REPLACE_MEMORY=true ;;
     --skip-github) SKIP_GITHUB=true ;;
     --skip-apps) SKIP_APPS=true ;;
     --link-all) LINK_ALL=true ;;
@@ -240,6 +246,23 @@ resolve_memory_token() {
   printf '%s\n' "$(host_path "$raw")"
 }
 
+ask_existing_memory() {
+  echo "A memory file already exists."
+  echo "  1) Use the existing memory file"
+  echo "  2) Create a new memory file (destructive)"
+  printf 'Choice [1]: '
+  read -r mem_existing || true
+  mem_existing="${mem_existing:-1}"
+  case "$mem_existing" in
+    1 | yes | Yes | YES) KEEP_EXISTING=true ;;
+    2) REPLACE_MEMORY=true ;;
+    *)
+      echo "Answer 1 or 2." >&2
+      exit 2
+      ;;
+  esac
+}
+
 ask_memory_controller() {
   echo "Install durable memory on this machine now?"
   echo "  1) Yes — controller, permissions, and tokens"
@@ -347,6 +370,20 @@ fi
 
 if ! $APPLY; then
   PROJECT_LIST="$("$SCRIPTS/bootstrap.sh" --print-projects || true)"
+  MEMORY_EXISTING_HINT=""
+  # shellcheck source=find-python.sh
+  . "$SCRIPTS/find-python.sh"
+  if find_python >/dev/null 2>&1; then
+    existing_status=0
+    if [ "$PY" = py ]; then
+      py -3 "$ROOT/Agents/Memory/installer/install_memory.py" --check-existing >/dev/null 2>&1 || existing_status=$?
+    else
+      "$PY" "$ROOT/Agents/Memory/installer/install_memory.py" --check-existing >/dev/null 2>&1 || existing_status=$?
+    fi
+    if [[ "$existing_status" -eq 0 ]]; then
+      MEMORY_EXISTING_HINT="7. A memory file already exists. Flag: --keep-existing (use it) or --replace-memory (destructive; deletes current entries)."
+    fi
+  fi
   cat <<EOF
 SETUP_NEED_INPUT
 os=$OS_LABEL
@@ -366,6 +403,7 @@ Ask the user, then re-run with --apply:
 6. Link current project directories? Existing AGENTS.md files are replaced with a pointer to the hub.
 ${PROJECT_LIST:- (none found)}
 Flag: --link-all | --app PATH (repeat) | --skip-apps
+${MEMORY_EXISTING_HINT}
 EOF
   exit 3
 fi
@@ -503,12 +541,44 @@ run_memory_controller_install() {
     echo "memory_controller=skipped-no-python"
     return 0
   fi
+  if [[ "$KEEP_EXISTING" == true && "$REPLACE_MEMORY" == true ]]; then
+    echo "Use either --keep-existing or --replace-memory." >&2
+    exit 2
+  fi
   args=("$ROOT/Agents/Memory/installer/install_memory.py")
   if [[ -n "${DETECTED_MEMORY:-}" && -f "$DETECTED_MEMORY" ]]; then
     if [[ "$(host_path "$MEMORY_PATH")" != "$(host_path "$DETECTED_MEMORY")" ]]; then
       src="$DETECTED_MEMORY"
       args+=(--source "$src")
     fi
+  fi
+  existing_status=0
+  if [ "$PY" = py ]; then
+    py -3 "$ROOT/Agents/Memory/installer/install_memory.py" --check-existing >/dev/null 2>&1 || existing_status=$?
+  else
+    "$PY" "$ROOT/Agents/Memory/installer/install_memory.py" --check-existing >/dev/null 2>&1 || existing_status=$?
+  fi
+  if [[ "$existing_status" -eq 0 ]]; then
+    if [[ "$KEEP_EXISTING" != true && "$REPLACE_MEMORY" != true ]]; then
+      if [[ "${INTERACTIVE:-false}" == true ]]; then
+        ask_existing_memory
+      else
+        echo "SETUP_NEED_INPUT missing: memory-existing" >&2
+        echo "A memory file already exists. Pass --keep-existing or --replace-memory. --replace-memory deletes the current entries." >&2
+        exit 3
+      fi
+    fi
+  elif [[ "$existing_status" -ne 1 ]]; then
+    exit "$existing_status"
+  fi
+  if [[ "$KEEP_EXISTING" == true ]]; then
+    args+=(--keep-existing)
+  fi
+  if [[ "$REPLACE_MEMORY" == true ]]; then
+    args+=(--replace-memory)
+  fi
+  if [[ "${INTERACTIVE:-false}" != true ]]; then
+    args+=(--noninteractive)
   fi
   if [ "$PY" = py ]; then
     py -3 "${args[@]}"

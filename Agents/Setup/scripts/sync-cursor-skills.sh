@@ -18,6 +18,20 @@ link_skill() {
   fi
   rm -rf "$linkpath"
   ln -s "$target" "$linkpath"
+  # macOS and Linux follow the symlink. Windows Git with core.symlinks=false
+  # writes the target path as a text file, which Cursor cannot open.
+  if [[ ! -d "$linkpath" ]]; then
+    rm -rf "$linkpath"
+    case "$(uname -s)" in
+      MINGW* | MSYS* | CYGWIN*)
+        cmd //c mklink /J "$(cygpath -w "$linkpath")" "$(cygpath -w "$SRC/$folder")"
+        ;;
+      *)
+        echo "Skill link is not a directory: $linkpath" >&2
+        exit 1
+        ;;
+    esac
+  fi
   echo "Linked .cursor/skills/$name -> $target"
 }
 

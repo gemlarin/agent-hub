@@ -99,7 +99,11 @@ Useful flags:
 python3 Agents/Memory/installer/install_memory.py --source /path/to/old/MEMORY.md
 python3 Agents/Memory/installer/install_memory.py --rotate-tokens
 python3 Agents/Memory/installer/install_memory.py --launchd
+python3 Agents/Memory/installer/install_memory.py --keep-existing
+python3 Agents/Memory/installer/install_memory.py --replace-memory
 ```
+
+A reinstall does not overwrite an existing memory file. A terminal asks whether to use that file or create a new one. A non-interactive run exits until you pass `--keep-existing` or `--replace-memory`. `--replace-memory` deletes the current entries. Credentials stay unless you also pass `--rotate-tokens`.
 
 `--rotate-tokens` replaces hashes and OS-store secrets. Existing agent sessions must use the new store. Do not pass `--root` to a throwaway folder on a machine that already has a live store: Keychain / Credential Manager entries are per agent id, not per folder.
 

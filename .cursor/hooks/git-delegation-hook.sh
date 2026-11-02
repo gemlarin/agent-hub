@@ -15,7 +15,28 @@ DENY_JSON='{"permission":"deny","user_message":"Git and gh are delegated to the 
 allow() { printf '%s\n' '{"permission":"allow"}'; }
 deny() { printf '%s\n' "$DENY_JSON"; }
 
-PAYLOAD=$(cat || true)
+# Read stdin to a file first. UTF-16 (Windows PowerShell pipes) contains NUL
+# bytes, and $(cat) would truncate the payload and deny every decision.
+PAYLOAD_FILE=$(mktemp "${TMPDIR:-/tmp}/git-delegation-hook.XXXXXX" 2>/dev/null || echo "/tmp/git-delegation-hook.$$")
+cat >"$PAYLOAD_FILE" || true
+# GNU od and BSD od (macOS) both print these bytes. BSD may use uppercase.
+sig=$(od -An -tx1 -N 2 "$PAYLOAD_FILE" 2>/dev/null | tr -d ' \n' | tr '[:upper:]' '[:lower:]' || true)
+case "$sig" in
+  fffe | feff)
+    if command -v iconv >/dev/null 2>&1; then
+      PAYLOAD=$(iconv -f UTF-16 -t UTF-8 "$PAYLOAD_FILE" 2>/dev/null || cat "$PAYLOAD_FILE")
+    else
+      PAYLOAD=$(cat "$PAYLOAD_FILE")
+    fi
+    ;;
+  efbb)
+    PAYLOAD=$(tail -c +4 "$PAYLOAD_FILE")
+    ;;
+  *)
+    PAYLOAD=$(cat "$PAYLOAD_FILE")
+    ;;
+esac
+rm -f "$PAYLOAD_FILE"
 
 # Top-level string field. Respects \" inside the value so a quoted git -C path survives.
 json_str() {
@@ -229,7 +250,8 @@ marker_id() {
 }
 
 marker_mtime() {
-  stat -f %m "$1" 2>/dev/null || stat -c %Y "$1" 2>/dev/null || date +%s
+  # GNU stat (Git Bash, Linux) then BSD stat (macOS). GNU `stat -f` is file-system info, not mtime.
+  stat -c %Y "$1" 2>/dev/null || stat -f %m "$1" 2>/dev/null || date +%s
 }
 
 prune_markers() {

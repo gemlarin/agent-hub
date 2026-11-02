@@ -6,8 +6,9 @@ HUB=$(CDPATH= cd -- "$HERE/../../.." && pwd)
 HOOK="$HUB/.cursor/hooks/git-delegation-hook.sh"
 STATE="$HUB/.cursor/hooks/state"
 TMPDIR="${TMPDIR:-/tmp}/cursor-agent-hub-git-delegation"
+mkdir -p "$TMPDIR"
 
-WORK=$(mktemp -d "${TMPDIR:-/tmp}/git-hook-test.XXXXXX")
+WORK=$(mktemp -d "$TMPDIR/git-hook-test.XXXXXX")
 export TMPDIR="$WORK"
 MARKER_TMP="$WORK/cursor-agent-hub-git-delegation"
 OTHER=""

@@ -46,10 +46,33 @@ def deny_shell() -> None:
     )
 
 
+def decode_payload(raw: bytes) -> str:
+    """Cursor on Windows can pipe hook JSON as UTF-16 or with a UTF-8 BOM.
+
+    json.loads rejects those bytes. An empty parse used to deny every git
+    command and every Git Coordinator launch.
+    """
+    if raw.startswith(b"\xff\xfe") or raw.startswith(b"\xfe\xff"):
+        return raw.decode("utf-16")
+    if raw.startswith(b"\xef\xbb\xbf"):
+        return raw.decode("utf-8-sig")
+    sample = raw[:8]
+    if b"\x00" in sample:
+        try:
+            return raw.decode("utf-16")
+        except UnicodeDecodeError:
+            pass
+    return raw.decode("utf-8")
+
+
 def load_payload() -> dict:
-    raw = sys.stdin.read()
+    raw = sys.stdin.buffer.read()
     try:
-        return json.loads(raw) if raw.strip() else {}
+        text = decode_payload(raw)
+    except UnicodeDecodeError:
+        return {}
+    try:
+        return json.loads(text) if text.strip() else {}
     except json.JSONDecodeError:
         return {}
 
